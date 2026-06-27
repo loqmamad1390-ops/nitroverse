@@ -1,1 +1,1 @@
-web: cd backend && gunicorn run:app
+web: cd backend && python init_db.py && gunicorn run:app
