@@ -13,10 +13,10 @@ from .routes.leagues import leagues_bp
 import os
 
 def create_app():
-    # ✅ مسیر frontend رو درست تنظیم کن
-    frontend_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'frontend')
-    
-    app = Flask(__name__)
+    app = Flask(__name__, 
+                static_folder='static',      # ← اسم پوشه
+                static_url_path='/static')   # ← آدرس فایل‌های استاتیک
+
     app.config.from_object(Config)
 
     # Initialize extensions
@@ -39,14 +39,26 @@ def create_app():
     app.register_blueprint(groups_bp)
     app.register_blueprint(leagues_bp)
 
-    # ===== سرو کردن فرانت‌اند =====
+    # ============================================
+    # 🚀 سرو کردن فرانت‌اند (با مسیر مستقیم)
+    # ============================================
+    
     @app.route('/')
     def serve_index():
-        return send_from_directory(frontend_path, 'index.html')
+        return send_from_directory('static', 'index.html')
 
     @app.route('/<path:path>')
-    def serve_static(path):
-        return send_from_directory(frontend_path, path)
+    def serve_static_files(path):
+        # اگه فایل توی static وجود داشت، برگردون
+        static_file = os.path.join('static', path)
+        if os.path.exists(static_file):
+            return send_from_directory('static', path)
+        
+        # اگه فایل HTML بود، از static برگردون
+        if path.endswith('.html'):
+            return send_from_directory('static', path)
+        
+        return {"error": "File not found"}, 404
 
     @app.get("/api")
     def home():
