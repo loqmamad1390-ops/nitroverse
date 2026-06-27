@@ -1,0 +1,266 @@
+/* ============================================
+   NitroVerse - Global Styles (Unified)
+   ============================================ */
+
+/* ---------- Reset & Base ---------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --neon-cyan: #00eaff;
+  --neon-purple: #7c3aed;
+  --neon-pink: #ff007f;
+  --neon-gold: #ffcc66;
+  --bg-dark: #0a0f1f;
+  --bg-card: rgba(255, 255, 255, 0.05);
+  --border-glow: rgba(0, 234, 255, 0.2);
+  --text-primary: #f0f0ff;
+  --text-secondary: #aab0c8;
+  --font-main: 'Vazirmatn', 'IRANSans', Tahoma, sans-serif;
+  --font-display: 'Orbitron', 'Vazirmatn', sans-serif;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Vazirmatn:wght@300;400;700;900&display=swap');
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-main);
+  background: radial-gradient(ellipse at top, #0a0f1f, #000000);
+  color: var(--text-primary);
+  min-height: 100vh;
+  direction: rtl;
+  line-height: 1.7;
+}
+
+/* ---------- Scrollbar Styling ---------- */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--neon-cyan);
+  border-radius: 10px;
+  box-shadow: 0 0 15px var(--neon-cyan);
+}
+
+/* ---------- Utility Classes ---------- */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.neon-text {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 20px var(--neon-cyan), 0 0 40px rgba(0, 234, 255, 0.4);
+  animation: neonPulse 3s ease-in-out infinite alternate;
+}
+
+.neon-text-purple {
+  color: var(--neon-purple);
+  text-shadow: 0 0 20px var(--neon-purple), 0 0 40px rgba(124, 58, 237, 0.4);
+}
+
+.neon-text-gold {
+  color: var(--neon-gold);
+  text-shadow: 0 0 20px var(--neon-gold), 0 0 40px rgba(255, 204, 102, 0.4);
+}
+
+.glow-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-glow);
+  border-radius: 20px;
+  backdrop-filter: blur(12px);
+  padding: 28px;
+  transition: all 0.4s ease;
+  box-shadow: 0 0 30px rgba(0, 234, 255, 0.05);
+}
+
+.glow-card:hover {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 50px rgba(0, 234, 255, 0.12);
+  transform: translateY(-4px);
+}
+
+.neon-border {
+  border: 1px solid var(--border-glow);
+  box-shadow: 0 0 25px rgba(0, 234, 255, 0.08);
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-block;
+  padding: 12px 28px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 1rem;
+  font-family: var(--font-main);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+  text-decoration: none;
+  text-align: center;
+  backdrop-filter: blur(8px);
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.btn-primary {
+  background: rgba(0, 234, 255, 0.15);
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+}
+
+.btn-primary:hover {
+  background: rgba(0, 234, 255, 0.3);
+  box-shadow: 0 0 40px rgba(0, 234, 255, 0.2);
+}
+
+.btn-purple {
+  background: rgba(124, 58, 237, 0.15);
+  border-color: var(--neon-purple);
+  color: var(--neon-purple);
+}
+
+.btn-purple:hover {
+  background: rgba(124, 58, 237, 0.3);
+  box-shadow: 0 0 40px rgba(124, 58, 237, 0.2);
+}
+
+.btn-gold {
+  background: rgba(255, 204, 102, 0.15);
+  border-color: var(--neon-gold);
+  color: var(--neon-gold);
+}
+
+.btn-gold:hover {
+  background: rgba(255, 204, 102, 0.3);
+  box-shadow: 0 0 40px rgba(255, 204, 102, 0.2);
+}
+
+.btn-danger {
+  background: rgba(255, 0, 0, 0.15);
+  border-color: rgba(255, 0, 0, 0.4);
+  color: #ff6b6b;
+}
+
+.btn-danger:hover {
+  background: rgba(255, 0, 0, 0.3);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ---------- Animations ---------- */
+@keyframes neonPulse {
+  0% {
+    text-shadow: 0 0 20px var(--neon-cyan), 0 0 40px rgba(0, 234, 255, 0.3);
+  }
+  100% {
+    text-shadow: 0 0 40px var(--neon-cyan), 0 0 80px rgba(0, 234, 255, 0.5), 0 0 120px rgba(0, 234, 255, 0.2);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(0, 234, 255, 0.1); }
+  50% { box-shadow: 0 0 40px rgba(0, 234, 255, 0.25); }
+}
+
+.fade-in {
+  animation: fadeInUp 0.7s ease forwards;
+}
+
+.float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 14px 28px;
+  border-radius: 14px;
+  font-weight: 700;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: fadeInUp 0.4s ease;
+}
+
+.toast-success {
+  border-color: #22c55e;
+  color: #22c55e;
+}
+
+.toast-error {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.toast-info {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 14px;
+  }
+  .glow-card {
+    padding: 18px;
+  }
+  .btn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .glow-card {
+    padding: 14px;
+    border-radius: 14px;
+  }
+}

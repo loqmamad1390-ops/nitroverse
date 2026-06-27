@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="داشبورد نیتروورس — پیشرفت، آمار و دسترسی سریع به همه بخش‌ها" />
+  <meta name="keywords" content="داشبورد, نیتروورس, آمار, پیشرفت, بازی" />
+  <meta property="og:title" content="داشبورد | NitroVerse" />
+  <meta property="og:description" content="داشبورد کاربری نیتروورس با آمار و دسترسی سریع" />
+  <title>داشبورد | NitroVerse</title>
+  <link rel="icon" href="img/logo.png" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    /* ============================================
+       صفحه داشبورد — استایل‌های اختصاصی
+       ============================================ */
+
+    /* ----- هدر ----- */
+    .dash-header {
+      background: rgba(0, 234, 255, 0.04);
+      border-bottom: 1px solid rgba(0, 234, 255, 0.08);
+      padding: 14px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .dash-header .logo {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 30px rgba(0, 234, 255, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dash-header .logo span {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      font-weight: 400;
+      opacity: 0.6;
+    }
+
+    .dash-header .user-info {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .dash-header .user-info .username {
+      color: var(--text-primary);
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 6px 16px;
+      background: rgba(0, 234, 255, 0.06);
+      border-radius: 20px;
+      border: 1px solid rgba(0, 234, 255, 0.08);
+    }
+
+    .dash-header .user-info .username .badge {
+      color: var(--neon-cyan);
+      font-size: 0.7rem;
+      margin-right: 4px;
+    }
+
+    .btn-logout {
+      background: rgba(255, 0, 0, 0.08);
+      border: 1px solid rgba(255, 0, 0, 0.15);
+      color: #ff6b6b;
+      padding: 8px 18px;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      font-size: 0.85rem;
+      font-family: var(--font-main);
+    }
+
+    .btn-logout:hover {
+      background: rgba(255, 0, 0, 0.18);
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(255, 0, 0, 0.05);
+    }
+
+    /* ----- محتوا ----- */
+    .dash-container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    /* ----- بخش خوش‌آمدگویی ----- */
+    .welcome-section {
+      text-align: center;
+      padding: 35px 20px 25px;
+      margin-bottom: 30px;
+      animation: fadeInUp 0.7s ease forwards;
+    }
+
+    .welcome-section h1 {
+      font-size: 2.2rem;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .welcome-section .greeting {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      opacity: 0.8;
+    }
+
+    .welcome-section .greeting .highlight {
+      color: var(--neon-cyan);
+      font-weight: 700;
+    }
+
+    /* ----- نوار نقل‌قول ----- */
+    .quote-bar {
+      text-align: center;
+      padding: 12px 20px;
+      margin-bottom: 24px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      animation: fadeInUp 0.7s ease 0.05s forwards;
+      opacity: 0;
+    }
+
+    .quote-bar .quote-icon {
+      margin-left: 8px;
+    }
+
+    /* ----- آمار ----- */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      margin: 0 0 30px;
+      animation: fadeInUp 0.7s ease 0.1s forwards;
+      opacity: 0;
+    }
+
+    .stat-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      padding: 18px 16px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .stat-box:hover {
+      border-color: rgba(0, 234, 255, 0.12);
+      background: rgba(0, 234, 255, 0.03);
+      transform: translateY(-3px);
+    }
+
+    .stat-box .number {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--neon-cyan);
+      line-height: 1.2;
+    }
+
+    .stat-box .label {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      display: block;
+      opacity: 0.7;
+    }
+
+    .stat-box .sub-label {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      opacity: 0.4;
+      margin-top: 2px;
+    }
+
+    .stat-box.gold .number {
+      color: var(--neon-gold);
+    }
+    .stat-box.purple .number {
+      color: var(--neon-purple);
+    }
+    .stat-box.green .number {
+      color: #22c55e;
+    }
+
+    /* ----- منوی اصلی ----- */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 18px;
+      margin-top: 10px;
+      animation: fadeInUp 0.7s ease 0.15s forwards;
+      opacity: 0;
+    }
+
+    .menu-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      padding: 24px 16px 20px;
+      text-align: center;
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      text-decoration: none;
+      color: var(--text-primary);
+      backdrop-filter: blur(4px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .menu-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: transparent;
+      transition: 0.4s;
+    }
+
+    .menu-card:hover::after {
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+    }
+
+    .menu-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      border-color: rgba(0, 234, 255, 0.15);
+      box-shadow: 0 0 50px rgba(0, 234, 255, 0.04);
+      background: rgba(0, 234, 255, 0.04);
+    }
+
+    .menu-card .icon {
+      font-size: 2.4rem;
+      display: block;
+      margin-bottom: 10px;
+      transition: 0.3s;
+    }
+
+    .menu-card:hover .icon {
+      transform: scale(1.1);
+    }
+
+    .menu-card .title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: #fff;
+    }
+
+    .menu-card .desc {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      opacity: 0.6;
+      line-height: 1.4;
+    }
+
+    .menu-card .badge-new {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: var(--neon-cyan);
+      color: #000;
+      font-size: 0.55rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+      opacity: 0.7;
+    }
+
+    /* ===== فوتر ===== */
+    .dash-footer {
+      text-align: center;
+      padding: 25px 20px 10px;
+      color: rgba(255, 255, 255, 0.12);
+      font-size: 0.8rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.03);
+      margin-top: 40px;
+    }
+
+    .dash-footer .version {
+      color: rgba(255, 255, 255, 0.05);
+      font-size: 0.65rem;
+    }
+
+    /* ============================================
+       ریسپانسیو
+       ============================================ */
+    @media (max-width: 768px) {
+      .dash-header {
+        padding: 12px 16px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .dash-header .logo {
+        font-size: 1.2rem;
+      }
+
+      .dash-header .user-info .username {
+        font-size: 0.8rem;
+        padding: 4px 12px;
+      }
+
+      .welcome-section h1 {
+        font-size: 1.6rem;
+      }
+
+      .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .stat-box .number {
+        font-size: 1.5rem;
+      }
+
+      .menu-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .menu-card {
+        padding: 18px 12px 14px;
+      }
+
+      .menu-card .icon {
+        font-size: 1.8rem;
+      }
+
+      .menu-card .title {
+        font-size: 0.85rem;
+      }
+
+      .menu-card .desc {
+        font-size: 0.7rem;
+      }
+
+      .btn-logout {
+        padding: 6px 14px;
+        font-size: 0.75rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .dash-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+
+      .dash-header .user-info {
+        justify-content: space-between;
+      }
+
+      .welcome-section {
+        padding: 20px 14px 16px;
+      }
+
+      .welcome-section h1 {
+        font-size: 1.3rem;
+      }
+
+      .welcome-section .greeting {
+        font-size: 0.9rem;
+      }
+
+      .stats-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .stat-box {
+        padding: 12px 8px;
+      }
+
+      .stat-box .number {
+        font-size: 1.2rem;
+      }
+
+      .stat-box .label {
+        font-size: 0.7rem;
+      }
+
+      .menu-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .menu-card {
+        padding: 14px 10px;
+        border-radius: 12px;
+      }
+
+      .menu-card .icon {
+        font-size: 1.5rem;
+        margin-bottom: 6px;
+      }
+
+      .menu-card .title {
+        font-size: 0.75rem;
+      }
+
+      .menu-card .desc {
+        display: none;
+      }
+
+      .quote-bar {
+        font-size: 0.8rem;
+        padding: 8px 14px;
+      }
+
+      .dash-footer {
+        font-size: 0.7rem;
+        padding: 16px 10px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .stats-row {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .menu-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .menu-card {
+        padding: 10px 6px;
+      }
+
+      .menu-card .icon {
+        font-size: 1.2rem;
+      }
+
+      .menu-card .title {
+        font-size: 0.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================
+       هدر
+       ========================================== -->
+  <header class="dash-header">
+    <div class="logo">
+      ⚡ NitroVerse
+      <span>v2.0</span>
+    </div>
+    <div class="user-info">
+      <span class="username" id="displayUsername">
+        👤 کاربر
+        <span class="badge" id="userRankBadge">🌱</span>
+      </span>
+      <button class="btn-logout" onclick="logoutUser()">🚪 خروج</button>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       محتوای اصلی
+       ========================================== -->
+  <div class="dash-container">
+
+    <!-- ===== بخش خوش‌آمدگویی ===== -->
+    <div class="welcome-section glow-card">
+      <h1 class="neon-text" id="welcomeMessage">🚀 خوش آمدی!</h1>
+      <p class="greeting">
+        به دنیای رقابت، علم و آینده خوش آمدی.
+        <br class="hide-on-desktop" />
+        امروز چیکار می‌خوای انجام بدی؟
+        <span class="highlight" id="dailyTip">💪 ادامه بده!</span>
+      </p>
+    </div>
+
+    <!-- ===== نقل‌قول روز ===== -->
+    <div class="quote-bar" id="quoteBar">
+      <span class="quote-icon">💡</span>
+      <span id="dailyQuote">بارگذاری...</span>
+    </div>
+
+    <!-- ===== آمار سریع ===== -->
+    <div class="stats-row" id="statsRow">
+      <div class="stat-box">
+        <div class="number" id="statScore">0</div>
+        <span class="label">⭐ امتیاز کل</span>
+        <span class="sub-label" id="statScoreChange">+۰ امروز</span>
+      </div>
+      <div class="stat-box gold">
+        <div class="number" id="statRank">-</div>
+        <span class="label">🏆 رنک فعلی</span>
+        <span class="sub-label" id="statRankProgress">—</span>
+      </div>
+      <div class="stat-box purple">
+        <div class="number" id="statGames">0</div>
+        <span class="label">🎮 بازی‌ها</span>
+        <span class="sub-label" id="statGamesToday">۰ امروز</span>
+      </div>
+      <div class="stat-box green">
+        <div class="number" id="statAchievements">0</div>
+        <span class="label">🏅 دستاوردها</span>
+        <span class="sub-label" id="statAchievementsTotal">از ۱۲</span>
+      </div>
+    </div>
+
+    <!-- ===== منوی اصلی ===== -->
+    <div class="menu-grid">
+      <a href="game.html" class="menu-card">
+        <span class="icon">🎮</span>
+        <div class="title">شروع رقابت</div>
+        <div class="desc">به سوالات پاسخ بده و امتیاز بگیر</div>
+      </a>
+      <a href="quiz.html" class="menu-card">
+        <span class="icon">🧠</span>
+        <div class="title">آزمون سریع</div>
+        <div class="desc">یک آزمون کوتاه و چالش‌برانگیز</div>
+      </a>
+      <a href="leaderboard.html" class="menu-card">
+        <span class="icon">🏆</span>
+        <div class="title">لیدربورد</div>
+        <div class="desc">رتبه‌ات را بین بقیه ببین</div>
+      </a>
+      <a href="profile.html" class="menu-card">
+        <span class="icon">👤</span>
+        <div class="title">پروفایل</div>
+        <div class="desc">اطلاعات و پیشرفت‌ت رو ببین</div>
+      </a>
+      <a href="leagues.html" class="menu-card">
+        <span class="icon">🏅</span>
+        <div class="title">لیگ‌ها</div>
+        <div class="desc">وارد لیگ‌های علمی شو</div>
+        <span class="badge-new">جدید</span>
+      </a>
+      <a href="shop.html" class="menu-card">
+        <span class="icon">🛍️</span>
+        <div class="title">فروشگاه</div>
+        <div class="desc">آیتم‌های ویژه بخر</div>
+      </a>
+      <a href="achievements.html" class="menu-card">
+        <span class="icon">🎖️</span>
+        <div class="title">دستاوردها</div>
+        <div class="desc">ببین چقدر پیشرفت کردی</div>
+      </a>
+      <a href="groups.html" class="menu-card">
+        <span class="icon">👥</span>
+        <div class="title">اتحادها</div>
+        <div class="desc">به تیم‌ها بپیوند یا بساز</div>
+      </a>
+      <a href="rank.html" class="menu-card">
+        <span class="icon">📊</span>
+        <div class="title">رنک من</div>
+        <div class="desc">وضعیت رنک‌ت رو دقیق ببین</div>
+      </a>
+      <a href="about.html" class="menu-card">
+        <span class="icon">ℹ️</span>
+        <div class="title">درباره</div>
+        <div class="desc">درباره نیتروورس بیشتر بدان</div>
+      </a>
+    </div>
+
+  </div>
+
+  <!-- ==========================================
+       فوتر
+       ========================================== -->
+  <div class="dash-footer">
+    © ۲۰۲۶ NitroVerse | ساخته‌ی ذهن‌های ایرانی 🌠
+    <div class="version">نسخه ۲.۰.۰</div>
+  </div>
+
+  <!-- ==========================================
+       اسکریپت‌ها
+       ========================================== -->
+  <script>
+    // ============================================
+    // توابع کمکی با پشتیبانی از userId
+    // ============================================
+
+    function getUserKey(baseKey) {
+      const userId = localStorage.getItem('nv_user_id') || 'guest';
+      return `${baseKey}_${userId}`;
+    }
+
+    function getUserData(baseKey, defaultValue = null) {
+      try {
+        const key = getUserKey(baseKey);
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : defaultValue;
+      } catch {
+        return defaultValue;
+      }
+    }
+
+    function getCurrentUser() {
+      try {
+        return JSON.parse(localStorage.getItem('nv_user') || 'null');
+      } catch {
+        return null;
+      }
+    }
+
+    function getUsername() {
+      return localStorage.getItem('nv_username') || 'کاربر';
+    }
+
+    // ============================================
+    // دریافت اطلاعات
+    // ============================================
+
+    function getScore() {
+      const history = getUserData('nv_quiz_history', []);
+      return history.reduce((sum, h) => sum + (h.score || 0), 0);
+    }
+
+    function getGameCount() {
+      const history = getUserData('nv_quiz_history', []);
+      return history.length;
+    }
+
+    function getTodayGames() {
+      const history = getUserData('nv_quiz_history', []);
+      const today = new Date().toLocaleDateString('fa-IR');
+      return history.filter(h => {
+        if (!h.date) return false;
+        return new Date(h.date).toLocaleDateString('fa-IR') === today;
+      }).length;
+    }
+
+    function getTodayScore() {
+      const history = getUserData('nv_quiz_history', []);
+      const today = new Date().toLocaleDateString('fa-IR');
+      return history.filter(h => {
+        if (!h.date) return false;
+        return new Date(h.date).toLocaleDateString('fa-IR') === today;
+      }).reduce((sum, h) => sum + (h.score || 0), 0);
+    }
+
+    function getAchievements() {
+      const ach = getUserData('nv_achievements', {});
+      return Object.values(ach).filter(v => v === true).length;
+    }
+
+    function getTotalAchievements() {
+      // تعداد کل دستاوردها (از data.js یا اینجا)
+      return 12;
+    }
+
+    function getRank(score) {
+      if (score >= 4000) return { name: 'Immortal 👑', emoji: '👑', key: 'immortal' };
+      if (score >= 3000) return { name: 'Legendary ⭐', emoji: '⭐', key: 'legendary' };
+      if (score >= 2200) return { name: 'Diamond 💎', emoji: '💎', key: 'diamond' };
+      if (score >= 1500) return { name: 'Gold 🥇', emoji: '🥇', key: 'gold' };
+      if (score >= 1000) return { name: 'Silver 🥈', emoji: '🥈', key: 'silver' };
+      if (score >= 500) return { name: 'Bronze 🥉', emoji: '🥉', key: 'bronze' };
+      return { name: 'Normal 🌱', emoji: '🌱', key: 'normal' };
+    }
+
+    function getNextRank(score) {
+      const ranks = [
+        { key: 'bronze', min: 500 },
+        { key: 'silver', min: 1000 },
+        { key: 'gold', min: 1500 },
+        { key: 'diamond', min: 2200 },
+        { key: 'legendary', min: 3000 },
+        { key: 'immortal', min: 4000 },
+      ];
+      for (const r of ranks) {
+        if (score < r.min) {
+          return { key: r.key, needed: r.min - score };
+        }
+      }
+      return null;
+    }
+
+    function getRandomQuote() {
+      const quotes = [
+        'هر روز یک قدم به جلو! 🚀',
+        'ذهن تو قدرتمندترین سلاح‌ته! 💪',
+        'یادگیری هیچوقت متوقف نمی‌شود! 📚',
+        'تو می‌توانی! فقط باور کن! ✨',
+        'هر شکست یه درس بزرگه! 🎯',
+        'آینده از آنِ کسانی‌ست که امروز می‌آموزند! 🌟',
+        'با تلاش امروز، قهرمان فردا باش! 🏆',
+        'هیچ چیز غیرممکن نیست! 🔥',
+        'بهترین زمان برای شروع، همینه! ⏰',
+        'هر روز یک فرصت جدید است! 🌅',
+        'تفاوت را ایجاد کن! 💡',
+        'به خودت ایمان داشته باش! 🌟',
+      ];
+      return quotes[Math.floor(Math.random() * quotes.length)];
+    }
+
+    function getDailyTip(score) {
+      if (score < 50) return '💪 امروز اولین بازی‌ات رو شروع کن!';
+      if (score < 100) return '🔥 داری خوب پیش می‌ری! ادامه بده!';
+      if (score < 500) return '🌟 عالی! به رنک برنز نزدیک می‌شی!';
+      if (score < 1000) return '💎 هدف بعدی: رنک سیلور!';
+      if (score < 1500) return '🏆 به رنک طلا نزدیک شدی!';
+      if (score < 3000) return '⭐ فوق‌العاده! به رنک افسانه‌ای برس!';
+      return '👑 تو یک اسطوره‌ای! ادامه بده!';
+    }
+
+    // ============================================
+    // بارگذاری صفحه
+    // ============================================
+
+    function loadDashboard() {
+      const user = getCurrentUser();
+
+      // بررسی لاگین
+      if (!user && !localStorage.getItem('nv_token')) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const username = getUsername();
+      const score = getScore();
+      const games = getGameCount();
+      const todayGames = getTodayGames();
+      const todayScore = getTodayScore();
+      const achievements = getAchievements();
+      const totalAchievements = getTotalAchievements();
+      const rank = getRank(score);
+      const nextRank = getNextRank(score);
+
+      // ===== نام کاربر =====
+      document.getElementById('displayUsername').innerHTML =
+        `👤 ${username} <span class="badge">${rank.emoji}</span>`;
+
+      // ===== پیام خوش‌آمدگویی =====
+      document.getElementById('welcomeMessage').textContent =
+        `🚀 خوش آمدی ${username}!`;
+
+      document.getElementById('dailyTip').textContent = getDailyTip(score);
+
+      // ===== نقل‌قول =====
+      document.getElementById('dailyQuote').textContent = getRandomQuote();
+
+      // ===== آمار =====
+      document.getElementById('statScore').textContent = score.toLocaleString();
+      document.getElementById('statScoreChange').textContent =
+        todayScore > 0 ? `+${todayScore} امروز` : '—';
+
+      document.getElementById('statRank').textContent = rank.name;
+      document.getElementById('statRankProgress').textContent =
+        nextRank ? `${nextRank.needed} امتیاز تا ${nextRank.key}` : '👑 حداکثر رنک!';
+
+      document.getElementById('statGames').textContent = games;
+      document.getElementById('statGamesToday').textContent =
+        todayGames > 0 ? `${todayGames} امروز` : '۰ امروز';
+
+      document.getElementById('statAchievements').textContent = achievements;
+      document.getElementById('statAchievementsTotal').textContent =
+        `از ${totalAchievements}`;
+
+      // ===== رنک در هدر =====
+      document.getElementById('userRankBadge').textContent = rank.emoji;
+
+      // ===== ذخیره آخرین بازدید =====
+      localStorage.setItem('nv_last_visit', Date.now().toString());
+    }
+
+    // ============================================
+    // خروج
+    // ============================================
+
+    function logoutUser() {
+      if (confirm('آیا مطمئنی می‌خوای خارج بشی؟')) {
+        // پاک کردن اطلاعات کاربری
+        localStorage.removeItem('nv_user');
+        localStorage.removeItem('nv_token');
+        localStorage.removeItem('nv_user_id');
+        localStorage.removeItem('nv_username');
+        window.location.href = 'index.html';
+      }
+    }
+
+    // ============================================
+    // اجرا
+    // ============================================
+
+    document.addEventListener('DOMContentLoaded', loadDashboard);
+
+    // بروزرسانی هر بار که صفحه فعال می‌شود
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        loadDashboard();
+      }
+    });
+
+    console.log('📊 NitroVerse Dashboard loaded!');
+  </script>
+
+</body>
+</html>

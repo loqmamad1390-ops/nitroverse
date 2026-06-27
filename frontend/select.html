@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="انتخاب حالت بازی در نیتروورس — سطح سختی و دسته‌بندی مورد نظر خود را انتخاب کن" />
+  <meta name="keywords" content="انتخاب, حالت, بازی, نیتروورس, سختی, دسته‌بندی" />
+  <meta property="og:title" content="🎯 انتخاب حالت | NitroVerse" />
+  <meta property="og:description" content="سطح سختی و دسته‌بندی مورد نظر خود را انتخاب کن" />
+  <title>🎯 انتخاب حالت | NitroVerse</title>
+  <link rel="icon" href="img/logo.png" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    /* ============================================
+       صفحه انتخاب حالت — استایل‌های اختصاصی
+       ============================================ */
+
+    .select-container {
+      max-width: 540px;
+      margin: 0 auto;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* ----- هدر ----- */
+    .select-header {
+      text-align: center;
+      padding: 10px 20px 20px;
+      animation: fadeInUp 0.7s ease forwards;
+    }
+
+    .select-header .icon-top {
+      font-size: 3rem;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .select-header h1 {
+      font-size: 2rem;
+      font-weight: 900;
+    }
+
+    .select-header .subtitle {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-top: 4px;
+      opacity: 0.7;
+    }
+
+    /* ----- کارت ----- */
+    .select-card {
+      padding: 32px 30px;
+      animation: fadeInUp 0.7s ease 0.05s forwards;
+      opacity: 0;
+    }
+
+    .select-card .form-group {
+      margin-bottom: 20px;
+    }
+
+    .select-card .form-group label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      opacity: 0.8;
+    }
+
+    .select-card .form-group label .label-icon {
+      margin-left: 6px;
+    }
+
+    .select-card .form-group select {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.04);
+      color: #fff;
+      font-size: 0.95rem;
+      font-family: var(--font-main);
+      outline: none;
+      transition: all 0.3s ease;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2300eaff' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: left 16px center;
+      cursor: pointer;
+    }
+
+    .select-card .form-group select:focus {
+      border-color: rgba(0, 234, 255, 0.15);
+      box-shadow: 0 0 30px rgba(0, 234, 255, 0.03);
+      background-color: rgba(255, 255, 255, 0.06);
+    }
+
+    .select-card .form-group select option {
+      background: #0a0f1f;
+      color: #fff;
+      padding: 8px;
+    }
+
+    .select-card .form-group select option:hover {
+      background: rgba(0, 234, 255, 0.1);
+    }
+
+    /* ===== کارت‌های پیش‌نمایش ===== */
+    .preview-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 12px 0 4px;
+    }
+
+    .preview-box .preview-item {
+      padding: 8px 4px;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      transition: 0.3s;
+      opacity: 0.4;
+    }
+
+    .preview-box .preview-item.active {
+      border-color: rgba(0, 234, 255, 0.1);
+      opacity: 1;
+      color: var(--neon-cyan);
+    }
+
+    .preview-box .preview-item .p-icon {
+      font-size: 1.2rem;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    /* ===== دکمه‌ها ===== */
+    .select-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .btn-start {
+      padding: 14px 28px;
+      border-radius: 30px;
+      border: none;
+      background: rgba(0, 234, 255, 0.08);
+      border: 1px solid rgba(0, 234, 255, 0.1);
+      color: var(--neon-cyan);
+      font-weight: 700;
+      font-size: 1.05rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: var(--font-main);
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-start:hover {
+      background: rgba(0, 234, 255, 0.16);
+      transform: translateY(-3px);
+      box-shadow: 0 0 50px rgba(0, 234, 255, 0.04);
+    }
+
+    .btn-start:active {
+      transform: translateY(0);
+    }
+
+    .btn-start .arrow {
+      transition: 0.3s;
+    }
+
+    .btn-start:hover .arrow {
+      transform: translateX(-4px);
+    }
+
+    .btn-secondary {
+      padding: 12px 28px;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-secondary);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: var(--font-main);
+      width: 100%;
+      text-decoration: none;
+      text-align: center;
+      display: inline-block;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary.purple {
+      border-color: rgba(124, 58, 237, 0.1);
+      color: var(--neon-purple);
+    }
+
+    .btn-secondary.purple:hover {
+      background: rgba(124, 58, 237, 0.08);
+    }
+
+    /* ===== وضعیت ذخیره‌شده ===== */
+    .saved-mode {
+      text-align: center;
+      padding: 10px 16px;
+      border-radius: 12px;
+      background: rgba(34, 197, 94, 0.06);
+      border: 1px solid rgba(34, 197, 94, 0.08);
+      margin-bottom: 16px;
+      font-size: 0.85rem;
+      color: #22c55e;
+      animation: fadeInUp 0.5s ease forwards;
+    }
+
+    .saved-mode .highlight {
+      font-weight: 700;
+    }
+
+    /* ============================================
+       ریسپانسیو
+       ============================================ */
+
+    @media (max-width: 768px) {
+      .select-container {
+        padding: 14px;
+      }
+
+      .select-header h1 {
+        font-size: 1.6rem;
+      }
+
+      .select-header .icon-top {
+        font-size: 2.4rem;
+      }
+
+      .select-card {
+        padding: 24px 20px;
+      }
+
+      .select-card .form-group select {
+        padding: 10px 14px;
+        font-size: 0.9rem;
+      }
+
+      .preview-box {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+
+      .btn-start {
+        padding: 12px 24px;
+        font-size: 0.95rem;
+      }
+
+      .btn-secondary {
+        padding: 10px 20px;
+        font-size: 0.85rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .select-container {
+        padding: 12px;
+      }
+
+      .select-header h1 {
+        font-size: 1.3rem;
+      }
+
+      .select-header .subtitle {
+        font-size: 0.8rem;
+      }
+
+      .select-card {
+        padding: 18px 14px;
+        border-radius: 14px;
+      }
+
+      .select-card .form-group {
+        margin-bottom: 14px;
+      }
+
+      .select-card .form-group label {
+        font-size: 0.75rem;
+      }
+
+      .select-card .form-group select {
+        padding: 10px 12px;
+        font-size: 0.85rem;
+        border-radius: 10px;
+        background-position: left 12px center;
+      }
+
+      .preview-box {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 4px;
+      }
+
+      .preview-box .preview-item {
+        font-size: 0.55rem;
+        padding: 6px 2px;
+        border-radius: 8px;
+      }
+
+      .preview-box .preview-item .p-icon {
+        font-size: 1rem;
+      }
+
+      .btn-start {
+        padding: 12px 16px;
+        font-size: 0.85rem;
+        border-radius: 25px;
+      }
+
+      .btn-secondary {
+        padding: 10px 16px;
+        font-size: 0.8rem;
+        border-radius: 25px;
+      }
+
+      .saved-mode {
+        font-size: 0.75rem;
+        padding: 8px 12px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .select-header h1 {
+        font-size: 1.1rem;
+      }
+
+      .select-card {
+        padding: 14px 10px;
+      }
+
+      .select-card .form-group select {
+        padding: 8px 10px;
+        font-size: 0.8rem;
+      }
+
+      .preview-box .preview-item {
+        font-size: 0.5rem;
+        padding: 4px 2px;
+      }
+
+      .preview-box .preview-item .p-icon {
+        font-size: 0.8rem;
+      }
+
+      .btn-start {
+        padding: 10px 14px;
+        font-size: 0.8rem;
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="select-container">
+
+    <!-- ==========================================
+         هدر
+         ========================================== -->
+    <header class="select-header">
+      <span class="icon-top">🎯</span>
+      <h1 class="neon-text">انتخاب حالت</h1>
+      <p class="subtitle">
+        سطح سختی و دسته‌بندی مورد علاقه‌ت رو انتخاب کن
+      </p>
+    </header>
+
+    <!-- ==========================================
+         کارت اصلی
+         ========================================== -->
+    <div class="select-card glow-card">
+
+      <!-- وضعیت ذخیره‌شده -->
+      <div class="saved-mode" id="savedMode" style="display:none;">
+        ⚡ حالت قبلی: <span class="highlight" id="savedModeText">—</span>
+      </div>
+
+      <!-- ===== سطح سختی ===== -->
+      <div class="form-group">
+        <label>
+          <span class="label-icon">📊</span> سطح سختی
+        </label>
+        <select id="level">
+          <option value="آسان" data-icon="🌱">🌱 آسان</option>
+          <option value="متوسط" selected data-icon="🔥">🔥 متوسط</option>
+          <option value="سخت" data-icon="💀">💀 سخت</option>
+        </select>
+
+        <!-- پیش‌نمایش سطح -->
+        <div class="preview-box">
+          <div class="preview-item" data-level="آسان">
+            <span class="p-icon">🌱</span>
+            آسان
+          </div>
+          <div class="preview-item active" data-level="متوسط">
+            <span class="p-icon">🔥</span>
+            متوسط
+          </div>
+          <div class="preview-item" data-level="سخت">
+            <span class="p-icon">💀</span>
+            سخت
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== دسته‌بندی ===== -->
+      <div class="form-group">
+        <label>
+          <span class="label-icon">📂</span> دسته‌بندی
+        </label>
+        <select id="category">
+          <option value="تکنولوژی">💻 تکنولوژی</option>
+          <option value="تاریخ">📜 تاریخ ایران</option>
+          <option value="ادبیات">📖 ادبیات فارسی</option>
+          <option value="ریاضیات">📐 ریاضی</option>
+          <option value="علوم تجربی">🔬 علوم</option>
+          <option value="عمومی">🌍 عمومی</option>
+        </select>
+      </div>
+
+      <!-- ===== دکمه‌ها ===== -->
+      <div class="select-actions">
+        <button class="btn-start" id="startBtn">
+          🚀 شروع بازی
+          <span class="arrow">→</span>
+        </button>
+
+        <a href="profile.html" class="btn-secondary purple">
+          👤 مشاهده پروفایل
+        </a>
+
+        <a href="dashboard.html" class="btn-secondary">
+          📊 بازگشت به داشبورد
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ==========================================
+       اسکریپت‌ها
+       ========================================== -->
+  <script>
+    // ============================================
+    // NitroVerse Select Mode (Enhanced)
+    // ============================================
+
+    const levelSelect = document.getElementById('level');
+    const categorySelect = document.getElementById('category');
+    const startBtn = document.getElementById('startBtn');
+    const savedModeDiv = document.getElementById('savedMode');
+    const savedModeText = document.getElementById('savedModeText');
+
+    // ============================================
+    // بارگذاری حالت ذخیره‌شده
+    // ============================================
+
+    function loadSavedMode() {
+      try {
+        const saved = JSON.parse(localStorage.getItem('nv_game_mode') || '{}');
+        if (saved.level && saved.category) {
+          // تنظیم select ها
+          if (saved.level) {
+            const levelOpt = Array.from(levelSelect.options).find(o => o.value === saved.level);
+            if (levelOpt) levelSelect.value = saved.level;
+          }
+          if (saved.category) {
+            const catOpt = Array.from(categorySelect.options).find(o => o.value === saved.category);
+            if (catOpt) categorySelect.value = saved.category;
+          }
+
+          // نمایش وضعیت ذخیره‌شده
+          savedModeDiv.style.display = 'block';
+          savedModeText.textContent = `${saved.level} • ${saved.category}`;
+
+          // به‌روزرسانی پیش‌نمایش
+          updatePreview();
+        }
+      } catch (e) {
+        // خطا نادیده گرفته شود
+      }
+    }
+
+    // ============================================
+    // پیش‌نمایش سطح
+    // ============================================
+
+    function updatePreview() {
+      const selected = levelSelect.value;
+      const items = document.querySelectorAll('.preview-box .preview-item');
+      items.forEach(item => {
+        const level = item.dataset.level;
+        item.classList.toggle('active', level === selected);
+      });
+    }
+
+    levelSelect.addEventListener('change', updatePreview);
+
+    // ============================================
+    // شروع بازی
+    // ============================================
+
+    function startGame() {
+      const level = levelSelect.value;
+      const category = categorySelect.value;
+
+      // اعتبارسنجی
+      if (!level || !category) {
+        showToast('❌ لطفاً سطح و دسته‌بندی را انتخاب کن!', 'error');
+        return;
+      }
+
+      const data = {
+        level: level,
+        category: category,
+        ts: Date.now(),
+      };
+
+      localStorage.setItem('nv_game_mode', JSON.stringify(data));
+      localStorage.setItem('nv_diff', level === 'آسان' ? 'easy' : level === 'متوسط' ? 'medium' : 'hard');
+
+      // انیمیشن دکمه
+      startBtn.textContent = '⏳ در حال رفتن...';
+      startBtn.disabled = true;
+
+      setTimeout(() => {
+        window.location.href = 'game.html';
+      }, 400);
+    }
+
+    // ============================================
+    // Toast
+    // ============================================
+
+    function showToast(message, type = 'info') {
+      const old = document.querySelector('.toast');
+      if (old) old.remove();
+
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      toast.style.cssText = `
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 14px 28px;
+        border-radius: 14px;
+        background: rgba(0,0,0,0.92);
+        border: 1px solid ${type === 'error' ? '#ef4444' : '#22c55e'};
+        color: ${type === 'error' ? '#ef4444' : '#22c55e'};
+        z-index: 999;
+        font-weight: 700;
+        backdrop-filter: blur(12px);
+        animation: fadeInUp 0.4s ease;
+        max-width: 90%;
+        text-align: center;
+        font-family: var(--font-main);
+      `;
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = '0.5s ease';
+        setTimeout(() => toast.remove(), 500);
+      }, 3000);
+    }
+
+    // ============================================
+    // رویدادها
+    // ============================================
+
+    startBtn.addEventListener('click', startGame);
+
+    // Enter key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const active = document.activeElement;
+        if (active === levelSelect || active === categorySelect || active === startBtn) {
+          startGame();
+        }
+      }
+    });
+
+    // ============================================
+    // اجرا
+    // ============================================
+
+    document.addEventListener('DOMContentLoaded', function() {
+      loadSavedMode();
+      updatePreview();
+      console.log('🎯 NitroVerse Select Mode loaded!');
+    });
+
+    // ============================================
+    // استایل اضافی برای toast
+    // ============================================
+
+    const style = document.createElement('style');
+    style.textContent = `
+      .toast {
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 14px 28px;
+        border-radius: 14px;
+        background: rgba(0,0,0,0.92);
+        border: 1px solid rgba(255,255,255,0.06);
+        color: #fff;
+        z-index: 999;
+        font-weight: 700;
+        backdrop-filter: blur(12px);
+        animation: fadeInUp 0.4s ease;
+        max-width: 90%;
+        text-align: center;
+        font-family: var(--font-main);
+      }
+      .toast.success {
+        border-color: #22c55e;
+        color: #22c55e;
+      }
+      .toast.error {
+        border-color: #ef4444;
+        color: #ef4444;
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+
+</body>
+</html>

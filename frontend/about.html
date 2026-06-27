@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="درباره نیتروورس — پروژه‌ای آموزشی با هوش مصنوعی برای آینده‌سازان ایران" />
+  <meta name="keywords" content="نیتروورس, آموزش, هوش مصنوعی, بازی, رقابت, یادگیری" />
+  <meta name="author" content="Mohammad Javad" />
+  <meta property="og:title" content="درباره نیتروورس | NitroVerse" />
+  <meta property="og:description" content="پلتفرم آموزشی-رقابتی با هوش مصنوعی برای نسل آینده" />
+  <meta property="og:type" content="website" />
+  <title>درباره نیتروورس | NitroVerse</title>
+  <link rel="icon" href="img/logo.png" />
+  <link rel="stylesheet" href="css/style.css" />
+  
+  <style>
+    /* ============================================
+       صفحه درباره — استایل‌های اختصاصی
+       ============================================ */
+
+    /* ----- هدر ----- */
+    .about-hero {
+      text-align: center;
+      padding: 50px 20px 10px;
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    .about-hero h1 {
+      font-size: 3rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    .about-hero .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin-top: 8px;
+      opacity: 0.8;
+    }
+
+    .about-hero .subtitle span {
+      color: var(--neon-cyan);
+      font-weight: 700;
+    }
+
+    /* ----- باکس اصلی ----- */
+    .about-box {
+      max-width: 860px;
+      margin: 30px auto 50px;
+      padding: 40px 45px;
+      animation: fadeInUp 0.8s ease 0.15s forwards;
+      opacity: 0;
+    }
+
+    .about-box .section-title {
+      font-size: 1.65rem;
+      font-weight: 800;
+      margin-top: 40px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #fff;
+    }
+
+    .about-box .section-title .icon {
+      font-size: 1.8rem;
+    }
+
+    .about-box .section-title:first-of-type {
+      margin-top: 0;
+    }
+
+    .about-box p {
+      color: var(--text-secondary);
+      line-height: 2.1;
+      text-align: justify;
+      font-size: 1.05rem;
+      margin: 0;
+    }
+
+    .about-box p strong {
+      color: var(--neon-cyan);
+      font-weight: 700;
+    }
+
+    .about-box .highlight-box {
+      background: rgba(0, 234, 255, 0.04);
+      border-right: 4px solid var(--neon-cyan);
+      padding: 18px 22px;
+      border-radius: 0 12px 12px 0;
+      margin: 16px 0 8px;
+    }
+
+    .about-box .highlight-box p {
+      margin: 0;
+      color: var(--text-primary);
+    }
+
+    /* ----- کارت سازنده ----- */
+    .creator-card {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      background: rgba(0, 234, 255, 0.04);
+      border: 1px solid rgba(0, 234, 255, 0.12);
+      border-radius: 20px;
+      padding: 24px 32px;
+      margin: 18px 0 12px;
+      transition: all 0.4s ease;
+      flex-wrap: wrap;
+    }
+
+    .creator-card:hover {
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 50px rgba(0, 234, 255, 0.06);
+      transform: translateY(-3px);
+    }
+
+    .creator-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.4rem;
+      font-weight: 900;
+      color: #000;
+      flex-shrink: 0;
+      box-shadow: 0 0 40px rgba(0, 234, 255, 0.2);
+      transition: 0.3s;
+    }
+
+    .creator-card:hover .creator-avatar {
+      box-shadow: 0 0 60px rgba(0, 234, 255, 0.35);
+      transform: scale(1.05);
+    }
+
+    .creator-info h3 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fff;
+      margin: 0 0 4px;
+    }
+
+    .creator-info .role {
+      color: var(--neon-cyan);
+      font-weight: 600;
+      font-size: 0.95rem;
+      opacity: 0.85;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .creator-info .role .badge {
+      background: rgba(0, 234, 255, 0.12);
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      color: var(--neon-cyan);
+    }
+
+    .creator-info .bio {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-top: 8px;
+      line-height: 1.8;
+    }
+
+    .creator-info .bio strong {
+      color: var(--neon-cyan);
+    }
+
+    /* ----- آمار سریع ----- */
+    .quick-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin: 24px 0 16px;
+    }
+
+    .quick-stats .stat {
+      text-align: center;
+      padding: 16px 10px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: 0.3s;
+    }
+
+    .quick-stats .stat:hover {
+      border-color: rgba(0, 234, 255, 0.15);
+      background: rgba(0, 234, 255, 0.03);
+    }
+
+    .quick-stats .stat .number {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--neon-cyan);
+    }
+
+    .quick-stats .stat .label {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    /* ----- تماس ----- */
+    .contact-email {
+      display: inline-block;
+      color: var(--neon-cyan);
+      font-weight: 700;
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      transition: all 0.3s ease;
+      font-size: 1.1rem;
+      padding: 2px 0;
+    }
+
+    .contact-email:hover {
+      border-bottom-color: var(--neon-cyan);
+      text-shadow: 0 0 30px rgba(0, 234, 255, 0.25);
+      transform: translateX(-4px);
+    }
+
+    .contact-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 4px 0;
+    }
+
+    .contact-row .social-links {
+      display: flex;
+      gap: 12px;
+    }
+
+    .contact-row .social-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 1.3rem;
+      transition: 0.3s;
+      padding: 4px 6px;
+    }
+
+    .contact-row .social-links a:hover {
+      color: var(--neon-cyan);
+      text-shadow: 0 0 20px rgba(0, 234, 255, 0.2);
+    }
+
+    /* ----- دکمه بازگشت ----- */
+    .back-wrapper {
+      text-align: center;
+      margin-top: 35px;
+    }
+
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 38px;
+      border-radius: 40px;
+      background: rgba(0, 234, 255, 0.06);
+      border: 1px solid rgba(0, 234, 255, 0.25);
+      color: var(--neon-cyan);
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
+
+    .btn-back:hover {
+      background: rgba(0, 234, 255, 0.14);
+      box-shadow: 0 0 50px rgba(0, 234, 255, 0.1);
+      transform: translateY(-3px);
+      border-color: var(--neon-cyan);
+    }
+
+    /* ----- فوتر ----- */
+    .about-footer {
+      text-align: center;
+      padding: 30px 20px 10px;
+      color: rgba(255, 255, 255, 0.15);
+      font-size: 0.85rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      margin-top: 25px;
+    }
+
+    .about-footer .version {
+      color: rgba(255, 255, 255, 0.08);
+      font-size: 0.7rem;
+      margin-top: 4px;
+    }
+
+    /* ============================================
+       ریسپانسیو
+       ============================================ */
+    @media (max-width: 768px) {
+      .about-hero h1 {
+        font-size: 2.4rem;
+      }
+
+      .about-box {
+        padding: 28px 22px;
+        margin: 20px 14px;
+      }
+
+      .about-box .section-title {
+        font-size: 1.4rem;
+        margin-top: 30px;
+      }
+
+      .quick-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .quick-stats .stat .number {
+        font-size: 1.4rem;
+      }
+
+      .creator-card {
+        padding: 18px 20px;
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .creator-info .bio {
+        text-align: center;
+      }
+
+      .btn-back {
+        padding: 12px 28px;
+        font-size: 0.9rem;
+      }
+
+      .contact-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .about-hero h1 {
+        font-size: 1.8rem;
+      }
+
+      .about-hero .subtitle {
+        font-size: 0.95rem;
+      }
+
+      .about-box {
+        padding: 18px 14px;
+        margin: 14px 8px;
+      }
+
+      .about-box .section-title {
+        font-size: 1.2rem;
+        margin-top: 24px;
+      }
+
+      .about-box p {
+        font-size: 0.95rem;
+        line-height: 1.9;
+      }
+
+      .creator-avatar {
+        width: 64px;
+        height: 64px;
+        font-size: 1.8rem;
+      }
+
+      .creator-info h3 {
+        font-size: 1.2rem;
+      }
+
+      .quick-stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .quick-stats .stat {
+        padding: 12px 8px;
+      }
+
+      .quick-stats .stat .number {
+        font-size: 1.2rem;
+      }
+
+      .btn-back {
+        padding: 10px 20px;
+        font-size: 0.85rem;
+        width: 100%;
+        justify-content: center;
+      }
+
+      .contact-email {
+        font-size: 0.95rem;
+        word-break: break-all;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .about-hero h1 {
+        font-size: 1.5rem;
+      }
+
+      .quick-stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .creator-card {
+        padding: 14px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================
+       هدر
+       ========================================== -->
+  <div class="about-hero">
+    <h1 class="neon-text">درباره نیتروورس</h1>
+    <p class="subtitle">
+      🔥 ساخته‌شده با <span>عشق</span> و <span>کد</span> برای آینده‌سازان ایران
+    </p>
+  </div>
+
+  <!-- ==========================================
+       محتوای اصلی
+       ========================================== -->
+  <div class="about-box glow-card">
+
+    <!-- ===== آمار سریع ===== -->
+    <div class="quick-stats">
+      <div class="stat">
+        <div class="number">۲۰۲۶</div>
+        <div class="label">سال تأسیس</div>
+      </div>
+      <div class="stat">
+        <div class="number">۱۰۰%</div>
+        <div class="label">ساخته‌شده در ایران</div>
+      </div>
+      <div class="stat">
+        <div class="number">AI</div>
+        <div class="label">هوش مصنوعی پیشرفته</div>
+      </div>
+      <div class="stat">
+        <div class="number">∞</div>
+        <div class="label">امکانات نامحدود</div>
+      </div>
+    </div>
+
+    <!-- ===== مأموریت ===== -->
+    <div class="section-title">
+      <span class="icon">🌌</span> مأموریت ما
+    </div>
+    <p>
+      نیتروورس یک پروژه <strong>آموزشی-فناورانه</strong> است که با هدف
+      <strong>ترکیب یادگیری، رقابت و هوش مصنوعی</strong> ساخته شده.
+      ما باور داریم که آموزش نباید خسته‌کننده باشد؛ بلکه باید
+      <strong>الهام‌بخش و پرانرژی</strong> باشد!
+    </p>
+    <div class="highlight-box">
+      <p>
+        ✨ این بازی به کاربران کمک می‌کند تا در حین بازی،
+        مهارت‌های علمی، تکنولوژیکی و تحلیلی خودشون رو تقویت کنند.
+      </p>
+    </div>
+
+    <!-- ===== چشم‌انداز ===== -->
+    <div class="section-title">
+      <span class="icon">🚀</span> چشم‌انداز آینده
+    </div>
+    <p>
+      هدف ما در بلندمدت، ساخت اولین
+      <strong>سیستم آموزشی مبتنی بر هوش مصنوعی ایرانی</strong> است —
+      سیستمی که نه‌تنها آموزش می‌دهد، بلکه هر بازیکن را به‌صورت
+      اختصاصی می‌شناسد، سطحش را می‌سنجد و او را برای آینده‌ای که
+      با فناوری و AI گره خورده، آماده می‌کند.
+    </p>
+
+    <!-- ===== سازنده ===== -->
+    <div class="section-title">
+      <span class="icon">👨‍💻</span> سازنده پروژه
+    </div>
+
+    <div class="creator-card">
+      <div class="creator-avatar">MJ</div>
+      <div class="creator-info">
+        <h3>Mohammad Javad</h3>
+        <div class="role">
+          ⚡ بنیان‌گذار و توسعه‌دهنده ارشد
+          <span class="badge">FOUNDER</span>
+        </div>
+        <div class="bio">
+          ایده‌پرداز، طراح مفهومی و برنامه‌نویس اصلی نیتروورس.
+          عاشق ترکیب <strong>هوش مصنوعی</strong>، <strong>بازی‌سازی</strong> و
+          <strong>آموزش</strong>.
+          هدفش ساخت پلتفرمی است که نسل جدید را برای دنیای فردا آماده کند.
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== تماس ===== -->
+    <div class="section-title">
+      <span class="icon">📬</span> تماس با ما
+    </div>
+    <p>
+      برای همکاری، پشتیبانی یا پیشنهادات خود با ما در ارتباط باشید:
+    </p>
+    <div class="contact-row">
+      <a href="mailto:contact@nitroverse.ir" class="contact-email">
+        📧 contact@nitroverse.ir
+      </a>
+      <div class="social-links">
+        <a href="#" title="تلگرام">📱</a>
+        <a href="#" title="اینستاگرام">📸</a>
+        <a href="#" title="گیت‌هاب">🐙</a>
+        <a href="#" title="لینکدین">💼</a>
+      </div>
+    </div>
+
+    <!-- ===== دکمه بازگشت ===== -->
+    <div class="back-wrapper">
+      <a href="game.html" class="btn-back">
+        🎮 بازگشت به بازی
+      </a>
+    </div>
+
+    <!-- ===== فوتر ===== -->
+    <div class="about-footer">
+      © ۲۰۲۶ NitroVerse | همه حقوق محفوظ است.
+      <div class="version">نسخه ۲.۰.۰</div>
+    </div>
+
+  </div>
+
+  <!-- ==========================================
+       اسکریپت‌ها
+       ========================================== -->
+  <script>
+    // ============================================
+    // آنالیز و ردیابی (اختیاری)
+    // ============================================
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('📄 About page loaded successfully!');
+      
+      // شمارش بازدید (اختیاری)
+      try {
+        let views = parseInt(localStorage.getItem('nv_about_views') || '0', 10);
+        views++;
+        localStorage.setItem('nv_about_views', String(views));
+      } catch (e) {
+        // خطا در ذخیره‌سازی نادیده گرفته شود
+      }
+      
+      // ===== نمایش انیمیشن شمارنده‌ها =====
+      const stats = document.querySelectorAll('.quick-stats .stat .number');
+      stats.forEach(stat => {
+        const text = stat.textContent;
+        if (!isNaN(parseInt(text))) {
+          // اگه عدد بود، انیمیشن شمارش
+          const target = parseInt(text);
+          let current = 0;
+          const increment = Math.ceil(target / 30);
+          const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+              current = target;
+              clearInterval(timer);
+            }
+            stat.textContent = current.toLocaleString();
+          }, 40);
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

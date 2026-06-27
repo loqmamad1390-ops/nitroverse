@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="بازی نیتروورس — سوالات علمی، چالش‌های فکری و رقابت با هوش مصنوعی" />
+  <meta name="keywords" content="بازی, سوال, آزمون, نیتروورس, رقابت, هوش مصنوعی" />
+  <meta property="og:title" content="🎮 بازی | NitroVerse" />
+  <meta property="og:description" content="به چالش‌های علمی نیتروورس پاسخ بده و امتیاز بگیر!" />
+  <title>🎮 بازی | NitroVerse</title>
+  <link rel="icon" href="img/logo.png" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    /* ============================================
+       صفحه بازی — استایل‌های اختصاصی
+       ============================================ */
+
+    .game-container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 16px 20px 30px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* ----- HUD ----- */
+    .hud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 20px;
+      animation: fadeInUp 0.5s ease forwards;
+    }
+
+    .hud-item {
+      padding: 6px 16px;
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      backdrop-filter: blur(4px);
+    }
+
+    .hud-item .value {
+      color: var(--neon-cyan);
+      font-weight: 900;
+    }
+
+    .hud-item .value.gold {
+      color: var(--neon-gold);
+    }
+
+    .hud-item .value.green {
+      color: #22c55e;
+    }
+
+    .hud-item .value.danger {
+      color: #ef4444;
+    }
+
+    .hud-progress {
+      flex: 1;
+      min-width: 100px;
+    }
+
+    .hud-progress .bar {
+      height: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .hud-progress .bar .fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+      border-radius: 10px;
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ----- سؤال ----- */
+    .question-box {
+      padding: 30px 32px;
+      margin-bottom: 16px;
+      animation: fadeInUp 0.4s ease forwards;
+    }
+
+    .question-box .meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .question-box .meta .diff-tag {
+      padding: 2px 14px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+
+    .diff-tag.easy {
+      background: rgba(34, 197, 94, 0.15);
+      color: #22c55e;
+    }
+    .diff-tag.medium {
+      background: rgba(255, 204, 102, 0.15);
+      color: var(--neon-gold);
+    }
+    .diff-tag.hard {
+      background: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
+    }
+
+    .question-box .q-number {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+
+    .question-box h2 {
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+      line-height: 1.9;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* ----- گزینه‌ها ----- */
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option {
+      padding: 14px 20px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+      text-align: right;
+      font-weight: 500;
+      color: var(--text-primary);
+      position: relative;
+    }
+
+    .option .opt-label {
+      display: inline-block;
+      width: 28px;
+      height: 28px;
+      line-height: 28px;
+      text-align: center;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+      margin-left: 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+
+    .option:hover:not(.disabled) {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateX(-4px);
+    }
+
+    .option.correct {
+      background: rgba(34, 197, 94, 0.15) !important;
+      border-color: #22c55e !important;
+      color: #22c55e;
+    }
+
+    .option.correct .opt-label {
+      background: rgba(34, 197, 94, 0.2);
+      color: #22c55e;
+    }
+
+    .option.wrong {
+      background: rgba(239, 68, 68, 0.15) !important;
+      border-color: #ef4444 !important;
+      color: #ef4444;
+    }
+
+    .option.wrong .opt-label {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+    }
+
+    .option.disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    .option .check-mark {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.2rem;
+    }
+
+    /* ----- دکمه‌ها ----- */
+    .question-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+      gap: 12px;
+    }
+
+    .btn-next {
+      padding: 12px 32px;
+      border-radius: 30px;
+      background: rgba(0, 234, 255, 0.08);
+      border: 1px solid rgba(0, 234, 255, 0.2);
+      color: var(--neon-cyan);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: var(--font-main);
+    }
+
+    .btn-next:hover:not(:disabled) {
+      background: rgba(0, 234, 255, 0.18);
+      box-shadow: 0 0 40px rgba(0, 234, 255, 0.05);
+      transform: translateY(-2px);
+    }
+
+    .btn-next:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    /* ----- Lobby ----- */
+    .lobby-overlay {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(120% 90% at 50% 20%, rgba(0, 234, 255, 0.04), rgba(10, 15, 31, 0.97));
+      z-index: 50;
+      padding: 20px;
+      animation: fadeInUp 0.6s ease forwards;
+    }
+
+    .lobby-card {
+      max-width: 520px;
+      width: 100%;
+      text-align: center;
+      padding: 40px 36px;
+    }
+
+    .lobby-card .lobby-icon {
+      font-size: 4rem;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .lobby-card h2 {
+      font-size: 2rem;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .lobby-card p {
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      line-height: 2;
+      font-size: 1rem;
+    }
+
+    .lobby-card .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .lobby-card .actions .btn {
+      padding: 14px 20px;
+      font-size: 1rem;
+    }
+
+    /* ----- Result ----- */
+    .result-box {
+      text-align: center;
+      padding: 35px 30px;
+      animation: fadeInUp 0.6s ease forwards;
+    }
+
+    .result-box .result-icon {
+      font-size: 4rem;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .result-box .big-score {
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: var(--neon-gold);
+      text-shadow: 0 0 40px rgba(255, 204, 102, 0.15);
+    }
+
+    .result-box .big-score span {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+    }
+
+    .result-box .stats {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+      margin: 20px 0 24px;
+    }
+
+    .result-box .stat-item {
+      padding: 12px 20px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      min-width: 100px;
+    }
+
+    .result-box .stat-item .label {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      display: block;
+      opacity: 0.7;
+    }
+
+    .result-box .stat-item .number {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .result-box .stat-item .number.gold {
+      color: var(--neon-gold);
+    }
+    .result-box .stat-item .number.green {
+      color: #22c55e;
+    }
+    .result-box .stat-item .number.purple {
+      color: var(--neon-purple);
+    }
+
+    .result-box .rank-change {
+      padding: 10px 20px;
+      border-radius: 12px;
+      background: rgba(255, 204, 102, 0.06);
+      border: 1px solid rgba(255, 204, 102, 0.1);
+      margin: 12px 0 20px;
+      display: inline-block;
+    }
+
+    .result-box .rank-change .from {
+      color: var(--text-secondary);
+    }
+
+    .result-box .rank-change .arrow {
+      color: var(--neon-cyan);
+      margin: 0 8px;
+    }
+
+    .result-box .rank-change .to {
+      color: var(--neon-gold);
+      font-weight: 700;
+    }
+
+    /* ============================================
+       ریسپانسیو
+       ============================================ */
+    @media (max-width: 768px) {
+      .game-container {
+        padding: 12px 14px 20px;
+      }
+
+      .hud {
+        gap: 8px;
+      }
+
+      .hud-item {
+        font-size: 0.75rem;
+        padding: 4px 12px;
+      }
+
+      .question-box {
+        padding: 20px 18px;
+      }
+
+      .question-box h2 {
+        font-size: 1.15rem;
+      }
+
+      .option {
+        padding: 12px 16px;
+        font-size: 0.9rem;
+      }
+
+      .option .opt-label {
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+        font-size: 0.65rem;
+        margin-left: 8px;
+      }
+
+      .lobby-card {
+        padding: 28px 20px;
+      }
+
+      .lobby-card h2 {
+        font-size: 1.5rem;
+      }
+
+      .result-box {
+        padding: 24px 18px;
+      }
+
+      .result-box .big-score {
+        font-size: 2.5rem;
+      }
+
+      .result-box .stats {
+        gap: 10px;
+      }
+
+      .result-box .stat-item {
+        padding: 8px 14px;
+        min-width: 80px;
+      }
+
+      .btn-next {
+        padding: 10px 24px;
+        font-size: 0.85rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .game-container {
+        padding: 8px 10px 16px;
+      }
+
+      .hud {
+        gap: 6px;
+        justify-content: center;
+      }
+
+      .hud-item {
+        font-size: 0.65rem;
+        padding: 3px 10px;
+      }
+
+      .hud-progress {
+        min-width: 60px;
+        width: 100%;
+        order: 99;
+      }
+
+      .question-box {
+        padding: 16px 14px;
+        border-radius: 14px;
+      }
+
+      .question-box .meta {
+        font-size: 0.7rem;
+      }
+
+      .question-box h2 {
+        font-size: 1rem;
+        margin-bottom: 14px;
+      }
+
+      .option {
+        padding: 10px 14px;
+        font-size: 0.85rem;
+        border-radius: 10px;
+      }
+
+      .option .opt-label {
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        font-size: 0.55rem;
+        margin-left: 6px;
+      }
+
+      .question-actions {
+        justify-content: center;
+      }
+
+      .btn-next {
+        padding: 8px 20px;
+        font-size: 0.8rem;
+        width: 100%;
+        justify-content: center;
+      }
+
+      .lobby-card {
+        padding: 20px 16px;
+      }
+
+      .lobby-card .lobby-icon {
+        font-size: 3rem;
+      }
+
+      .lobby-card h2 {
+        font-size: 1.3rem;
+      }
+
+      .lobby-card p {
+        font-size: 0.9rem;
+        line-height: 1.8;
+      }
+
+      .lobby-card .actions .btn {
+        padding: 12px 16px;
+        font-size: 0.9rem;
+      }
+
+      .result-box .big-score {
+        font-size: 2rem;
+      }
+
+      .result-box .stats {
+        gap: 8px;
+      }
+
+      .result-box .stat-item {
+        padding: 6px 12px;
+        min-width: 60px;
+        flex: 1;
+      }
+
+      .result-box .stat-item .number {
+        font-size: 1rem;
+      }
+
+      .result-box .stat-item .label {
+        font-size: 0.65rem;
+      }
+
+      .result-box .rank-change {
+        font-size: 0.85rem;
+        padding: 8px 14px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .hud-item {
+        font-size: 0.55rem;
+        padding: 2px 8px;
+      }
+
+      .question-box h2 {
+        font-size: 0.9rem;
+      }
+
+      .option {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+      }
+
+      .option .opt-label {
+        width: 18px;
+        height: 18px;
+        line-height: 18px;
+        font-size: 0.5rem;
+        margin-left: 4px;
+      }
+
+      .lobby-card h2 {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="game-container" id="app">
+
+    <!-- ==========================================
+         LOBBY (اتاق انتظار)
+         ========================================== -->
+    <div id="lobby" class="lobby-overlay">
+      <div class="lobby-card glow-card">
+        <span class="lobby-icon">⚡</span>
+        <h2 class="neon-text">آماده‌ای برای رقابت؟</h2>
+        <p>
+          اینجا اول حالت بازی رو انتخاب کن، بعد با یک کلیک وارد آزمون می‌شی.
+          <br />هدف اینه که بازی «یک‌راست» شروع نشه و کاربر آماده بشه.
+        </p>
+        <div class="actions">
+          <button class="btn btn-primary" id="startBtn">🚀 شروع مسابقه</button>
+          <button class="btn" onclick="location.href='select.html'">🧭 انتخاب حالت</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         HUD (وضعیت بازی)
+         ========================================== -->
+    <div id="hud" class="hud" style="display:none;">
+      <span class="hud-item">
+        📝 سؤال <span class="value" id="current">0</span>/<span id="total">0</span>
+      </span>
+      <span class="hud-item">
+        ⏱ <span class="value" id="timer">60</span>s
+      </span>
+      <span class="hud-item">
+        ⭐ امتیاز: <span class="value gold" id="scoreHud">0</span>
+      </span>
+      <span class="hud-item">
+        🔥 رگه: <span class="value green" id="streak">0</span>
+      </span>
+      <div class="hud-progress">
+        <div class="bar">
+          <div class="fill" id="progressFill"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         سؤال
+         ========================================== -->
+    <div id="questionArea" style="display:none;">
+      <div class="question-box glow-card">
+        <div class="meta">
+          <span id="difficulty">سختی: متوسط</span>
+          <span class="q-number" id="qNumber">سؤال ۱ از ۱۰</span>
+        </div>
+        <h2 id="questionText">در حال بارگذاری...</h2>
+        <div class="options" id="optionsContainer"></div>
+        <div class="question-actions">
+          <button class="btn-next" id="nextBtn" disabled>
+            سؤال بعدی →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         نتیجه
+         ========================================== -->
+    <div id="resultArea" style="display:none;">
+      <div class="result-box glow-card">
+        <span class="result-icon">🎉</span>
+        <h2 class="neon-text-gold" style="margin-bottom:4px;">آزمون تمام شد!</h2>
+        <div class="big-score" id="finalScore">0 <span>امتیاز</span></div>
+
+        <div class="stats" id="resultStats"></div>
+
+        <div id="rankChangeContainer" class="rank-change" style="display:none;">
+          <span class="from" id="rankFrom">—</span>
+          <span class="arrow">→</span>
+          <span class="to" id="rankTo">—</span>
+        </div>
+
+        <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:20px;">
+          <button class="btn btn-primary" onclick="location.reload()">🔄 شروع مجدد</button>
+          <button class="btn btn-purple" onclick="location.href='dashboard.html'">📊 داشبورد</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ==========================================
+       اسکریپت‌ها
+       ========================================== -->
+  <script src="js/quiz.js"></script>
+  <script src="js/rank.js"></script>
+  <script src="js/rank-anim.js"></script>
+
+  <script>
+    // ============================================
+    // Lobby → Start
+    // ============================================
+    document.getElementById('startBtn').addEventListener('click', function() {
+      const lobby = document.getElementById('lobby');
+      lobby.style.opacity = '0';
+      lobby.style.transition = '0.5s ease';
+      setTimeout(() => {
+        lobby.style.display = 'none';
+        document.getElementById('hud').style.display = 'flex';
+        document.getElementById('questionArea').style.display = 'block';
+        if (window.startQuiz) window.startQuiz();
+      }, 400);
+    });
+
+    // ============================================
+    // انتخاب حالت (از select.html)
+    // ============================================
+    // بررسی انتخاب حالت ذخیره‌شده
+    try {
+      const mode = JSON.parse(localStorage.getItem('nv_game_mode') || '{}');
+      if (mode.level) {
+        console.log('🎯 حالت بازی انتخاب شده:', mode.level, mode.category);
+      }
+    } catch (e) {}
+
+    console.log('🎮 NitroVerse Game loaded!');
+  </script>
+
+</body>
+</html>

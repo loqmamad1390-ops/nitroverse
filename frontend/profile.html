@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="پروفایل کاربری نیتروورس — مدیریت اطلاعات و مشاهده پیشرفت" />
+  <meta name="keywords" content="پروفایل, کاربر, نیتروورس, آمار, پیشرفت" />
+  <meta property="og:title" content="👤 پروفایل من | NitroVerse" />
+  <meta property="og:description" content="اطلاعات خود را مدیریت کن و پیشرفت‌ت را ببین" />
+  <title>👤 پروفایل من | NitroVerse</title>
+  <link rel="icon" href="img/logo.png" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+  </script>
+
+  <style>
+    /* ============================================
+       صفحه پروفایل — استایل‌های اختصاصی
+       ============================================ */
+
+    .profile-container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 16px 20px 40px;
+      min-height: 100vh;
+    }
+
+    /* ----- هدر ----- */
+    .profile-header {
+      text-align: center;
+      padding: 20px 20px 10px;
+      animation: fadeInUp 0.7s ease forwards;
+    }
+
+    .profile-header h1 {
+      font-size: 2.2rem;
+      font-weight: 900;
+    }
+
+    .profile-header .subtitle {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      margin-top: 4px;
+      opacity: 0.8;
+    }
+
+    .profile-header .subtitle span {
+      color: var(--neon-cyan);
+      font-weight: 700;
+    }
+
+    /* ----- آواتار ----- */
+    .profile-avatar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 22px;
+      animation: fadeInUp 0.7s ease 0.05s forwards;
+      opacity: 0;
+    }
+
+    .profile-avatar .avatar-circle {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: #000;
+      box-shadow: 0 0 50px rgba(0, 234, 255, 0.15);
+      margin-bottom: 8px;
+      transition: 0.3s;
+      border: 3px solid rgba(0, 234, 255, 0.1);
+    }
+
+    .profile-avatar .avatar-circle:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 70px rgba(0, 234, 255, 0.2);
+    }
+
+    .profile-avatar .avatar-name {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .profile-avatar .avatar-rank {
+      font-size: 0.95rem;
+      color: var(--neon-gold);
+      font-weight: 600;
+    }
+
+    .profile-avatar .avatar-email {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      opacity: 0.5;
+    }
+
+    /* ----- آمار ----- */
+    .profile-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+      animation: fadeInUp 0.7s ease 0.1s forwards;
+      opacity: 0;
+    }
+
+    .profile-stats .stat-card {
+      text-align: center;
+      padding: 16px 10px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      transition: all 0.3s ease;
+    }
+
+    .profile-stats .stat-card:hover {
+      border-color: rgba(0, 234, 255, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .profile-stats .stat-card .number {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--neon-cyan);
+      line-height: 1.2;
+    }
+
+    .profile-stats .stat-card .label {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-top: 2px;
+      display: block;
+      opacity: 0.7;
+    }
+
+    .profile-stats .stat-card.gold .number {
+      color: var(--neon-gold);
+    }
+    .profile-stats .stat-card.purple .number {
+      color: var(--neon-purple);
+    }
+    .profile-stats .stat-card.green .number {
+      color: #22c55e;
+    }
+
+    /* ----- فرم ----- */
+    .profile-form {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      padding: 24px 28px;
+      margin-bottom: 24px;
+      animation: fadeInUp 0.7s ease 0.12s forwards;
+      opacity: 0;
+    }
+
+    .profile-form .form-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--neon-cyan);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .profile-form .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .profile-form .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .profile-form .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    .profile-form .form-group label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+      opacity: 0.8;
+    }
+
+    .profile-form .form-group input,
+    .profile-form .form-group select {
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.04);
+      color: #fff;
+      font-family: var(--font-main);
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .profile-form .form-group input:focus,
+    .profile-form .form-group select:focus {
+      border-color: rgba(0, 234, 255, 0.15);
+      box-shadow: 0 0 30px rgba(0, 234, 255, 0.03);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .profile-form .form-group input::placeholder {
+      color: var(--text-secondary);
+      opacity: 0.3;
+    }
+
+    .profile-form .form-group select option {
+      background: #0a0f1f;
+      color: #fff;
+    }
+
+    .profile-form .form-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    .btn-save {
+      padding: 12px 32px;
+      border-radius: 30px;
+      border: none;
+      background: rgba(0, 234, 255, 0.08);
+      color: var(--neon-cyan);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: var(--font-main);
+      border: 1px solid rgba(0, 234, 255, 0.1);
+    }
+
+    .btn-save:hover {
+      background: rgba(0, 234, 255, 0.16);
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px rgba(0, 234, 255, 0.04);
+    }
+
+    .btn-reset {
+      padding: 12px 24px;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-secondary);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: var(--font-main);
+    }
+
+    .btn-reset:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .form-result {
+      margin-top: 14px;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-weight: 600;
+      display: none;
+      animation: fadeInUp 0.4s ease forwards;
+    }
+
+    .form-result.success {
+      display: block;
+      background: rgba(34, 197, 94, 0.08);
+      border: 1px solid rgba(34, 197, 94, 0.12);
+      color: #22c55e;
+    }
+
+    .form-result.error {
+      display: block;
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.12);
+      color: #ef4444;
+    }
+
+    /* ----- نمودارها ----- */
+    .charts-section {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      padding: 24px 28px;
+      margin-bottom: 24px;
+      animation: fadeInUp 0.7s ease 0.15s forwards;
+      opacity: 0;
+    }
+
+    .charts-section .charts-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--neon-gold);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .charts-section .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .charts-section .chart-box {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 12px;
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .charts-section .chart-box h4 {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-bottom: 10px;
+      opacity: 0.7;
+    }
+
+    .charts-section .chart-box canvas {
+      max-height: 180px;
+      max-width: 100%;
+    }
+
+    /* ----- تاریخچه ----- */
+    .history-section {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      padding: 24px 28px;
+      margin-bottom: 24px;
+      animation: fadeInUp 0.7s ease 0.18s forwards;
+      opacity: 0;
+    }
+
+    .history-section .history-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--neon-purple);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .history-section .history-title .count {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      font-weight: 400;
+      opacity: 0.6;
+    }
+
+    .history-list {
+      max-height: 300px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .history-list::-webkit-scrollbar {
+      width: 4px;
+    }
+    .history-list::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 10px;
+    }
+    .history-list::-webkit-scrollbar-thumb {
+      background: rgba(124, 58, 237, 0.2);
+      border-radius: 10px;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      transition: 0.3s;
+      border-radius: 8px;
+    }
+
+    .history-item:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .history-item:last-child {
+      border-bottom: none;
+    }
+
+    .history-item .h-date {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      opacity: 0.6;
+    }
+
+    .history-item .h-score {
+      font-weight: 700;
+      color: var(--neon-gold);
+      font-size: 0.95rem;
+    }
+
+    .history-item .h-detail {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      opacity: 0.7;
+    }
+
+    .history-item .h-rank {
+      font-size: 0.7rem;
+      padding: 2px 10px;
+      border-radius: 20px;
+      background: rgba(255, 204, 102, 0.06);
+      border: 1px solid rgba(255, 204, 102, 0.06);
+      color: var(--neon-gold);
+    }
+
+    .history-empty {
+      text-align: center;
+      padding: 30px 20px;
+      color: var(--text-secondary);
+    }
+
+    .history-empty .icon {
+      font-size: 2.8rem;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .history-empty h4 {
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .history-empty p {
+      font-size: 0.85rem;
+      opacity: 0.6;
+    }
+
+    /* ----- دکمه‌ها ----- */
+    .profile-actions {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      animation: fadeInUp 0.7s ease 0.2s forwards;
+      opacity: 0;
+    }
+
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: var(--text-primary);
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      cursor: pointer;
+      font-family: var(--font-main);
+    }
+
+    .btn-back:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .btn-back.primary {
+      background: rgba(124, 58, 237, 0.08);
+      border-color: rgba(124, 58, 237, 0.12);
+      color: var(--neon-purple);
+    }
+
+    .btn-back.primary:hover {
+      background: rgba(124, 58, 237, 0.16);
+    }
+
+    .btn-back.neon {
+      background: rgba(0, 234, 255, 0.06);
+      border-color: rgba(0, 234, 255, 0.1);
+      color: var(--neon-cyan);
+    }
+
+    .btn-back.neon:hover {
+      background: rgba(0, 234, 255, 0.12);
+    }
+
+    /* ============================================
+       انیمیشن‌ها
+       ============================================ */
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ============================================
+       ریسپانسیو
+       ============================================ */
+
+    @media (max-width: 768px) {
+      .profile-container {
+        padding: 12px 14px 30px;
+      }
+
+      .profile-header h1 {
+        font-size: 1.8rem;
+      }
+
+      .profile-avatar .avatar-circle {
+        width: 80px;
+        height: 80px;
+        font-size: 2.2rem;
+      }
+
+      .profile-avatar .avatar-name {
+        font-size: 1.1rem;
+      }
+
+      .profile-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .profile-stats .stat-card .number {
+        font-size: 1.4rem;
+      }
+
+      .profile-form {
+        padding: 18px 16px;
+      }
+
+      .profile-form .form-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .charts-section {
+        padding: 18px 16px;
+      }
+
+      .charts-section .charts-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .charts-section .chart-box canvas {
+        max-height: 140px;
+      }
+
+      .history-section {
+        padding: 18px 16px;
+      }
+
+      .history-item {
+        padding: 8px 10px;
+        flex-wrap: wrap;
+        gap: 4px;
+      }
+
+      .profile-actions {
+        flex-direction: column;
+      }
+
+      .profile-actions .btn-back {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .profile-form .form-actions {
+        flex-direction: column;
+      }
+
+      .profile-form .form-actions .btn-save,
+      .profile-form .form-actions .btn-reset {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .profile-header h1 {
+        font-size: 1.4rem;
+      }
+
+      .profile-header .subtitle {
+        font-size: 0.85rem;
+      }
+
+      .profile-avatar .avatar-circle {
+        width: 64px;
+        height: 64px;
+        font-size: 1.8rem;
+      }
+
+      .profile-avatar .avatar-name {
+        font-size: 1rem;
+      }
+
+      .profile-avatar .avatar-rank {
+        font-size: 0.8rem;
+      }
+
+      .profile-stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .profile-stats .stat-card {
+        padding: 12px 8px;
+      }
+
+      .profile-stats .stat-card .number {
+        font-size: 1.2rem;
+      }
+
+      .profile-stats .stat-card .label {
+        font-size: 0.65rem;
+      }
+
+      .profile-form {
+        padding: 14px 12px;
+        border-radius: 14px;
+      }
+
+      .profile-form .form-title {
+        font-size: 0.95rem;
+      }
+
+      .profile-form .form-group input,
+      .profile-form .form-group select {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+      }
+
+      .charts-section .charts-title {
+        font-size: 0.95rem;
+      }
+
+      .history-section .history-title {
+        font-size: 0.95rem;
+      }
+
+      .history-item .h-date {
+        font-size: 0.65rem;
+      }
+
+      .history-item .h-score {
+        font-size: 0.8rem;
+      }
+
+      .history-item .h-detail {
+        font-size: 0.7rem;
+      }
+
+      .btn-back {
+        padding: 10px 20px;
+        font-size: 0.8rem;
+      }
+
+      .btn-save,
+      .btn-reset {
+        padding: 10px 20px;
+        font-size: 0.85rem;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .profile-stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+      }
+
+      .profile-stats .stat-card .number {
+        font-size: 1rem;
+      }
+
+      .profile-avatar .avatar-circle {
+        width: 54px;
+        height: 54px;
+        font-size: 1.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="profile-container">
+
+    <!-- ==========================================
+         هدر
+         ========================================== -->
+    <header class="profile-header">
+      <h1 class="neon-text">👤 پروفایل من</h1>
+      <p class="subtitle">اطلاعات خود را مدیریت کن و <span>پیشرفت</span>‌ت را ببین</p>
+    </header>
+
+    <!-- ==========================================
+         آواتار
+         ========================================== -->
+    <div class="profile-avatar">
+      <div class="avatar-circle" id="avatarLetter">?</div>
+      <div class="avatar-name" id="displayName">کاربر مهمان</div>
+      <div class="avatar-rank" id="displayRank">🌟 رنک: Normal</div>
+      <div class="avatar-email" id="displayEmail">—</div>
+    </div>
+
+    <!-- ==========================================
+         آمار
+         ========================================== -->
+    <div class="profile-stats" id="statsRow">
+      <div class="stat-card">
+        <div class="number" id="statScore">0</div>
+        <span class="label">⭐ امتیاز کل</span>
+      </div>
+      <div class="stat-card gold">
+        <div class="number" id="statRating">0</div>
+        <span class="label">🏅 Rating</span>
+      </div>
+      <div class="stat-card purple">
+        <div class="number" id="statGames">0</div>
+        <span class="label">🎮 بازی‌ها</span>
+      </div>
+      <div class="stat-card green">
+        <div class="number" id="statAchievements">0</div>
+        <span class="label">🏅 دستاوردها</span>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         فرم پروفایل
+         ========================================== -->
+    <div class="profile-form">
+      <div class="form-title">✏️ ویرایش اطلاعات</div>
+      <div class="form-grid">
+        <div class="form-group full">
+          <label>نام کامل</label>
+          <input type="text" id="fullname" placeholder="نام و نام خانوادگی" />
+        </div>
+        <div class="form-group">
+          <label>نام کاربری</label>
+          <input type="text" id="username" placeholder="نام کاربری" />
+        </div>
+        <div class="form-group">
+          <label>ایمیل</label>
+          <input type="email" id="email" placeholder="ایمیل (اختیاری)" />
+        </div>
+        <div class="form-group">
+          <label>استان</label>
+          <select id="province">
+            <option value="">انتخاب استان</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>شهر</label>
+          <select id="city">
+            <option value="">انتخاب شهر</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>مدرسه / سازمان</label>
+          <input type="text" id="school" placeholder="نام مدرسه یا سازمان" />
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-save" id="saveBtn">💾 ذخیره تغییرات</button>
+        <button class="btn-reset" id="resetBtn">↺ بازنشانی</button>
+      </div>
+      <div class="form-result" id="formResult"></div>
+    </div>
+
+    <!-- ==========================================
+         نمودارها
+         ========================================== -->
+    <div class="charts-section">
+      <div class="charts-title">📊 نمودارهای عملکرد</div>
+      <div class="charts-grid">
+        <div class="chart-box">
+          <h4>امتیاز در هر بازی</h4>
+          <canvas id="scoreChart"></canvas>
+        </div>
+        <div class="chart-box">
+          <h4>میانگین امتیاز</h4>
+          <canvas id="avgChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         تاریخچه
+         ========================================== -->
+    <div class="history-section">
+      <div class="history-title">
+        📜 تاریخچه فعالیت‌ها
+        <span class="count" id="historyCount">۰ رکورد</span>
+      </div>
+      <div class="history-list" id="historyList">
+        <!-- توسط JS پر می‌شود -->
+      </div>
+    </div>
+
+    <!-- ==========================================
+         دکمه‌ها
+         ========================================== -->
+    <div class="profile-actions">
+      <a href="dashboard.html" class="btn-back primary">📊 بازگشت به داشبورد</a>
+      <button class="btn-back neon" onclick="location.reload()">🔄 تازه‌سازی</button>
+    </div>
+
+  </div>
+
+  <!-- ==========================================
+       اسکریپت‌ها
+       ========================================== -->
+  <script>
+    // ============================================
+    // NitroVerse Profile (Enhanced)
+    // ============================================
+
+    const PROFILE_KEY = 'nv_profile';
+    const HISTORY_KEY = 'nv_quiz_history';
+    const ACH_KEY = 'nv_achievements';
+    const RATING_KEY = 'nv_rating';
+
+    // ============================================
+    // DOM Refs
+    // ============================================
+    const $ = (id) => document.getElementById(id);
+
+    const fullnameEl = $('fullname');
+    const usernameEl = $('username');
+    const emailEl = $('email');
+    const provinceEl = $('province');
+    const cityEl = $('city');
+    const schoolEl = $('school');
+    const resultEl = $('formResult');
+    const saveBtn = $('saveBtn');
+    const resetBtn = $('resetBtn');
+
+    // ============================================
+    // داده‌های استان‌ها و شهرها
+    // ============================================
+    const citiesByProvince = {
+      'تهران': ['تهران', 'اسلام‌شهر', 'شهریار', 'ورامین', 'پردیس', 'ملارد', 'قرچک'],
+      'اصفهان': ['اصفهان', 'کاشان', 'نجف‌آباد', 'شهرضا', 'خمینی‌شهر', 'فلاورجان'],
+      'خراسان رضوی': ['مشهد', 'نیشابور', 'سبزوار', 'قوچان', 'کاشمر', 'تربت حیدریه'],
+      'فارس': ['شیراز', 'مرودشت', 'کازرون', 'جهرم', 'فیروزآباد', 'لار'],
+      'آذربایجان شرقی': ['تبریز', 'مراغه', 'میانه', 'اهر', 'بناب', 'سراب'],
+      'گیلان': ['رشت', 'انزلی', 'لاهیجان', 'آستارا', 'فومن', 'رودسر'],
+      'مازندران': ['ساری', 'بابل', 'آمل', 'قائم‌شهر', 'بهشهر', 'نوشهر'],
+      'کرمان': ['کرمان', 'سیرجان', 'رفسنجان', 'بم', 'زرند', 'جیرفت'],
+      'خوزستان': ['اهواز', 'آبادان', 'خرمشهر', 'دزفول', 'اندیمشک', 'شوشتر'],
+      'یزد': ['یزد', 'میبد', 'اردکان', 'بافق', 'مهریز'],
+      'قزوین': ['قزوین', 'تاکستان', 'الوند', 'بوئین‌زهرا'],
+      'کردستان': ['سنندج', 'بانه', 'سقز', 'مریوان', 'دیواندره'],
+      'سیستان و بلوچستان': ['زاهدان', 'چابهار', 'ایرانشهر', 'زابل', 'خاش'],
+      'هرمزگان': ['بندرعباس', 'میناب', 'بندرلنگه', 'قشم', 'کیش'],
+      'البرز': ['کرج', 'نظرآباد', 'هشتگرد', 'طالقان'],
+      'همدان': ['همدان', 'ملایر', 'نهاوند', 'تویسرکان'],
+      'کرمانشاه': ['کرمانشاه', 'کنگاور', 'صحنه', 'سنقر'],
+      'لرستان': ['خرم‌آباد', 'بروجرد', 'دورود', 'الیگودرز'],
+      'زنجان': ['زنجان', 'ابهر', 'خرم‌دره', 'ماه‌نشان'],
+      'سمنان': ['سمنان', 'دامغان', 'شاهرود', 'گرمسار'],
+    };
+
+    const provinces = Object.keys(citiesByProvince);
+
+    // ============================================
+    // توابع کمکی
+    // ============================================
+
+    function getUserKey(baseKey) {
+      const userId = localStorage.getItem('nv_user_id') || 'guest';
+      return `${baseKey}_${userId}`;
+    }
+
+    function getUserData(baseKey, defaultValue = null) {
+      try {
+        const key = getUserKey(baseKey);
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : defaultValue;
+      } catch {
+        return defaultValue;
+      }
+    }
+
+    function getProfile() {
+      return getUserData(PROFILE_KEY, {});
+    }
+
+    function getHistory() {
+      return getUserData(HISTORY_KEY, []);
+    }
+
+    function getAchievements() {
+      try {
+        const ach = getUserData(ACH_KEY, {});
+        return Object.values(ach).filter(v => v === true).length;
+      } catch {
+        return 0;
+      }
+    }
+
+    function getRating() {
+      return getUserData(RATING_KEY, 0);
+    }
+
+    function getRank(rating) {
+      if (rating >= 4000) return 'Immortal 👑';
+      if (rating >= 3000) return 'Legendary ⭐';
+      if (rating >= 2200) return 'Diamond 💎';
+      if (rating >= 1500) return 'Gold 🥇';
+      if (rating >= 1000) return 'Silver 🥈';
+      if (rating >= 500) return 'Bronze 🥉';
+      return 'Normal 🌱';
+    }
+
+    function getTotalScore(history) {
+      return history.reduce((sum, h) => sum + (h.score || 0), 0);
+    }
+
+    function getUsername() {
+      return localStorage.getItem('nv_username') || 'کاربر مهمان';
+    }
+
+    // ============================================
+    // بارگذاری پروفایل
+    // ============================================
+    function loadProfile() {
+      const p = getProfile();
+      const history = getHistory();
+      const totalScore = getTotalScore(history);
+      const totalGames = history.length;
+      const achievements = getAchievements();
+      const rating = getRating();
+      const username = getUsername();
+
+      // ===== فرم =====
+      if (p.fullname) fullnameEl.value = p.fullname;
+      if (p.username) usernameEl.value = p.username;
+      if (p.email) emailEl.value = p.email;
+      if (p.school) schoolEl.value = p.school;
+
+      if (p.province) {
+        provinceEl.value = p.province;
+        fillCities(p.city || '');
+      }
+
+      // ===== آواتار =====
+      const displayName = p.fullname || username || 'کاربر مهمان';
+      $('displayName').textContent = displayName;
+      $('avatarLetter').textContent = displayName.charAt(0).toUpperCase();
+      $('displayRank').textContent = '🌟 رنک: ' + getRank(rating);
+      $('displayEmail').textContent = p.email || '—';
+
+      // ===== آمار =====
+      $('statScore').textContent = totalScore.toLocaleString();
+      $('statRating').textContent = rating;
+      $('statGames').textContent = totalGames;
+      $('statAchievements').textContent = achievements;
+
+      // ===== تاریخچه =====
+      renderHistory();
+      // ===== نمودارها =====
+      renderCharts();
+    }
+
+    // ============================================
+    // شهرها
+    // ============================================
+    function fillCities(selectedCity = '') {
+      const province = provinceEl.value;
+      const cities = citiesByProvince[province] || [];
+      cityEl.innerHTML = '<option value="">انتخاب شهر</option>';
+
+      cities.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = c;
+        if (c === selectedCity) opt.selected = true;
+        cityEl.appendChild(opt);
+      });
+    }
+
+    function populateProvinces() {
+      provinces.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p;
+        opt.textContent = p;
+        provinceEl.appendChild(opt);
+      });
+    }
+
+    // ============================================
+    // ذخیره
+    // ============================================
+    function saveProfile() {
+      const p = {
+        fullname: fullnameEl.value.trim(),
+        username: usernameEl.value.trim(),
+        email: emailEl.value.trim(),
+        province: provinceEl.value,
+        city: cityEl.value,
+        school: schoolEl.value.trim(),
+      };
+
+      if (!p.username) {
+        showResult('⚠️ لطفاً نام کاربری را وارد کنید.', 'error');
+        return;
+      }
+
+      // ذخیره با پشتیبانی از userId
+      const key = getUserKey(PROFILE_KEY);
+      localStorage.setItem(key, JSON.stringify(p));
+
+      // همچنین در nv_username برای استفاده در سایر بخش‌ها
+      localStorage.setItem('nv_username', p.username);
+
+      showResult('✅ اطلاعات با موفقیت ذخیره شد!', 'success');
+      loadProfile();
+    }
+
+    function resetForm() {
+      const p = getProfile();
+      if (p.fullname) fullnameEl.value = p.fullname;
+      if (p.username) usernameEl.value = p.username;
+      if (p.email) emailEl.value = p.email;
+      if (p.school) schoolEl.value = p.school;
+      if (p.province) {
+        provinceEl.value = p.province;
+        fillCities(p.city || '');
+      }
+      resultEl.className = 'form-result';
+      resultEl.style.display = 'none';
+    }
+
+    function showResult(msg, type) {
+      resultEl.textContent = msg;
+      resultEl.className = 'form-result ' + type;
+      resultEl.style.display = 'block';
+      setTimeout(() => {
+        resultEl.style.display = 'none';
+      }, 3000);
+    }
+
+    // ============================================
+    // تاریخچه
+    // ============================================
+    function renderHistory() {
+      const history = getHistory();
+      const list = $('historyList');
+      const count = $('historyCount');
+
+      if (history.length === 0) {
+        list.innerHTML = `
+          <div class="history-empty">
+            <span class="icon">📭</span>
+            <h4>هنوز هیچ فعالیتی ثبت نشده است</h4>
+            <p>اولین بازی خود را انجام بده و پیشرفت‌ت را ببین! 🚀</p>
+          </div>
+        `;
+        count.textContent = '۰ رکورد';
+        return;
+      }
+
+      count.textContent = history.length + ' رکورد';
+
+      // مرتب‌سازی از جدید به قدیم
+      const sorted = [...history].reverse().slice(0, 30);
+
+      list.innerHTML = sorted.map((h, i) => {
+        const date = h.date ? new Date(h.date) : new Date();
+        const dateStr = date.toLocaleDateString('fa-IR') + ' ' +
+          date.toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' });
+        const score = h.score || 0;
+        const total = h.total || 0;
+        const maxScore = total * 10;
+
+        // رتبه (اگر در نتیجه ذخیره شده باشد)
+        const rankName = h.rankAfter || '';
+
+        return `
+          <div class="history-item">
+            <span class="h-date">${dateStr}</span>
+            <span class="h-detail">${score} از ${maxScore} امتیاز</span>
+            ${rankName ? `<span class="h-rank">${rankName}</span>` : ''}
+            <span class="h-score">${score} ⭐</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ============================================
+    // نمودارها با Chart.js
+    // ============================================
+    let scoreChartInstance = null;
+    let avgChartInstance = null;
+
+    function renderCharts() {
+      const history = getHistory();
+      const sorted = [...history].slice(-10);
+
+      if (sorted.length === 0) {
+        // اگر داده‌ای نبود، نمودار خالی نمایش بده
+        const ctx1 = document.getElementById('scoreChart').getContext('2d');
+        const ctx2 = document.getElementById('avgChart').getContext('2d');
+
+        if (scoreChartInstance) scoreChartInstance.destroy();
+        if (avgChartInstance) avgChartInstance.destroy();
+
+        scoreChartInstance = new Chart(ctx1, {
+          type: 'bar',
+          data: {
+            labels: ['بدون داده'],
+            datasets: [{
+              label: 'امتیاز',
+              data: [0],
+              backgroundColor: 'rgba(255,255,255,0.05)',
+              borderColor: 'rgba(255,255,255,0.1)',
+              borderWidth: 1,
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+              legend: { display: false }
+            },
+            scales: {
+              y: { beginAtZero: true, ticks: { color: '#aab0c8', font: { size: 9 } } },
+              x: { ticks: { color: '#aab0c8', font: { size: 9 } } }
+            }
+          }
+        });
+
+        avgChartInstance = new Chart(ctx2, {
+          type: 'line',
+          data: {
+            labels: ['بدون داده'],
+            datasets: [{
+              label: 'میانگین',
+              data: [0],
+              borderColor: 'rgba(255,255,255,0.1)',
+              backgroundColor: 'rgba(255,255,255,0.02)',
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+              legend: { display: false }
+            },
+            scales: {
+              y: { beginAtZero: true, ticks: { color: '#aab0c8', font: { size: 9 } } },
+              x: { ticks: { color: '#aab0c8', font: { size: 9 } } }
+            }
+          }
+        });
+        return;
+      }
+
+      const labels = sorted.map((_, i) => '🎯' + (i + 1));
+      const scores = sorted.map(h => h.score || 0);
+      const totals = sorted.map(h => (h.total || 1) * 10);
+      const avgs = sorted.map((h) => Math.round((h.score || 0) / (h.total || 1)));
+
+      // ===== نمودار امتیاز =====
+      const ctx1 = document.getElementById('scoreChart').getContext('2d');
+      if (scoreChartInstance) scoreChartInstance.destroy();
+
+      scoreChartInstance = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'امتیاز شما',
+            data: scores,
+            backgroundColor: 'rgba(0, 234, 255, 0.25)',
+            borderColor: '#00eaff',
+            borderWidth: 2,
+            borderRadius: 6,
+          }, {
+            label: 'حداکثر امتیاز',
+            data: totals,
+            backgroundColor: 'rgba(255, 204, 102, 0.08)',
+            borderColor: 'rgba(255, 204, 102, 0.3)',
+            borderWidth: 1,
+            borderRadius: 6,
+            borderDash: [4, 4],
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: {
+            legend: {
+              labels: {
+                color: '#aab0c8',
+                font: { size: 9, family: 'Vazirmatn' },
+                boxWidth: 10,
+                padding: 6,
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: { color: '#aab0c8', font: { size: 8 } },
+              grid: { color: 'rgba(255,255,255,0.04)' }
+            },
+            x: {
+              ticks: { color: '#aab0c8', font: { size: 8 } },
+              grid: { display: false }
+            }
+          }
+        }
+      });
+
+      // ===== نمودار میانگین =====
+      const ctx2 = document.getElementById('avgChart').getContext('2d');
+      if (avgChartInstance) avgChartInstance.destroy();
+
+      avgChartInstance = new Chart(ctx2, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'میانگین امتیاز',
+            data: avgs,
+            backgroundColor: 'rgba(124, 58, 237, 0.1)',
+            borderColor: '#7c3aed',
+            borderWidth: 3,
+            pointBackgroundColor: '#7c3aed',
+            pointBorderColor: '#fff',
+            pointBorderWidth: 1,
+            pointRadius: 4,
+            fill: true,
+            tension: 0.3,
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: {
+            legend: {
+              labels: {
+                color: '#aab0c8',
+                font: { size: 9, family: 'Vazirmatn' },
+                boxWidth: 10,
+                padding: 6,
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: { color: '#aab0c8', font: { size: 8 } },
+              grid: { color: 'rgba(255,255,255,0.04)' }
+            },
+            x: {
+              ticks: { color: '#aab0c8', font: { size: 8 } },
+              grid: { display: false }
+            }
+          }
+        }
+      });
+    }
+
+    // ============================================
+    // رویدادها
+    // ============================================
+    saveBtn.addEventListener('click', saveProfile);
+    resetBtn.addEventListener('click', resetForm);
+    provinceEl.addEventListener('change', function() {
+      fillCities();
+    });
+
+    // ============================================
+    // اجرا
+    // ============================================
+    document.addEventListener('DOMContentLoaded', function() {
+      populateProvinces();
+      loadProfile();
+
+      // به‌روزرسانی خودکار هر ۱۵ ثانیه
+      setInterval(() => {
+        loadProfile();
+      }, 15000);
+    });
+
+    // بروزرسانی هر بار که صفحه فعال می‌شود
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        loadProfile();
+      }
+    });
+
+    console.log('👤 NitroVerse Profile loaded!');
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="description" content="مشاهده رنک و رتبه‌بندی نیتروورس — موقعیت خود را در بین کاربران ببین" />
+  <meta name="keywords" content="رنک, رتبه‌بندی, امتیاز, نیتروورس, پیشرفت" />
+  <meta property="og:title" content="📊 رنک من | NitroVerse" />
+  <meta property="og:description" content="وضعیت رنک و پیشرفت خود را در نیتروورس ببین" />
+  <title>📊 رنک من | NitroVerse</title>
+  <link rel="icon" href="img/logo.png" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    /* ============================================
+       صفحه رنک — استایل‌های اختصاصی
+       ============================================ */
+
+    .rank-wrap {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 16px 16px 30px;
+      min-height: 100vh;
+    }
+
+    /* ----- هدر ----- */
+    .rank-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 18px;
+      animation: fadeInUp 0.7s ease forwards;
+    }
+
+    .rank-top .title {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 30px rgba(0, 234, 255, 0.1);
+    }
+
+    .btn-rank {
+      cursor: pointer;
+      border-radius: 30px;
+      padding: 8px 18px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-secondary);
+      font-weight: 700;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+      font-family: var(--font-main);
+    }
+
+    .btn-rank:hover {
+      border-color: rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .btn-rank.primary {
+      border-color: rgba(124, 58, 237, 0.15);
+      color: var(--neon-purple);
+    }
+
+    .btn-rank.primary:hover {
+      background: rgba(124, 58, 237, 0.08);
+    }
+
+    /* ----- گرید ----- */
+    .rank-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 18px;
+      animation: fadeInUp 0.7s ease 0.05s forwards;
+      opacity: 0;
+    }
+
+    @media (max-width: 768px) {
+      .rank-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+    }
+
+    /* ----- کارت خلاصه ----- */
+    .rank-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 18px;
+      padding: 20px 22px;
+      backdrop-filter: blur(8px);
+      transition: all 0.3s ease;
+    }
+
+    .rank-card:hover {
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .rank-card .row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .rank-card .rank-icon-wrap {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(0, 234, 255, 0.04);
+      border: 2px solid rgba(0, 234, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: 0.3s;
+    }
+
+    .rank-card .rank-icon-wrap:hover {
+      border-color: rgba(0, 234, 255, 0.15);
+      box-shadow: 0 0 40px rgba(0, 234, 255, 0.04);
+    }
+
+    .rank-card .rank-icon-wrap .rank-icon {
+      font-size: 2.8rem;
+    }
+
+    .rank-card .rank-info .rank-name {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    .rank-card .rank-info .rank-rating {
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .rank-card .rank-info .rank-rating .value {
+      color: var(--neon-gold);
+      font-size: 1.1rem;
+    }
+
+    /* ----- KPI ها ----- */
+    .rank-kpi {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .rank-pill {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .rank-pill .highlight {
+      color: var(--neon-cyan);
+    }
+
+    .rank-pill.gold .highlight {
+      color: var(--neon-gold);
+    }
+
+    /* ----- نوار پیشرفت ----- */
+    .rank-progress {
+      margin-top: 16px;
+    }
+
+    .rank-progress .bar {
+      height: 8px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .rank-progress .bar .fill {
+      height: 100%;
+      border-radius: 10px;
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+      box-shadow: 0 0 30px rgba(0, 234, 255, 0.1);
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 0%;
+    }
+
+    .rank-progress .bar-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 6px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .rank-progress .bar-label .current {
+      color: var(--neon-cyan);
+    }
+
+    .rank-progress .bar-label .next {
+      color: var(--neon-gold);
+    }
+
+    .rank-progress .note {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      opacity: 0.4;
+      margin-top: 8px;
+    }
+
+    /* ----- لیست رنک‌ها ----- */
+    .rank-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .rank-item {
+      display: grid;
+      grid-template-columns: 52px 1fr 40px;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      background: rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      cursor: default;
+    }
+
+    .rank-item:hover {
+      border-color: rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .rank-item.active {
+      border-color: rgba(0, 234, 255, 0.15);
+      background: rgba(0, 234, 255, 0.04);
+      box-shadow: 0 0 30px rgba(0, 234, 255, 0.02);
+    }
+
+    .rank-item .rank-icon-sm {
+      font-size: 1.8rem;
+      text-align: center;
+    }
+
+    .rank-item .rank-detail .name {
+      font-weight: 900;
+      font-size: 0.95rem;
+      color: #fff;
+    }
+
+    .rank-item .rank-detail .meta {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      opacity: 0.7;
+    }
+
+    .rank-item .rank-detail .need {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      opacity: 0.5;
+      margin-top: 2px;
+    }
+
+    .rank-item .rank-detail .need .value {
+      color: var(--neon-cyan);
+      font-weight: 700;
+    }
+
+    .rank-item .rank-status {
+      font-size: 1.2rem;
+      text-align: center;
+    }
+
+    /* ============================================
+       ریسپانسیو
+       ============================================ */
+
+    @media (max-width: 768px) {
+      .rank-wrap {
+        padding: 12px 14px 24px;
+      }
+
+      .rank-top .title {
+        font-size: 1.2rem;
+      }
+
+      .btn-rank {
+        padding: 6px 14px;
+        font-size: 0.75rem;
+      }
+
+      .rank-card {
+        padding: 16px 16px;
+      }
+
+      .rank-card .rank-icon-wrap {
+        width: 64px;
+        height: 64px;
+      }
+
+      .rank-card .rank-icon-wrap .rank-icon {
+        font-size: 2.2rem;
+      }
+
+      .rank-card .rank-info .rank-name {
+        font-size: 1.1rem;
+      }
+
+      .rank-pill {
+        font-size: 0.7rem;
+        padding: 4px 10px;
+      }
+
+      .rank-item {
+        grid-template-columns: 40px 1fr 32px;
+        padding: 8px 12px;
+        gap: 10px;
+      }
+
+      .rank-item .rank-icon-sm {
+        font-size: 1.4rem;
+      }
+
+      .rank-item .rank-detail .name {
+        font-size: 0.85rem;
+      }
+
+      .rank-item .rank-detail .meta {
+        font-size: 0.65rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .rank-top {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .rank-top .title {
+        font-size: 1rem;
+        order: -1;
+        width: 100%;
+        text-align: center;
+      }
+
+      .btn-rank {
+        padding: 6px 12px;
+        font-size: 0.7rem;
+        flex: 1;
+        text-align: center;
+      }
+
+      .rank-card {
+        padding: 14px 12px;
+        border-radius: 14px;
+      }
+
+      .rank-card .row {
+        gap: 12px;
+      }
+
+      .rank-card .rank-icon-wrap {
+        width: 52px;
+        height: 52px;
+      }
+
+      .rank-card .rank-icon-wrap .rank-icon {
+        font-size: 1.8rem;
+      }
+
+      .rank-card .rank-info .rank-name {
+        font-size: 0.95rem;
+      }
+
+      .rank-card .rank-info .rank-rating {
+        font-size: 0.8rem;
+      }
+
+      .rank-kpi {
+        gap: 6px;
+      }
+
+      .rank-pill {
+        font-size: 0.6rem;
+        padding: 3px 8px;
+      }
+
+      .rank-progress .bar {
+        height: 6px;
+      }
+
+      .rank-progress .bar-label {
+        font-size: 0.65rem;
+      }
+
+      .rank-item {
+        grid-template-columns: 32px 1fr 28px;
+        padding: 6px 10px;
+        gap: 8px;
+        border-radius: 10px;
+      }
+
+      .rank-item .rank-icon-sm {
+        font-size: 1.2rem;
+      }
+
+      .rank-item .rank-detail .name {
+        font-size: 0.75rem;
+      }
+
+      .rank-item .rank-detail .meta {
+        font-size: 0.6rem;
+      }
+
+      .rank-item .rank-detail .need {
+        font-size: 0.6rem;
+      }
+
+      .rank-item .rank-status {
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .rank-card .rank-icon-wrap {
+        width: 44px;
+        height: 44px;
+      }
+
+      .rank-card .rank-icon-wrap .rank-icon {
+        font-size: 1.4rem;
+      }
+
+      .rank-item {
+        grid-template-columns: 28px 1fr 24px;
+        padding: 4px 8px;
+        gap: 6px;
+      }
+
+      .rank-item .rank-icon-sm {
+        font-size: 1rem;
+      }
+
+      .rank-item .rank-detail .name {
+        font-size: 0.7rem;
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="rank-wrap">
+
+    <!-- ==========================================
+         هدر
+         ========================================== -->
+    <div class="rank-top">
+      <button class="btn-rank" onclick="location.href='dashboard.html'">‹ بازگشت</button>
+      <div class="title">📊 رنک من</div>
+      <button class="btn-rank primary" onclick="location.reload()">↻ تازه‌سازی</button>
+    </div>
+
+    <!-- ==========================================
+         محتوای اصلی
+         ========================================== -->
+    <div class="rank-grid">
+
+      <!-- ===== کارت خلاصه ===== -->
+      <section class="rank-card" id="summaryCard">
+        <div class="row">
+          <div class="rank-icon-wrap">
+            <span class="rank-icon" id="currentIcon">🌱</span>
+          </div>
+          <div class="rank-info">
+            <div class="rank-name" id="currentName">—</div>
+            <div class="rank-rating">
+              Rating: <span class="value" id="currentRating">۰</span>
+            </div>
+            <div class="rank-kpi">
+              <span class="rank-pill" id="highestPill">🏆 بالاترین: —</span>
+              <span class="rank-pill gold" id="gapPill">🎯 فاصله تا بعدی: —</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rank-progress">
+          <div class="bar" aria-label="پیشرفت تا رنک بعدی">
+            <div class="fill" id="progressFill" style="width: 0%;"></div>
+          </div>
+          <div class="bar-label">
+            <span class="current" id="progressLeft">—</span>
+            <span class="next" id="progressRight">—</span>
+          </div>
+          <div class="note">💡 Rating با ترکیب دقت، سرعت و سطح سوال‌ها تغییر می‌کند.</div>
+        </div>
+      </section>
+
+      <!-- ===== لیست همه رنک‌ها ===== -->
+      <section class="rank-card">
+        <div style="font-size: 1rem; font-weight: 900; margin-bottom: 12px; color: var(--neon-gold);">
+          🏅 همه رنک‌ها
+        </div>
+        <div class="rank-list" id="rankList">
+          <!-- توسط JS پر می‌شود -->
+        </div>
+      </section>
+
+    </div>
+
+  </div>
+
+  <!-- ==========================================
+       اسکریپت‌ها
+       ========================================== -->
+
+  <script src="js/rank.js"></script>
+  <script src="js/rank-anim.js"></script>
+
+  <script>
+    // ============================================
+    // NitroVerse Rank Page (Enhanced)
+    // ============================================
+
+    (function() {
+      // ==========================================
+      // توابع کمکی
+      // ==========================================
+
+      function getUserKey(baseKey) {
+        const userId = localStorage.getItem('nv_user_id') || 'guest';
+        return `${baseKey}_${userId}`;
+      }
+
+      function getUserData(baseKey, defaultValue = null) {
+        try {
+          const key = getUserKey(baseKey);
+          const data = localStorage.getItem(key);
+          return data ? JSON.parse(data) : defaultValue;
+        } catch {
+          return defaultValue;
+        }
+      }
+
+      function getRating() {
+        return getUserData('nv_rating', 0);
+      }
+
+      function getHistory() {
+        return getUserData('nv_quiz_history', []);
+      }
+
+      // ==========================================
+      // داده‌های رنک‌ها
+      // ==========================================
+
+      const RANKS = [{
+        key: 'normal',
+        name: 'Normal 🌱',
+        min: 0,
+        icon: '🌱',
+        color: '#aab0c8',
+      }, {
+        key: 'bronze',
+        name: 'Bronze 🥉',
+        min: 500,
+        icon: '🥉',
+        color: '#cd7f32',
+      }, {
+        key: 'silver',
+        name: 'Silver 🥈',
+        min: 1000,
+        icon: '🥈',
+        color: '#c0c0c0',
+      }, {
+        key: 'gold',
+        name: 'Gold 🥇',
+        min: 1500,
+        icon: '🥇',
+        color: '#ffd700',
+      }, {
+        key: 'diamond',
+        name: 'Diamond 💎',
+        min: 2200,
+        icon: '💎',
+        color: '#b9f2ff',
+      }, {
+        key: 'legendary',
+        name: 'Legendary ⭐',
+        min: 3000,
+        icon: '⭐',
+        color: '#ff6b35',
+      }, {
+        key: 'immortal',
+        name: 'Immortal 👑',
+        min: 4000,
+        icon: '👑',
+        color: '#ffd700',
+      }, ];
+
+      // ==========================================
+      // توابع
+      // ==========================================
+
+      function getRankByRating(rating) {
+        let result = RANKS[0];
+        for (const rank of RANKS) {
+          if (rating >= rank.min) result = rank;
+        }
+        return result;
+      }
+
+      function getNextRank(rating) {
+        for (let i = 0; i < RANKS.length; i++) {
+          if (rating < RANKS[i].min) {
+            return {
+              next: RANKS[i],
+              gap: RANKS[i].min - rating,
+              index: i,
+            };
+          }
+        }
+        return null;
+      }
+
+      function getHighestRating() {
+        const history = getHistory();
+        let max = 0;
+        for (const entry of history) {
+          if (entry.ratingAfter && entry.ratingAfter > max) {
+            max = entry.ratingAfter;
+          }
+        }
+        return Math.max(max, getRating());
+      }
+
+      // ==========================================
+      // رندر
+      // ==========================================
+
+      function renderRankPage() {
+        const rating = getRating();
+        const highest = getHighestRating();
+        const current = getRankByRating(rating);
+        const highestRank = getRankByRating(highest);
+        const next = getNextRank(rating);
+
+        // ===== خلاصه =====
+        document.getElementById('currentIcon').textContent = current.icon;
+        document.getElementById('currentName').textContent = 'رنک فعلی: ' + current.name;
+        document.getElementById('currentRating').textContent = rating;
+
+        document.getElementById('highestPill').innerHTML =
+          '🏆 بالاترین: <span class="highlight">' + highestRank.name + '</span> (' + highest + ')';
+
+        if (next) {
+          document.getElementById('gapPill').innerHTML =
+            '🎯 فاصله تا بعدی: <span class="highlight">' + next.gap + '</span> امتیاز';
+        } else {
+          document.getElementById('gapPill').innerHTML = '👑 تو در بالاترین رنک هستی!';
+        }
+
+        // ===== نوار پیشرفت =====
+        let leftText = '',
+          rightText = '';
+        let pct = 100;
+
+        if (next) {
+          const curMin = current.min;
+          const nextMin = next.next.min;
+          const span = Math.max(1, nextMin - curMin);
+          const done = Math.max(0, rating - curMin);
+          pct = Math.max(0, Math.min(100, (done / span) * 100));
+          leftText = 'فعلی: ' + rating;
+          rightText = 'بعدی: ' + nextMin + ' (' + next.next.name + ')';
+        } else {
+          leftText = '👑 ' + current.name;
+          rightText = 'حداکثر';
+          pct = 100;
+        }
+
+        document.getElementById('progressFill').style.width = pct.toFixed(1) + '%';
+        document.getElementById('progressLeft').textContent = leftText;
+        document.getElementById('progressRight').textContent = rightText;
+
+        // ===== لیست همه رنک‌ها =====
+        const list = document.getElementById('rankList');
+        list.innerHTML = '';
+
+        RANKS.forEach((rk, i) => {
+          const isActive = current.key === rk.key;
+          const nextRank = (i + 1 < RANKS.length) ? RANKS[i + 1] : null;
+
+          let needText = '';
+          if (rating >= rk.min) {
+            if (nextRank) {
+              const gap = Math.max(0, nextRank.min - rating);
+              needText = 'فاصله تا بعدی: <span class="value">' + gap + '</span>';
+            } else {
+              needText = '👑 تو در اوج هستی!';
+            }
+          } else {
+            needText = 'برای رسیدن: <span class="value">' + (rk.min - rating) + '</span> امتیاز';
+          }
+
+          const div = document.createElement('div');
+          div.className = 'rank-item' + (isActive ? ' active' : '');
+
+          div.innerHTML = `
+            <div class="rank-icon-sm">${rk.icon}</div>
+            <div class="rank-detail">
+              <div class="name">${rk.name}</div>
+              <div class="meta">حداقل Rating: ${rk.min}</div>
+              <div class="need">${needText}</div>
+            </div>
+            <div class="rank-status">${isActive ? '📍' : ''}</div>
+          `;
+
+          list.appendChild(div);
+        });
+      }
+
+      // ==========================================
+      // اجرا
+      // ==========================================
+
+      document.addEventListener('DOMContentLoaded', function() {
+        renderRankPage();
+
+        // به‌روزرسانی هر ۱۰ ثانیه
+        setInterval(renderRankPage, 10000);
+
+        console.log('📊 NitroVerse Rank page loaded!');
+      });
+
+      // بروزرسانی هر بار که صفحه فعال می‌شود
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+          renderRankPage();
+        }
+      });
+
+      // اکپورت برای استفاده در جای دیگر
+      window.NVRank = window.NVRank || {};
+      window.NVRank.getRating = getRating;
+      window.NVRank.getHighestRating = getHighestRating;
+      window.NVRank.getRankByRating = getRankByRating;
+      window.NVRank.getNextRank = getNextRank;
+      window.NVRank.RANKS = RANKS;
+
+    })();
+  </script>
+
+</body>
+</html>

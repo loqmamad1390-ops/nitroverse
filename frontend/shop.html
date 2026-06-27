@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="فروشگاه نیتروورس — آیتم‌های ویژه برای شخصی‌سازی و افتخارآفرینی" />
+  <meta name="keywords" content="فروشگاه, آیتم, شخصی‌سازی, نیتروورس, خرید" />
+  <meta property="og:title" content="🛒 فروشگاه | NitroVerse" />
+  <meta property="og:description" content="آیتم‌های ویژه برای شخصی‌سازی و افتخارآفرینی" />
+  <title>🛒 فروشگاه | NitroVerse</title>
+  <link rel="icon" href="img/logo.png" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    /* ============================================
+       صفحه فروشگاه — استایل‌های اختصاصی
+       ============================================ */
+
+    .shop-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px 20px 40px;
+      min-height: 100vh;
+    }
+
+    /* ----- هدر ----- */
+    .shop-header {
+      text-align: center;
+      padding: 20px 20px 10px;
+      animation: fadeInUp 0.7s ease forwards;
+    }
+
+    .shop-header h1 {
+      font-size: 2.4rem;
+      font-weight: 900;
+    }
+
+    .shop-header .subtitle {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      margin-top: 4px;
+      opacity: 0.8;
+    }
+
+    .shop-header .subtitle span {
+      color: var(--neon-cyan);
+      font-weight: 700;
+    }
+
+    /* ----- موجودی ----- */
+    .shop-balance {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin: 16px auto 24px;
+      padding: 14px 28px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      max-width: 640px;
+      animation: fadeInUp 0.7s ease 0.05s forwards;
+      opacity: 0;
+    }
+
+    .shop-balance .bal-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .shop-balance .bal-item .bal-icon {
+      font-size: 1.3rem;
+    }
+
+    .shop-balance .bal-item .bal-value {
+      font-size: 1.1rem;
+      font-weight: 900;
+    }
+
+    .shop-balance .bal-item.coins .bal-value {
+      color: var(--neon-gold);
+    }
+    .shop-balance .bal-item.nitro .bal-value {
+      color: var(--neon-cyan);
+    }
+    .shop-balance .bal-item.legend .bal-value {
+      color: var(--neon-purple);
+    }
+
+    /* ----- تب‌ها ----- */
+    .shop-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      animation: fadeInUp 0.7s ease 0.08s forwards;
+      opacity: 0;
+    }
+
+    .shop-tab {
+      padding: 10px 24px;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-secondary);
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: var(--font-main);
+    }
+
+    .shop-tab:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+    }
+
+    .shop-tab.active {
+      background: rgba(0, 234, 255, 0.08);
+      border-color: rgba(0, 234, 255, 0.15);
+      color: var(--neon-cyan);
+      box-shadow: 0 0 40px rgba(0, 234, 255, 0.03);
+    }
+
+    .shop-tab .tab-icon {
+      margin-left: 6px;
+    }
+
+    .shop-tab .tab-count {
+      font-size: 0.65rem;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 0 8px;
+      border-radius: 20px;
+      margin-right: 4px;
+    }
+
+    /* ----- آیتم‌ها ----- */
+    .shop-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 18px;
+      margin-bottom: 24px;
+      animation: fadeInUp 0.7s ease 0.1s forwards;
+      opacity: 0;
+    }
+
+    .shop-item {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      padding: 20px 16px 18px;
+      text-align: center;
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shop-item:hover {
+      transform: translateY(-6px);
+      border-color: rgba(0, 234, 255, 0.08);
+      box-shadow: 0 10px 50px rgba(0, 0, 0, 0.2);
+    }
+
+    .shop-item .item-icon {
+      font-size: 3rem;
+      display: block;
+      margin-bottom: 6px;
+      transition: 0.3s;
+    }
+
+    .shop-item:hover .item-icon {
+      transform: scale(1.05);
+    }
+
+    .shop-item .item-name {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+
+    .shop-item .item-desc {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      min-height: 36px;
+      line-height: 1.5;
+      opacity: 0.7;
+    }
+
+    .shop-item .item-price {
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    .shop-item .item-price.coins {
+      color: var(--neon-gold);
+      background: rgba(255, 204, 102, 0.06);
+      border: 1px solid rgba(255, 204, 102, 0.08);
+    }
+
+    .shop-item .item-price.nitro {
+      color: var(--neon-cyan);
+      background: rgba(0, 234, 255, 0.06);
+      border: 1px solid rgba(0, 234, 255, 0.08);
+    }
+
+    .shop-item .item-price.legend {
+      color: var(--neon-purple);
+      background: rgba(124, 58, 237, 0.06);
+      border: 1px solid rgba(124, 58, 237, 0.08);
+    }
+
+    .shop-item .item-btn {
+      padding: 8px 20px;
+      border-radius: 30px;
+      border: none;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: var(--font-main);
+      width: 100%;
+    }
+
+    .shop-item .item-btn.buy {
+      background: rgba(0, 234, 255, 0.06);
+      color: var(--neon-cyan);
+      border: 1px solid rgba(0, 234, 255, 0.08);
+    }
+
+    .shop-item .item-btn.buy:hover {
+      background: rgba(0, 234, 255, 0.14);
+      transform: scale(1.02);
+      box-shadow: 0 0 30px rgba(0, 234, 255, 0.04);
+    }
+
+    .shop-item .item-btn.owned {
+      background: rgba(34, 197, 94, 0.06);
+      color: #22c55e;
+      border: 1px solid rgba(34, 197, 94, 0.08);
+      cursor: default;
+    }
+
+    .shop-item .item-btn.locked {
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-secondary);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      cursor: not-allowed;
+      opacity: 0.4;
+    }
+
+    .shop-item .item-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 0.6rem;
+      padding: 2px 10px;
+      border-radius: 20px;
+      background: rgba(34, 197, 94, 0.08);
+      color: #22c55e;
+      border: 1px solid rgba(34, 197, 94, 0.08);
+      font-weight: 700;
+    }
+
+    .shop-item.owned-item {
+      border-color: rgba(34, 197, 94, 0.06);
+      box-shadow: 0 0 30px rgba(34, 197, 94, 0.02);
+    }
+
+    /* ----- دکمه‌ها ----- */
+    .shop-actions {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+      animation: fadeInUp 0.7s ease 0.15s forwards;
+      opacity: 0;
+    }
+
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: var(--text-primary);
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      cursor: pointer;
+      font-family: var(--font-main);
+    }
+
+    .btn-back:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .btn-back.primary {
+      background: rgba(124, 58, 237, 0.08);
+      border-color: rgba(124, 58, 237, 0.12);
+      color: var(--neon-purple);
+    }
+
+    .btn-back.primary:hover {
+      background: rgba(124, 58, 237, 0.16);
+    }
+
+    .btn-back.neon {
+      background: rgba(0, 234, 255, 0.06);
+      border-color: rgba(0, 234, 255, 0.08);
+      color: var(--neon-cyan);
+    }
+
+    .btn-back.neon:hover {
+      background: rgba(0, 234, 255, 0.12);
+    }
+
+    /* ============================================
+       ریسپانسیو
+       ============================================ */
+
+    @media (max-width: 768px) {
+      .shop-container {
+        padding: 12px 14px 30px;
+      }
+
+      .shop-header h1 {
+        font-size: 1.8rem;
+      }
+
+      .shop-balance {
+        gap: 14px;
+        padding: 12px 16px;
+        flex-wrap: wrap;
+      }
+
+      .shop-balance .bal-item {
+        font-size: 0.85rem;
+      }
+
+      .shop-tabs {
+        gap: 6px;
+      }
+
+      .shop-tab {
+        padding: 8px 14px;
+        font-size: 0.8rem;
+        border-radius: 20px;
+      }
+
+      .shop-items {
+        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+        gap: 12px;
+      }
+
+      .shop-item {
+        padding: 16px 12px;
+        border-radius: 14px;
+      }
+
+      .shop-item .item-icon {
+        font-size: 2.4rem;
+      }
+
+      .shop-item .item-name {
+        font-size: 0.9rem;
+      }
+
+      .shop-actions {
+        flex-direction: column;
+      }
+
+      .shop-actions .btn-back {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .shop-header h1 {
+        font-size: 1.4rem;
+      }
+
+      .shop-header .subtitle {
+        font-size: 0.85rem;
+      }
+
+      .shop-balance {
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        padding: 10px 14px;
+      }
+
+      .shop-balance .bal-item {
+        font-size: 0.8rem;
+      }
+
+      .shop-balance .bal-item .bal-value {
+        font-size: 0.95rem;
+      }
+
+      .shop-tabs {
+        gap: 4px;
+      }
+
+      .shop-tab {
+        padding: 6px 10px;
+        font-size: 0.7rem;
+        border-radius: 16px;
+      }
+
+      .shop-items {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .shop-item {
+        padding: 12px 8px;
+        border-radius: 12px;
+      }
+
+      .shop-item .item-icon {
+        font-size: 1.8rem;
+      }
+
+      .shop-item .item-name {
+        font-size: 0.75rem;
+      }
+
+      .shop-item .item-desc {
+        font-size: 0.6rem;
+        min-height: 24px;
+        margin-bottom: 4px;
+      }
+
+      .shop-item .item-price {
+        font-size: 0.65rem;
+        padding: 2px 10px;
+        margin-bottom: 6px;
+      }
+
+      .shop-item .item-btn {
+        font-size: 0.7rem;
+        padding: 6px 10px;
+        border-radius: 20px;
+      }
+
+      .shop-item .item-badge {
+        font-size: 0.5rem;
+        padding: 1px 6px;
+        top: 6px;
+        right: 6px;
+      }
+
+      .btn-back {
+        padding: 10px 20px;
+        font-size: 0.8rem;
+        border-radius: 25px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .shop-items {
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+      }
+
+      .shop-item {
+        padding: 10px 6px;
+      }
+
+      .shop-item .item-icon {
+        font-size: 1.4rem;
+        margin-bottom: 2px;
+      }
+
+      .shop-item .item-name {
+        font-size: 0.65rem;
+      }
+
+      .shop-item .item-desc {
+        display: none;
+      }
+
+      .shop-item .item-price {
+        font-size: 0.6rem;
+        padding: 1px 8px;
+      }
+
+      .shop-item .item-btn {
+        font-size: 0.6rem;
+        padding: 4px 8px;
+      }
+
+      .shop-tab {
+        padding: 4px 8px;
+        font-size: 0.6rem;
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="shop-container">
+
+    <!-- ==========================================
+         هدر
+         ========================================== -->
+    <header class="shop-header">
+      <h1 class="neon-text">🛒 فروشگاه نیتروورس</h1>
+      <p class="subtitle">
+        آیتم‌های ویژه برای <span>شخصی‌سازی</span> و <span>افتخارآفرینی</span>
+      </p>
+    </header>
+
+    <!-- ==========================================
+         موجودی
+         ========================================== -->
+    <div class="shop-balance" id="balance">
+      <div class="bal-item coins">
+        <span class="bal-icon">🪙</span>
+        <span>سکه‌ها:</span>
+        <span class="bal-value" id="balCoins">0</span>
+      </div>
+      <div class="bal-item nitro">
+        <span class="bal-icon">💎</span>
+        <span>نیترو:</span>
+        <span class="bal-value" id="balNitro">0</span>
+      </div>
+      <div class="bal-item legend">
+        <span class="bal-icon">🌟</span>
+        <span>افسانه‌ای:</span>
+        <span class="bal-value" id="balLegend">0</span>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         تب‌ها
+         ========================================== -->
+    <div class="shop-tabs" id="tabs">
+      <button class="shop-tab active" data-tab="custom">
+        <span class="tab-icon">🎭</span> شخصی‌سازی
+        <span class="tab-count" id="countCustom">0</span>
+      </button>
+      <button class="shop-tab" data-tab="honor">
+        <span class="tab-icon">🏆</span> افتخارات
+        <span class="tab-count" id="countHonor">0</span>
+      </button>
+      <button class="shop-tab" data-tab="effects">
+        <span class="tab-icon">🎨</span> افکت‌ها
+        <span class="tab-count" id="countEffects">0</span>
+      </button>
+      <button class="shop-tab" data-tab="all">
+        <span class="tab-icon">📦</span> همه آیتم‌ها
+        <span class="tab-count" id="countAll">0</span>
+      </button>
+    </div>
+
+    <!-- ==========================================
+         آیتم‌ها
+         ========================================== -->
+    <div class="shop-items" id="items">
+      <!-- توسط JS پر می‌شود -->
+    </div>
+
+    <!-- ==========================================
+         دکمه‌ها
+         ========================================== -->
+    <div class="shop-actions">
+      <a href="dashboard.html" class="btn-back primary">📊 بازگشت به داشبورد</a>
+      <button class="btn-back neon" onclick="location.reload()">🔄 تازه‌سازی</button>
+    </div>
+
+  </div>
+
+  <!-- ==========================================
+       اسکریپت‌ها
+       ========================================== -->
+  <script>
+    // ============================================
+    // NitroVerse Shop (Enhanced)
+    // ============================================
+
+    const SHOP_KEY = 'nv_shop_items';
+    const BAL_KEY = 'nv_balance';
+
+    // ============================================
+    // توابع کمکی با پشتیبانی از userId
+    // ============================================
+
+    function getUserKey(baseKey) {
+      const userId = localStorage.getItem('nv_user_id') || 'guest';
+      return `${baseKey}_${userId}`;
+    }
+
+    function getUserData(baseKey, defaultValue = null) {
+      try {
+        const key = getUserKey(baseKey);
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : defaultValue;
+      } catch {
+        return defaultValue;
+      }
+    }
+
+    function setUserData(baseKey, data) {
+      try {
+        const key = getUserKey(baseKey);
+        localStorage.setItem(key, JSON.stringify(data));
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
+    // ============================================
+    // داده‌های آیتم‌ها
+    // ============================================
+
+    const ITEMS = {
+      custom: [
+        { id: 'avatar_frame_gold', icon: '🟡', name: 'قاب طلایی آواتار', desc: 'آواتار شما را درخشان می‌کند', price: 50,
+          currency: 'coins' },
+        { id: 'avatar_frame_blue', icon: '🔵', name: 'قاب آبی نئونی', desc: 'قاب آبی با افکت نئونی', price: 30,
+          currency: 'coins' },
+        { id: 'avatar_frame_purple', icon: '🟣', name: 'قاب بنفش سلطنتی', desc: 'قاب بنفش برای افراد خاص', price: 45,
+          currency: 'coins' },
+        { id: 'avatar_frame_rainbow', icon: '🌈', name: 'قاب رنگین‌کمان', desc: 'همه رنگ‌ها در یک قاب', price: 80,
+          currency: 'coins' },
+        { id: 'font_elite', icon: '🅰️', name: 'فونت Elite', desc: 'فونت خاص برای پروفایل', price: 2, currency: 'nitro' },
+        { id: 'font_neon', icon: '🅱️', name: 'فونت نئونی', desc: 'فونت با افکت نئون', price: 3, currency: 'nitro' },
+        { id: 'theme_darkspace', icon: '🌌', name: 'تم Dark Space', desc: 'تم تاریک کهکشانی', price: 1,
+        currency: 'legend' },
+        { id: 'theme_cyberpunk', icon: '💜', name: 'تم سایبرپانک', desc: 'تم سایبرپانک با رنگ‌های نئونی', price: 2,
+          currency: 'legend' },
+      ],
+      honor: [
+        { id: 'badge_earlybird', icon: '🐣', name: 'کاربر اولیه', desc: 'اولین کاربران نیتروورس', price: 1,
+          currency: 'nitro' },
+        { id: 'badge_scientist', icon: '🔬', name: 'نابغه علم', desc: 'برای عاشقان علم', price: 3, currency: 'nitro' },
+        { id: 'badge_master', icon: '🏅', name: 'استاد رقابت', desc: 'برای قهرمانان رقابت‌ها', price: 2,
+          currency: 'legend' },
+        { id: 'badge_legend', icon: '⭐', name: 'افسانه نیترو', desc: 'فقط برای بهترین‌ها', price: 5, currency: 'legend' },
+        { id: 'badge_teacher', icon: '📚', name: 'معلم نیترو', desc: 'برای کسانی که به دیگران یاد می‌دهند', price: 2,
+          currency: 'nitro' },
+        { id: 'badge_innovator', icon: '💡', name: 'نوآور', desc: 'برای ایده‌های جدید و خلاقانه', price: 4,
+          currency: 'nitro' },
+      ],
+      effects: [
+        { id: 'effect_glow', icon: '✨', name: 'افکت درخشان', desc: 'بدنت درخشان می‌شود', price: 40, currency: 'coins' },
+        { id: 'effect_fire', icon: '🔥', name: 'افکت شعله‌ای', desc: 'شعله‌های آتش دورت را می‌گیرند', price: 2,
+          currency: 'nitro' },
+        { id: 'effect_star', icon: '🌟', name: 'افکت ستاره‌ای', desc: 'ستاره‌ها دورت می‌چرخند', price: 1,
+          currency: 'legend' },
+        { id: 'effect_lightning', icon: '⚡', name: 'افکت برق', desc: 'برق‌های نئونی دورت می‌پیچند', price: 3,
+          currency: 'nitro' },
+        { id: 'effect_rainbow', icon: '🌈', name: 'افکت رنگین‌کمان', desc: 'رنگ‌های زیبا دورت می‌چرخند', price: 5,
+          currency: 'legend' },
+        { id: 'effect_snow', icon: '❄️', name: 'افکت برفی', desc: 'برف می‌بارد!', price: 2, currency: 'nitro' },
+      ]
+    };
+
+    // ============================================
+    // موجودی
+    // ============================================
+
+    function getBalance() {
+      return getUserData(BAL_KEY, { coins: 150, nitro: 10, legend: 1 });
+    }
+
+    function saveBalance(balance) {
+      return setUserData(BAL_KEY, balance);
+    }
+
+    function getOwnedItems() {
+      return getUserData(SHOP_KEY, []);
+    }
+
+    function saveOwnedItems(items) {
+      return setUserData(SHOP_KEY, items);
+    }
+
+    // ============================================
+    // رندر
+    // ============================================
+
+    let currentTab = 'custom';
+
+    function renderBalance() {
+      const bal = getBalance();
+      document.getElementById('balCoins').textContent = bal.coins || 0;
+      document.getElementById('balNitro').textContent = bal.nitro || 0;
+      document.getElementById('balLegend').textContent = bal.legend || 0;
+    }
+
+    function updateTabCounts() {
+      const allItems = [...ITEMS.custom, ...ITEMS.honor, ...ITEMS.effects];
+      document.getElementById('countCustom').textContent = ITEMS.custom.length;
+      document.getElementById('countHonor').textContent = ITEMS.honor.length;
+      document.getElementById('countEffects').textContent = ITEMS.effects.length;
+      document.getElementById('countAll').textContent = allItems.length;
+    }
+
+    function renderItems(tab) {
+      const container = document.getElementById('items');
+      const owned = getOwnedItems();
+      const bal = getBalance();
+
+      let items = [];
+      let categoryName = '';
+
+      if (tab === 'all') {
+        items = [...ITEMS.custom, ...ITEMS.honor, ...ITEMS.effects];
+        categoryName = 'همه آیتم‌ها';
+      } else {
+        items = ITEMS[tab] || [];
+        const names = { custom: 'شخصی‌سازی', honor: 'افتخارات', effects: 'افکت‌ها' };
+        categoryName = names[tab] || '';
+      }
+
+      if (items.length === 0) {
+        container.innerHTML = `
+          <div class="shop-empty" style="grid-column:1/-1; text-align:center; padding:40px 20px; color:var(--text-secondary);">
+            <span style="font-size:3rem; display:block; margin-bottom:8px;">📭</span>
+            <h3 style="color:#fff; margin-bottom:4px;">هیچ آیتمی در این دسته نیست</h3>
+            <p style="font-size:0.9rem; opacity:0.6;">دسته‌ی دیگری را امتحان کن</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = items.map((item, index) => {
+        const isOwned = owned.includes(item.id);
+        const canAfford = (bal[item.currency] || 0) >= item.price;
+
+        const priceClass = item.currency === 'coins' ? 'coins' : item.currency === 'nitro' ? 'nitro' : 'legend';
+        const priceLabel = item.currency === 'coins' ? '🪙 سکه' : item.currency === 'nitro' ? '💎 نیترو' : '🌟 افسانه‌ای';
+
+        let btnHTML = '';
+        if (isOwned) {
+          btnHTML = `<button class="item-btn owned">✅ خریداری‌شده</button>`;
+        } else if (!canAfford) {
+          btnHTML = `<button class="item-btn locked">🔒 موجودی کافی نیست</button>`;
+        } else {
+          btnHTML = `<button class="item-btn buy" onclick="buyItem('${item.id}')">🛒 خرید</button>`;
+        }
+
+        return `
+          <div class="shop-item ${isOwned ? 'owned-item' : ''}" style="animation-delay: ${(index * 0.04)}s">
+            ${isOwned ? '<span class="item-badge">✅ تملک</span>' : ''}
+            <span class="item-icon">${item.icon}</span>
+            <div class="item-name">${item.name}</div>
+            <div class="item-desc">${item.desc || ''}</div>
+            <div class="item-price ${priceClass}">${item.price} ${priceLabel}</div>
+            ${btnHTML}
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ============================================
+    // خرید
+    // ============================================
+
+    function buyItem(id) {
+      // پیدا کردن آیتم
+      const allItems = [...ITEMS.custom, ...ITEMS.honor, ...ITEMS.effects];
+      const item = allItems.find(i => i.id === id);
+      if (!item) {
+        showToast('❌ آیتم یافت نشد!', 'error');
+        return;
+      }
+
+      const bal = getBalance();
+      const owned = getOwnedItems();
+
+      // بررسی مالکیت
+      if (owned.includes(id)) {
+        showToast('✅ این آیتم قبلاً خریداری شده است!', 'info');
+        return;
+      }
+
+      // بررسی موجودی
+      if ((bal[item.currency] || 0) < item.price) {
+        showToast('❌ موجودی کافی نیست!', 'error');
+        return;
+      }
+
+      // انجام خرید
+      bal[item.currency] -= item.price;
+      owned.push(id);
+
+      saveBalance(bal);
+      saveOwnedItems(owned);
+
+      // به‌روزرسانی UI
+      renderBalance();
+      renderItems(currentTab);
+
+      // نمایش پیام موفقیت
+      showPurchaseSuccess(item);
+    }
+
+    function showPurchaseSuccess(item) {
+      // ساخت پاپ‌آپ سفارشی
+      const popup = document.createElement('div');
+      popup.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.95);
+        border: 2px solid #22c55e;
+        border-radius: 20px;
+        padding: 30px 40px;
+        text-align: center;
+        z-index: 9999;
+        animation: fadeInUp 0.5s ease;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 0 60px rgba(34, 197, 94, 0.1);
+        max-width: 400px;
+        width: 90%;
+      `;
+
+      popup.innerHTML = `
+        <div style="font-size: 4rem; margin-bottom: 10px;">${item.icon}</div>
+        <h3 style="color: #22c55e; font-size: 1.4rem; margin-bottom: 6px;">🎉 خرید موفق!</h3>
+        <p style="color: #fff; font-size: 1.1rem;">${item.name}</p>
+        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px;">با موفقیت به موجودی شما اضافه شد!</p>
+        <button onclick="this.parentElement.remove()" style="
+          margin-top: 16px;
+          padding: 10px 28px;
+          border-radius: 12px;
+          border: none;
+          background: rgba(34, 197, 94, 0.1);
+          color: #22c55e;
+          font-weight: 700;
+          font-size: 0.95rem;
+          cursor: pointer;
+          transition: 0.3s;
+          font-family: var(--font-main);
+        " onmouseover="this.style.background='rgba(34,197,94,0.2)'" onmouseout="this.style.background='rgba(34,197,94,0.1)'">
+          🎊 عالی!
+        </button>
+      `;
+
+      document.body.appendChild(popup);
+
+      // حذف خودکار بعد از ۴ ثانیه
+      setTimeout(() => {
+        if (popup.parentElement) {
+          popup.style.opacity = '0';
+          popup.style.transition = '0.5s ease';
+          setTimeout(() => popup.remove(), 500);
+        }
+      }, 4000);
+    }
+
+    // ============================================
+    // Toast
+    // ============================================
+
+    function showToast(message, type = 'info') {
+      const old = document.querySelector('.shop-toast');
+      if (old) old.remove();
+
+      const colors = {
+        success: '#22c55e',
+        error: '#ef4444',
+        info: '#00eaff',
+      };
+
+      const toast = document.createElement('div');
+      toast.className = 'shop-toast';
+      toast.style.cssText = `
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 14px 28px;
+        border-radius: 14px;
+        background: rgba(0,0,0,0.92);
+        border: 1px solid ${colors[type] || '#00eaff'};
+        color: ${colors[type] || '#00eaff'};
+        z-index: 9998;
+        font-weight: 700;
+        backdrop-filter: blur(12px);
+        animation: fadeInUp 0.4s ease;
+        max-width: 90%;
+        text-align: center;
+        font-family: var(--font-main);
+      `;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = '0.5s ease';
+        setTimeout(() => toast.remove(), 500);
+      }, 3000);
+    }
+
+    // ============================================
+    // تب‌ها
+    // ============================================
+
+    function setupTabs() {
+      const tabs = document.querySelectorAll('.shop-tab');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          tabs.forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          currentTab = this.dataset.tab;
+          renderItems(currentTab);
+        });
+      });
+    }
+
+    // ============================================
+    // تست (افزایش موجودی)
+    // ============================================
+
+    function addTestCoins() {
+      const bal = getBalance();
+      bal.coins = (bal.coins || 0) + 100;
+      saveBalance(bal);
+      renderBalance();
+      renderItems(currentTab);
+      showToast('🎁 ۱۰۰ سکه به موجودی شما اضافه شد!', 'success');
+    }
+
+    // ============================================
+    // اجرا
+    // ============================================
+
+    document.addEventListener('DOMContentLoaded', function() {
+      renderBalance();
+      updateTabCounts();
+      setupTabs();
+      renderItems('custom');
+
+      // به‌روزرسانی خودکار هر ۱۰ ثانیه
+      setInterval(() => {
+        renderBalance();
+      }, 10000);
+    });
+
+    // بروزرسانی هر بار که صفحه فعال می‌شود
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        renderBalance();
+        renderItems(currentTab);
+      }
+    });
+
+    // اکپورت برای استفاده در console
+    window.addTestCoins = addTestCoins;
+    window.buyItem = buyItem;
+
+    console.log('🛒 NitroVerse Shop loaded!');
+  </script>
+
+</body>
+</html>

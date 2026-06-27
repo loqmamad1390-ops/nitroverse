@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="قوانین و مقررات استفاده از نیتروورس — پلتفرم آموزشی و رقابتی" />
+  <meta name="keywords" content="قوانین, مقررات, نیتروورس, شرایط استفاده" />
+  <meta property="og:title" content="📜 قوانین | NitroVerse" />
+  <meta property="og:description" content="قوانین و مقررات استفاده از نیتروورس" />
+  <title>📜 قوانین | NitroVerse</title>
+  <link rel="icon" href="img/logo.png" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    /* ============================================
+       صفحه قوانین — استایل‌های اختصاصی
+       ============================================ */
+
+    .terms-container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    /* ----- هدر ----- */
+    .terms-header {
+      text-align: center;
+      padding: 30px 20px 20px;
+      animation: fadeInUp 0.7s ease forwards;
+    }
+
+    .terms-header .icon-top {
+      font-size: 3rem;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .terms-header h1 {
+      font-size: 2.4rem;
+      font-weight: 900;
+    }
+
+    .terms-header .subtitle {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      margin-top: 4px;
+      opacity: 0.7;
+    }
+
+    .terms-header .subtitle span {
+      color: var(--neon-cyan);
+      font-weight: 700;
+    }
+
+    /* ===== اطلاعات ===== */
+    .terms-info {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+      padding: 12px 20px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      animation: fadeInUp 0.7s ease 0.05s forwards;
+      opacity: 0;
+    }
+
+    .terms-info .info-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .terms-info .info-item .info-icon {
+      font-size: 1.1rem;
+    }
+
+    .terms-info .info-item .info-value {
+      color: var(--neon-cyan);
+      font-weight: 700;
+    }
+
+    /* ===== لیست قوانین ===== */
+    .terms-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 30px;
+      animation: fadeInUp 0.7s ease 0.08s forwards;
+      opacity: 0;
+    }
+
+    .terms-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 16px;
+      padding: 20px 24px;
+      transition: all 0.3s ease;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .terms-item:hover {
+      border-color: rgba(0, 234, 255, 0.06);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .terms-item .term-number {
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: var(--neon-cyan);
+      min-width: 40px;
+      text-align: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .terms-item .term-content {
+      flex: 1;
+    }
+
+    .terms-item .term-content .term-title {
+      font-weight: 700;
+      color: #fff;
+      font-size: 1rem;
+      margin-bottom: 2px;
+    }
+
+    .terms-item .term-content .term-desc {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.9;
+      opacity: 0.8;
+    }
+
+    .terms-item .term-content .term-desc strong {
+      color: var(--neon-cyan);
+      font-weight: 700;
+    }
+
+    /* ===== بخش آخر ===== */
+    .terms-footer-box {
+      text-align: center;
+      padding: 24px 20px;
+      border-radius: 16px;
+      background: rgba(0, 234, 255, 0.04);
+      border: 1px solid rgba(0, 234, 255, 0.06);
+      margin-bottom: 24px;
+      animation: fadeInUp 0.7s ease 0.12s forwards;
+      opacity: 0;
+    }
+
+    .terms-footer-box .agree-icon {
+      font-size: 2.5rem;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .terms-footer-box .agree-text {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.8;
+    }
+
+    .terms-footer-box .agree-text strong {
+      color: var(--neon-gold);
+    }
+
+    /* ===== دکمه‌ها ===== */
+    .terms-actions {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      animation: fadeInUp 0.7s ease 0.15s forwards;
+      opacity: 0;
+    }
+
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 32px;
+      border-radius: 30px;
+      background: rgba(0, 234, 255, 0.06);
+      border: 1px solid rgba(0, 234, 255, 0.08);
+      color: var(--neon-cyan);
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+      cursor: pointer;
+      font-family: var(--font-main);
+    }
+
+    .btn-back:hover {
+      background: rgba(0, 234, 255, 0.14);
+      transform: translateY(-3px);
+      box-shadow: 0 0 40px rgba(0, 234, 255, 0.04);
+    }
+
+    .btn-back.primary {
+      background: rgba(124, 58, 237, 0.08);
+      border-color: rgba(124, 58, 237, 0.12);
+      color: var(--neon-purple);
+    }
+
+    .btn-back.primary:hover {
+      background: rgba(124, 58, 237, 0.16);
+    }
+
+    /* ============================================
+       ریسپانسیو
+       ============================================ */
+
+    @media (max-width: 768px) {
+      .terms-container {
+        padding: 14px;
+      }
+
+      .terms-header h1 {
+        font-size: 1.8rem;
+      }
+
+      .terms-header .icon-top {
+        font-size: 2.4rem;
+      }
+
+      .terms-info {
+        gap: 12px;
+        padding: 10px 14px;
+      }
+
+      .terms-info .info-item {
+        font-size: 0.75rem;
+      }
+
+      .terms-item {
+        padding: 16px 18px;
+        gap: 12px;
+      }
+
+      .terms-item .term-number {
+        font-size: 1rem;
+        min-width: 32px;
+      }
+
+      .terms-item .term-content .term-title {
+        font-size: 0.9rem;
+      }
+
+      .terms-item .term-content .term-desc {
+        font-size: 0.85rem;
+      }
+
+      .terms-actions {
+        flex-direction: column;
+      }
+
+      .terms-actions .btn-back {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .terms-header h1 {
+        font-size: 1.4rem;
+      }
+
+      .terms-header .subtitle {
+        font-size: 0.85rem;
+      }
+
+      .terms-info {
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        padding: 8px 12px;
+      }
+
+      .terms-info .info-item {
+        font-size: 0.7rem;
+      }
+
+      .terms-item {
+        padding: 14px 14px;
+        gap: 10px;
+        border-radius: 12px;
+      }
+
+      .terms-item .term-number {
+        font-size: 0.85rem;
+        min-width: 28px;
+      }
+
+      .terms-item .term-content .term-title {
+        font-size: 0.8rem;
+      }
+
+      .terms-item .term-content .term-desc {
+        font-size: 0.75rem;
+        line-height: 1.8;
+      }
+
+      .terms-footer-box {
+        padding: 16px 14px;
+      }
+
+      .terms-footer-box .agree-icon {
+        font-size: 2rem;
+      }
+
+      .terms-footer-box .agree-text {
+        font-size: 0.8rem;
+      }
+
+      .btn-back {
+        padding: 10px 20px;
+        font-size: 0.85rem;
+        border-radius: 25px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .terms-header h1 {
+        font-size: 1.2rem;
+      }
+
+      .terms-item {
+        padding: 12px 10px;
+        gap: 8px;
+      }
+
+      .terms-item .term-number {
+        font-size: 0.75rem;
+        min-width: 22px;
+      }
+
+      .terms-item .term-content .term-desc {
+        font-size: 0.7rem;
+      }
+
+      .btn-back {
+        padding: 8px 16px;
+        font-size: 0.75rem;
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="terms-container">
+
+    <!-- ==========================================
+         هدر
+         ========================================== -->
+    <header class="terms-header">
+      <span class="icon-top">📜</span>
+      <h1 class="neon-text">قوانین و مقررات</h1>
+      <p class="subtitle">
+        برای استفاده از <span>نیتروورس</span>، لطفاً قوانین زیر را مطالعه کن
+      </p>
+    </header>
+
+    <!-- ==========================================
+         اطلاعات
+         ========================================== -->
+    <div class="terms-info">
+      <div class="info-item">
+        <span class="info-icon">📅</span>
+        <span>آخرین بروزرسانی:</span>
+        <span class="info-value">۲۰ اسفند ۱۴۰۴</span>
+      </div>
+      <div class="info-item">
+        <span class="info-icon">📋</span>
+        <span>تعداد مواد:</span>
+        <span class="info-value">۵</span>
+      </div>
+      <div class="info-item">
+        <span class="info-icon">✅</span>
+        <span>وضعیت:</span>
+        <span class="info-value">فعال</span>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         لیست قوانین
+         ========================================== -->
+    <div class="terms-list">
+
+      <!-- قانون ۱ -->
+      <div class="terms-item">
+        <div class="term-number">۰۱</div>
+        <div class="term-content">
+          <div class="term-title">اطلاعات صحیح و واقعی</div>
+          <div class="term-desc">
+            کاربر موظف است اطلاعات <strong>واقعی و صحیح</strong> در هنگام ثبت‌نام وارد کند.
+            ارائه اطلاعات نادرست منجر به <strong>مسدودی حساب</strong> خواهد شد.
+          </div>
+        </div>
+      </div>
+
+      <!-- قانون ۲ -->
+      <div class="terms-item">
+        <div class="term-number">۰۲</div>
+        <div class="term-content">
+          <div class="term-title">تقلب و روش‌های غیرمجاز</div>
+          <div class="term-desc">
+            استفاده از هرگونه <strong>تقلب</strong> یا روش‌های غیرمجاز در مسابقات
+            منجر به <strong>مسدودی دائمی حساب</strong> و حذف تمام امتیازات خواهد شد.
+          </div>
+        </div>
+      </div>
+
+      <!-- قانون ۳ -->
+      <div class="terms-item">
+        <div class="term-number">۰۳</div>
+        <div class="term-content">
+          <div class="term-title">احترام متقابل</div>
+          <div class="term-desc">
+            کاربران باید با <strong>احترام متقابل</strong> در بخش چت و گروه‌ها رفتار کنند.
+            هرگونه توهین، فحش یا محتوای نامناسب <strong>ممنوع</strong> است.
+          </div>
+        </div>
+      </div>
+
+      <!-- قانون ۴ -->
+      <div class="terms-item">
+        <div class="term-number">۰۴</div>
+        <div class="term-content">
+          <div class="term-title">تغییر قوانین</div>
+          <div class="term-desc">
+            نیتروورس حق <strong>تغییر قوانین</strong> را در هر زمان دارد.
+            کاربران موظف به <strong>مطالعه مجدد</strong> قوانین در صورت تغییر هستند.
+          </div>
+        </div>
+      </div>
+
+      <!-- قانون ۵ -->
+      <div class="terms-item">
+        <div class="term-number">۰۵</div>
+        <div class="term-content">
+          <div class="term-title">پذیرش قوانین</div>
+          <div class="term-desc">
+            با <strong>ثبت‌نام</strong>، کاربر تأیید می‌کند که تمامی شرایط را
+            <strong>خوانده و پذیرفته</strong> است و متعهد به رعایت آن‌ها می‌باشد.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ==========================================
+         بخش پایانی
+         ========================================== -->
+    <div class="terms-footer-box">
+      <span class="agree-icon">🤝</span>
+      <div class="agree-text">
+        با ثبت‌نام در نیتروورس، شما <strong>پذیرش کامل</strong> این قوانین را تأیید می‌کنید.
+        <br />
+        در صورت عدم پذیرش، لطفاً از ثبت‌نام خودداری کنید.
+      </div>
+    </div>
+
+    <!-- ==========================================
+         دکمه‌ها
+         ========================================== -->
+    <div class="terms-actions">
+      <a href="login.html" class="btn-back">
+        🔙 بازگشت به ورود
+      </a>
+      <a href="register.html" class="btn-back primary">
+        📝 بازگشت به ثبت‌نام
+      </a>
+    </div>
+
+  </div>
+
+  <!-- ==========================================
+       اسکریپت‌ها
+       ========================================== -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('📜 NitroVerse Terms loaded!');
+
+      // ===== نمایش تاریخ شمسی =====
+      try {
+        const now = new Date();
+        const persianDate = new Intl.DateTimeFormat('fa-IR', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        }).format(now);
+        const infoItems = document.querySelectorAll('.terms-info .info-item .info-value');
+        if (infoItems.length > 0) {
+          // به‌روزرسانی تاریخ
+          const dateEl = infoItems[0];
+          if (dateEl) {
+            dateEl.textContent = persianDate;
+          }
+        }
+      } catch (e) {
+        // خطا نادیده گرفته شود
+      }
+    });
+  </script>
+
+</body>
+</html>

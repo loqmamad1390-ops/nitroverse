@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NitroVerse Intro</title>
+<style>
+body{
+  margin:0;
+  background:radial-gradient(circle at center,#1a1028,#05070f);
+  color:#fff3d6;
+  font-family:Tahoma, sans-serif;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:100vh;
+  text-align:center;
+}
+.wrap{max-width:700px;padding:20px}
+#quoteText{font-size:22px;font-weight:800;min-height:60px}
+button{
+  margin-top:20px;
+  padding:10px 20px;
+  border-radius:12px;
+  border:1px solid rgba(255,170,60,.4);
+  background:rgba(255,255,255,.05);
+  color:#fff3d6;
+  font-weight:800;
+  cursor:pointer;
+}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="quoteText"></div>
+  <button id="enterBtn" class="hidden">ورود</button>
+  <button id="skipBtn">رد کردن</button>
+  <audio id="bgm" preload="auto" loop playsinline></audio>
+</div>
+<script src="intro.js"></script>
+</body>
+</html>

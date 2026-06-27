@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="اتحادهای نیتروورس — به تیم‌ها بپیوند، اتحاد بساز و در لیگ‌ها فرمانروایی کن" />
+  <meta name="keywords" content="اتحاد, گروه, تیم, نیتروورس, همکاری" />
+  <meta property="og:title" content="👥 اتحادها | NitroVerse" />
+  <meta property="og:description" content="به اتحادهای نیتروورس بپیوند و با هم تیمی‌های خود رقابت کن" />
+  <title>👥 اتحادها | NitroVerse</title>
+  <link rel="icon" href="img/logo.png" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <style>
+    /* ============================================
+       صفحه اتحادها — استایل‌های اختصاصی
+       ============================================ */
+
+    .groups-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 24px 40px;
+    }
+
+    /* ----- هدر ----- */
+    .groups-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 16px;
+      animation: fadeInUp 0.7s ease forwards;
+    }
+
+    .groups-header .title-area h1 {
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    .groups-header .title-area p {
+      color: var(--text-secondary);
+      opacity: 0.7;
+      margin-top: 2px;
+    }
+
+    .btn-create {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 24px;
+      border-radius: 30px;
+      background: rgba(0, 234, 255, 0.06);
+      border: 1px solid rgba(0, 234, 255, 0.2);
+      color: var(--neon-cyan);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: var(--font-main);
+    }
+
+    .btn-create:hover {
+      background: rgba(0, 234, 255, 0.14);
+      box-shadow: 0 0 40px rgba(0, 234, 255, 0.06);
+      transform: translateY(-3px);
+    }
+
+    .btn-create i {
+      font-size: 1.1rem;
+    }
+
+    /* ===== تب‌ها ===== */
+    .groups-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      animation: fadeInUp 0.7s ease 0.05s forwards;
+      opacity: 0;
+    }
+
+    .groups-tabs .tab {
+      padding: 8px 20px;
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: var(--font-main);
+    }
+
+    .groups-tabs .tab:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+
+    .groups-tabs .tab.active {
+      background: rgba(0, 234, 255, 0.08);
+      border-color: rgba(0, 234, 255, 0.15);
+      color: var(--neon-cyan);
+    }
+
+    .groups-tabs .tab .count {
+      background: rgba(255, 255, 255, 0.06);
+      padding: 0 8px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      margin-right: 4px;
+    }
+
+    /* ===== آمار ===== */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+      animation: fadeInUp 0.7s ease 0.1s forwards;
+      opacity: 0;
+    }
+
+    .stats-bar .stat-item {
+      text-align: center;
+      padding: 14px 12px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      transition: 0.3s;
+    }
+
+    .stats-bar .stat-item:hover {
+      border-color: rgba(0, 234, 255, 0.08);
+    }
+
+    .stats-bar .stat-item .stat-value {
+      display: block;
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--neon-cyan);
+    }
+
+    .stats-bar .stat-item .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      opacity: 0.7;
+      margin-top: 2px;
+    }
+
+    .stats-bar .stat-item.gold .stat-value {
+      color: var(--neon-gold);
+    }
+    .stats-bar .stat-item.purple .stat-value {
+      color: var(--neon-purple);
+    }
+    .stats-bar .stat-item.green .stat-value {
+      color: #22c55e;
+    }
+
+    /* ===== لیست گروه‌ها ===== */
+    .groups-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      animation: fadeInUp 0.7s ease 0.15s forwards;
+      opacity: 0;
+    }
+
+    .group-card {
+      padding: 22px 24px 20px;
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      cursor: default;
+    }
+
+    .group-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--neon-cyan), var(--neon-purple));
+      transition: 0.3s;
+      opacity: 0.5;
+    }
+
+    .group-card:hover::before {
+      opacity: 1;
+      width: 5px;
+    }
+
+    .group-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(0, 234, 255, 0.15);
+      box-shadow: 0 0 50px rgba(0, 234, 255, 0.04);
+    }
+
+    .group-card .group-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .group-card .group-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+      background: rgba(0, 234, 255, 0.06);
+      border: 1px solid rgba(0, 234, 255, 0.06);
+    }
+
+    .group-card .group-info h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 0 0 2px;
+      color: #fff;
+    }
+
+    .group-card .group-info .xp-tag {
+      font-size: 0.7rem;
+      background: rgba(0, 234, 255, 0.08);
+      color: var(--neon-cyan);
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    .group-card .group-desc {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 14px;
+      opacity: 0.8;
+      min-height: 40px;
+    }
+
+    .group-card .group-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .group-card .group-footer .member-count {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      opacity: 0.7;
+    }
+
+    .group-card .group-footer .member-count i {
+      margin-left: 4px;
+    }
+
+    .btn-join {
+      padding: 8px 20px;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.04);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: var(--font-main);
+    }
+
+    .btn-join:hover:not(:disabled) {
+      background: rgba(0, 234, 255, 0.12);
+      border-color: rgba(0, 234, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .btn-join.joined {
+      background: rgba(34, 197, 94, 0.1);
+      border-color: rgba(34, 197, 94, 0.15);
+      color: #22c55e;
+    }
+
+    .btn-join.joined:hover {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
+    }
+
+    .btn-join:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .btn-join.full {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* ===== حالت خالی ===== */
+    .empty-state {
+      text-align: center;
+      padding: 50px 20px;
+      color: var(--text-secondary);
+      grid-column: 1 / -1;
+    }
+
+    .empty-state .big-icon {
+      font-size: 4rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .empty-state h3 {
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    /* ===== مودال ایجاد گروه ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-box {
+      max-width: 480px;
+      width: 100%;
+      padding: 32px 30px;
+      animation: fadeInUp 0.4s ease forwards;
+    }
+
+    .modal-box .modal-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .modal-box .modal-sub {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+    }
+
+    .modal-box .form-group {
+      margin-bottom: 16px;
+    }
+
+    .modal-box .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--text-secondary);
+    }
+
+    .modal-box .form-group input,
+    .modal-box .form-group textarea,
+    .modal-box .form-group select {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.04);
+      color: #fff;
+      font-size: 0.95rem;
+      font-family: var(--font-main);
+      transition: 0.3s;
+    }
+
+    .modal-box .form-group input:focus,
+    .modal-box .form-group textarea:focus,
+    .modal-box .form-group select:focus {
+      outline: none;
+      border-color: rgba(0, 234, 255, 0.2);
+      box-shadow: 0 0 30px rgba(0, 234, 255, 0.03);
+    }
+
+    .modal-box .form-group textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    .modal-box .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .modal-box .modal-actions .btn {
+      flex: 1;
+      padding: 12px;
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+    .modal-box .modal-actions .btn-secondary {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: var(--text-secondary);
+    }
+
+    .modal-box .modal-actions .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* ============================================
+       ریسپانسیو
+       ============================================ */
+    @media (max-width: 768px) {
+      .groups-container {
+        padding: 14px 16px 30px;
+      }
+
+      .groups-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .groups-header .title-area h1 {
+        font-size: 1.8rem;
+      }
+
+      .btn-create {
+        padding: 10px 20px;
+        font-size: 0.85rem;
+        width: 100%;
+        justify-content: center;
+      }
+
+      .groups-tabs {
+        justify-content: center;
+      }
+
+      .groups-tabs .tab {
+        padding: 6px 14px;
+        font-size: 0.75rem;
+      }
+
+      .stats-bar {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .stats-bar .stat-item .stat-value {
+        font-size: 1.3rem;
+      }
+
+      .groups-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .group-card {
+        padding: 18px 16px;
+      }
+
+      .modal-box {
+        padding: 24px 18px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .groups-header .title-area h1 {
+        font-size: 1.4rem;
+      }
+
+      .groups-header .title-area p {
+        font-size: 0.85rem;
+      }
+
+      .stats-bar {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .stats-bar .stat-item {
+        padding: 10px 8px;
+      }
+
+      .stats-bar .stat-item .stat-value {
+        font-size: 1.1rem;
+      }
+
+      .stats-bar .stat-item .stat-label {
+        font-size: 0.65rem;
+      }
+
+      .groups-tabs .tab {
+        padding: 4px 10px;
+        font-size: 0.65rem;
+      }
+
+      .group-card .group-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+
+      .group-card .group-info h3 {
+        font-size: 0.95rem;
+      }
+
+      .group-card .group-desc {
+        font-size: 0.8rem;
+        min-height: 30px;
+      }
+
+      .group-card .group-footer .member-count {
+        font-size: 0.7rem;
+      }
+
+      .btn-join {
+        padding: 6px 14px;
+        font-size: 0.7rem;
+      }
+
+      .modal-box .modal-title {
+        font-size: 1.2rem;
+      }
+
+      .modal-box .modal-actions {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .stats-bar {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .groups-tabs .tab {
+        font-size: 0.6rem;
+        padding: 3px 8px;
+      }
+
+      .group-card {
+        padding: 14px 12px;
+      }
+
+      .btn-join {
+        padding: 4px 10px;
+        font-size: 0.65rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="groups-container">
+
+    <!-- ==========================================
+         هدر
+         ========================================== -->
+    <header class="groups-header">
+      <div class="title-area">
+        <h1>
+          <span class="neon-text">👥 اتحادهای</span>
+          <span style="color: var(--neon-cyan);">Nitro</span>Verse
+        </h1>
+        <p>تیم خودت رو بساز و در لیگ‌ها فرمانروایی کن</p>
+      </div>
+      <button class="btn-create" id="openModalBtn">
+        <i class="fas fa-plus"></i>
+        ایجاد اتحاد جدید
+      </button>
+    </header>
+
+    <!-- ==========================================
+         تب‌ها
+         ========================================== -->
+    <div class="groups-tabs">
+      <button class="tab active" data-filter="all">
+        <i class="fas fa-globe"></i> همه
+        <span class="count" id="countAll">۰</span>
+      </button>
+      <button class="tab" data-filter="my">
+        <i class="fas fa-users"></i> اتحادهای من
+        <span class="count" id="countMy">۰</span>
+      </button>
+      <button class="tab" data-filter="popular">
+        <i class="fas fa-fire"></i> محبوب‌ترین
+        <span class="count" id="countPopular">۰</span>
+      </button>
+    </div>
+
+    <!-- ==========================================
+         آمار
+         ========================================== -->
+    <div class="stats-bar">
+      <div class="stat-item">
+        <span class="stat-value" id="totalGroups">۰</span>
+        <span class="stat-label">📋 کل اتحادها</span>
+      </div>
+      <div class="stat-item gold">
+        <span class="stat-value" id="totalXP">۰</span>
+        <span class="stat-label">⭐ مجموع XP</span>
+      </div>
+      <div class="stat-item purple">
+        <span class="stat-value" id="totalMembers">۰</span>
+        <span class="stat-label">👤 کل اعضا</span>
+      </div>
+      <div class="stat-item green">
+        <span class="stat-value" id="myGroupsCount">۰</span>
+        <span class="stat-label">✅ اتحادهای من</span>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         لیست گروه‌ها
+         ========================================== -->
+    <div class="groups-grid" id="groupsGrid">
+      <!-- توسط JavaScript پر می‌شود -->
+    </div>
+
+  </div>
+
+  <!-- ==========================================
+       مودال ایجاد گروه
+       ========================================== -->
+  <div class="modal-overlay" id="createModal">
+    <div class="modal-box glow-card">
+      <h2 class="modal-title neon-text">✨ ایجاد اتحاد جدید</h2>
+      <p class="modal-sub">یک تیم بساز و دیگران رو به چالش بکش!</p>
+
+      <div class="form-group">
+        <label>🏷️ نام اتحاد</label>
+        <input type="text" id="groupName" placeholder="مثلاً: پیشتازان فضا" />
+      </div>
+
+      <div class="form-group">
+        <label>📝 توضیحات</label>
+        <textarea id="groupDesc" placeholder="درباره اتحادت بنویس..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>🎨 آیکون</label>
+        <select id="groupIcon">
+          <option value="🚀">🚀 موشک</option>
+          <option value="🔥">🔥 آتش</option>
+          <option value="⚡">⚡ برق</option>
+          <option value="💎">💎 الماس</option>
+          <option value="🌟">🌟 ستاره</option>
+          <option value="🦅">🦅 عقاب</option>
+          <option value="🐉">🐉 اژدها</option>
+          <option value="⚔️">⚔️ شمشیر</option>
+          <option value="🛡️">🛡️ سپر</option>
+          <option value="👑">👑 تاج</option>
+        </select>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="closeModalBtn">لغو</button>
+        <button class="btn btn-primary" id="confirmCreateBtn">🚀 ایجاد کن</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       اسکریپت‌ها
+       ========================================== -->
+  <script>
+    // ============================================
+    // داده‌های گروه‌ها (با پشتیبانی از userId)
+    // ============================================
+
+    function getUserKey(baseKey) {
+      const userId = localStorage.getItem('nv_user_id') || 'guest';
+      return `${baseKey}_${userId}`;
+    }
+
+    function getUserData(baseKey, defaultValue = null) {
+      try {
+        const key = getUserKey(baseKey);
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : defaultValue;
+      } catch {
+        return defaultValue;
+      }
+    }
+
+    function setUserData(baseKey, data) {
+      try {
+        const key = getUserKey(baseKey);
+        localStorage.setItem(key, JSON.stringify(data));
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
+    function getUsername() {
+      return localStorage.getItem('nv_username') || 'کاربر';
+    }
+
+    // ============================================
+    // داده‌های پیش‌فرض گروه‌ها
+    // ============================================
+
+    const DEFAULT_GROUPS = [{
+      id: 'space_pioneers',
+      name: 'پیشتازان فضا',
+      icon: '🚀',
+      description: 'ما اولین اتحاد نیتروورس هستیم. هدف ما تسخیر تمامی لیگ‌های گیمیفیکیشن است.',
+      members: 12,
+      maxMembers: 50,
+      xp: 12500,
+      createdAt: '2025-01-15',
+      creator: 'سیستم',
+      membersList: ['سیستم', 'کاربر1', 'کاربر2']
+    }, {
+      id: 'cyber_ninja',
+      name: 'سایبر نینجا',
+      icon: '🥷',
+      description: 'سریع، بی‌صدا و مرگبار. در تاریکی کد می‌زنیم و در نور پیروز می‌شویم.',
+      members: 45,
+      maxMembers: 50,
+      xp: 8200,
+      createdAt: '2025-02-01',
+      creator: 'سیستم',
+      membersList: ['سیستم', 'کاربر3', 'کاربر4', 'کاربر5']
+    }, {
+      id: 'phoenix_fire',
+      name: 'ققنوس آتشین',
+      icon: '🔥',
+      description: 'اتحاد ققنوس برای کسانی است که هرگز تسلیم نمی‌شوند. از خاکستر خود برمی‌خیزیم.',
+      members: 50,
+      maxMembers: 50,
+      xp: 21000,
+      createdAt: '2024-12-10',
+      creator: 'سیستم',
+      membersList: ['سیستم', 'کاربر6', 'کاربر7']
+    }, {
+      id: 'code_masters',
+      name: 'استادان کد',
+      icon: '💻',
+      description: 'جایی که کد به هنر تبدیل می‌شود. برنامه‌نویسان نخبه نیتروورس.',
+      members: 8,
+      maxMembers: 30,
+      xp: 4500,
+      createdAt: '2025-03-01',
+      creator: 'سیستم',
+      membersList: ['سیستم']
+    }, {
+      id: 'ai_innovators',
+      name: 'نوآوران هوش مصنوعی',
+      icon: '🤖',
+      description: 'ما آینده را با هوش مصنوعی می‌سازیم. هر روز یک ایده جدید!',
+      members: 18,
+      maxMembers: 40,
+      xp: 9800,
+      createdAt: '2025-02-20',
+      creator: 'سیستم',
+      membersList: ['سیستم', 'کاربر8']
+    }, {
+      id: 'quantum_brains',
+      name: 'مغزهای کوانتومی',
+      icon: '⚛️',
+      description: 'تفکر کوانتومی، حل مسائل پیچیده. جایگاه نخبگان علمی.',
+      members: 6,
+      maxMembers: 20,
+      xp: 3200,
+      createdAt: '2025-03-15',
+      creator: 'سیستم',
+      membersList: ['سیستم']
+    }];
+
+    // ============================================
+    // توابع مدیریت گروه‌ها
+    // ============================================
+
+    function getGroups() {
+      return getUserData('nv_groups', DEFAULT_GROUPS);
+    }
+
+    function saveGroups(groups) {
+      return setUserData('nv_groups', groups);
+    }
+
+    function getMyGroups() {
+      return getUserData('nv_my_groups', []);
+    }
+
+    function saveMyGroups(myGroups) {
+      return setUserData('nv_my_groups', myGroups);
+    }
+
+    function getMyGroupsData() {
+      const allGroups = getGroups();
+      const myIds = getMyGroups();
+      return allGroups.filter(g => myIds.includes(g.id));
+    }
+
+    function isMember(groupId) {
+      const myGroups = getMyGroups();
+      return myGroups.includes(groupId);
+    }
+
+    // ============================================
+    // توابع اصلی
+    // ============================================
+
+    function createGroup(data) {
+      const groups = getGroups();
+      const newGroup = {
+        id: 'group_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+        name: data.name || 'اتحاد جدید',
+        icon: data.icon || '👥',
+        description: data.description || 'یک اتحاد جدید در نیتروورس',
+        members: 1,
+        maxMembers: data.maxMembers || 50,
+        xp: 0,
+        createdAt: new Date().toISOString(),
+        creator: getUsername(),
+        membersList: [getUsername()],
+      };
+
+      groups.push(newGroup);
+      saveGroups(groups);
+
+      // اضافه کردن به گروه‌های من
+      const myGroups = getMyGroups();
+      if (!myGroups.includes(newGroup.id)) {
+        myGroups.push(newGroup.id);
+        saveMyGroups(myGroups);
+      }
+
+      renderGroups();
+      updateStats();
+
+      return newGroup;
+    }
+
+    function joinGroup(groupId) {
+      const groups = getGroups();
+      const index = groups.findIndex(g => g.id === groupId);
+      if (index === -1) return { success: false, message: 'گروه پیدا نشد' };
+
+      const group = groups[index];
+      const username = getUsername();
+
+      if (group.members >= group.maxMembers) {
+        return { success: false, message: 'ظرفیت گروه تکمیل است' };
+      }
+
+      if (!group.membersList) group.membersList = [];
+      if (group.membersList.includes(username)) {
+        return { success: false, message: 'شما قبلاً عضو این گروه هستید' };
+      }
+
+      group.members++;
+      group.membersList.push(username);
+      groups[index] = group;
+      saveGroups(groups);
+
+      const myGroups = getMyGroups();
+      if (!myGroups.includes(groupId)) {
+        myGroups.push(groupId);
+        saveMyGroups(myGroups);
+      }
+
+      renderGroups();
+      updateStats();
+
+      return { success: true, message: 'به گروه پیوستید!' };
+    }
+
+    function leaveGroup(groupId) {
+      const groups = getGroups();
+      const index = groups.findIndex(g => g.id === groupId);
+      if (index === -1) return { success: false, message: 'گروه پیدا نشد' };
+
+      const group = groups[index];
+      const username = getUsername();
+
+      if (!group.membersList) group.membersList = [];
+      const memberIndex = group.membersList.indexOf(username);
+      if (memberIndex === -1) {
+        return { success: false, message: 'شما عضو این گروه نیستید' };
+      }
+
+      group.members--;
+      group.membersList.splice(memberIndex, 1);
+      groups[index] = group;
+      saveGroups(groups);
+
+      const myGroups = getMyGroups();
+      const newMyGroups = myGroups.filter(id => id !== groupId);
+      saveMyGroups(newMyGroups);
+
+      renderGroups();
+      updateStats();
+
+      return { success: true, message: 'از گروه خارج شدید' };
+    }
+
+    // ============================================
+    // رندر
+    // ============================================
+
+    function renderGroups(filter = 'all') {
+      const container = document.getElementById('groupsGrid');
+      let groups = getGroups();
+      const myGroups = getMyGroups();
+      const username = getUsername();
+
+      // فیلتر
+      if (filter === 'my') {
+        groups = groups.filter(g => myGroups.includes(g.id));
+      } else if (filter === 'popular') {
+        groups = [...groups].sort((a, b) => b.members - a.members);
+      }
+
+      if (groups.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <span class="big-icon">👥</span>
+            <h3>هیچ اتحادی وجود ندارد</h3>
+            <p>اولین اتحاد رو تو بساز!</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = groups.map(group => {
+        const isJoined = myGroups.includes(group.id);
+        const isFull = group.members >= group.maxMembers;
+
+        return `
+          <div class="group-card glow-card" data-id="${group.id}">
+            <div class="group-header">
+              <div class="group-icon">${group.icon || '👥'}</div>
+              <div class="group-info">
+                <h3>${group.name}</h3>
+                <span class="xp-tag">⭐ ${group.xp.toLocaleString()} XP</span>
+              </div>
+            </div>
+            <p class="group-desc">${group.description || 'بدون توضیحات'}</p>
+            <div class="group-footer">
+              <span class="member-count">
+                <i class="fas fa-users"></i> ${group.members} / ${group.maxMembers} عضو
+                ${group.creator === username ? ' 👑' : ''}
+              </span>
+              <button class="btn-join ${isJoined ? 'joined' : ''} ${isFull && !isJoined ? 'full' : ''}" 
+                      onclick="handleJoin('${group.id}')" 
+                      ${isFull && !isJoined ? 'disabled' : ''}>
+                ${isJoined ? '✅ عضو هستی' : isFull ? '🔒 تکمیل' : '➕ پیوستن'}
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function updateStats() {
+      const groups = getGroups();
+      const myGroups = getMyGroups();
+
+      document.getElementById('totalGroups').textContent = groups.length;
+      document.getElementById('totalXP').textContent = groups.reduce((sum, g) => sum + g.xp, 0).toLocaleString();
+      document.getElementById('totalMembers').textContent = groups.reduce((sum, g) => sum + g.members, 0);
+      document.getElementById('myGroupsCount').textContent = myGroups.length;
+
+      // بروزرسانی شمارنده تب‌ها
+      document.getElementById('countAll').textContent = groups.length;
+      document.getElementById('countMy').textContent = myGroups.length;
+      document.getElementById('countPopular').textContent = Math.min(groups.length, 3);
+    }
+
+    // ============================================
+    // رویدادها
+    // ============================================
+
+    function handleJoin(groupId) {
+      const username = getUsername();
+      const groups = getGroups();
+      const group = groups.find(g => g.id === groupId);
+
+      if (!group) return;
+
+      const isJoined = group.membersList && group.membersList.includes(username);
+
+      if (isJoined) {
+        const result = leaveGroup(groupId);
+        showToast(result.message, result.success ? 'success' : 'error');
+      } else {
+        const result = joinGroup(groupId);
+        showToast(result.message, result.success ? 'success' : 'error');
+      }
+    }
+
+    // ============================================
+    // تابع Toast
+    // ============================================
+
+    function showToast(message, type = 'info') {
+      const old = document.querySelector('.toast');
+      if (old) old.remove();
+
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = '0.4s';
+        setTimeout(() => toast.remove(), 400);
+      }, 2800);
+    }
+
+    // ============================================
+    // مودال
+    // ============================================
+
+    const modal = document.getElementById('createModal');
+    const openBtn = document.getElementById('openModalBtn');
+    const closeBtn = document.getElementById('closeModalBtn');
+    const confirmBtn = document.getElementById('confirmCreateBtn');
+
+    openBtn.addEventListener('click', () => {
+      modal.classList.add('active');
+      document.getElementById('groupName').focus();
+    });
+
+    closeBtn.addEventListener('click', () => {
+      modal.classList.remove('active');
+    });
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.classList.remove('active');
+    });
+
+    confirmBtn.addEventListener('click', () => {
+      const name = document.getElementById('groupName').value.trim();
+      const desc = document.getElementById('groupDesc').value.trim();
+      const icon = document.getElementById('groupIcon').value;
+
+      if (!name) {
+        showToast('❌ لطفاً نام گروه را وارد کن!', 'error');
+        return;
+      }
+
+      const group = createGroup({ name, description: desc, icon });
+      showToast(`✅ اتحاد "${group.name}" با موفقیت ایجاد شد!`, 'success');
+      modal.classList.remove('active');
+
+      // پاک کردن فرم
+      document.getElementById('groupName').value = '';
+      document.getElementById('groupDesc').value = '';
+    });
+
+    // ============================================
+    // تب‌ها
+    // ============================================
+
+    document.querySelectorAll('.groups-tabs .tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.groups-tabs .tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        const filter = this.dataset.filter;
+        renderGroups(filter);
+      });
+    });
+
+    // ============================================
+    // اجرا
+    // ============================================
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderGroups('all');
+      updateStats();
+      console.log('👥 NitroVerse Groups loaded!');
+    });
+
+    // بروزرسانی هر بار که صفحه فعال می‌شود
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        renderGroups(document.querySelector('.groups-tabs .tab.active')?.dataset.filter || 'all');
+        updateStats();
+      }
+    });
+
+    // اکپورت برای استفاده در جای دیگر
+    window.Groups = {
+      getGroups,
+      saveGroups,
+      getMyGroups,
+      saveMyGroups,
+      createGroup,
+      joinGroup,
+      leaveGroup,
+      renderGroups,
+      updateStats,
+      handleJoin,
+    };
+  </script>
+
+</body>
+</html>

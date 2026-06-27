@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="آزمون سریع نیتروورس — چالش‌های علمی در سطوح مختلف" />
+  <meta name="keywords" content="آزمون, سوال, چالش, نیتروورس, علمی" />
+  <meta property="og:title" content="🧠 آزمون سریع | NitroVerse" />
+  <meta property="og:description" content="مهارت‌های خود را در آزمون‌های علمی نیتروورس بسنج" />
+  <title>🧠 آزمون سریع | NitroVerse</title>
+  <link rel="icon" href="img/logo.png" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    /* ============================================
+       صفحه آزمون — استایل‌های اختصاصی
+       ============================================ */
+
+    .quiz-container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* ===== هدر ===== */
+    .quiz-header {
+      text-align: center;
+      padding: 10px 20px 20px;
+      animation: fadeInUp 0.7s ease forwards;
+    }
+
+    .quiz-header h1 {
+      font-size: 2rem;
+      font-weight: 900;
+    }
+
+    .quiz-header .subtitle {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-top: 4px;
+      opacity: 0.7;
+    }
+
+    .quiz-header .subtitle span {
+      color: var(--neon-cyan);
+      font-weight: 700;
+    }
+
+    /* ===== کارت ===== */
+    .quiz-card {
+      padding: 32px 30px;
+      margin-bottom: 16px;
+      animation: fadeInUp 0.7s ease 0.05s forwards;
+      opacity: 0;
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .quiz-card .question-number {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      opacity: 0.5;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .quiz-card .question-text {
+      font-size: 1.3rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 24px;
+      line-height: 1.9;
+      color: #fff;
+    }
+
+    .quiz-card .question-text .diff-tag {
+      display: inline-block;
+      font-size: 0.6rem;
+      padding: 2px 12px;
+      border-radius: 20px;
+      margin-right: 8px;
+      vertical-align: middle;
+      font-weight: 700;
+    }
+
+    .diff-tag.easy {
+      background: rgba(34, 197, 94, 0.15);
+      color: #22c55e;
+    }
+    .diff-tag.medium {
+      background: rgba(255, 204, 102, 0.15);
+      color: var(--neon-gold);
+    }
+    .diff-tag.hard {
+      background: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
+    }
+
+    /* ===== گزینه‌ها ===== */
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .option-btn {
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: var(--font-main);
+      text-align: center;
+    }
+
+    .option-btn:hover:not(.disabled) {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.12);
+      transform: translateY(-2px);
+    }
+
+    .option-btn .opt-label {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      text-align: center;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+      margin-left: 8px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+
+    .option-btn.correct {
+      background: rgba(34, 197, 94, 0.15) !important;
+      border-color: #22c55e !important;
+      color: #22c55e;
+    }
+
+    .option-btn.correct .opt-label {
+      background: rgba(34, 197, 94, 0.2);
+      color: #22c55e;
+    }
+
+    .option-btn.wrong {
+      background: rgba(239, 68, 68, 0.15) !important;
+      border-color: #ef4444 !important;
+      color: #ef4444;
+    }
+
+    .option-btn.wrong .opt-label {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+    }
+
+    .option-btn.disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    /* ===== نوار پیشرفت ===== */
+    .quiz-progress {
+      margin: 16px 0 8px;
+    }
+
+    .quiz-progress .bar {
+      height: 4px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .quiz-progress .bar .fill {
+      height: 100%;
+      border-radius: 10px;
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+      transition: width 0.5s ease;
+      width: 0%;
+    }
+
+    .quiz-progress .info {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 6px;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      opacity: 0.5;
+    }
+
+    /* ===== دکمه‌ها ===== */
+    .quiz-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-quiz {
+      padding: 12px 28px;
+      border-radius: 30px;
+      border: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: var(--font-main);
+    }
+
+    .btn-quiz.primary {
+      background: rgba(0, 234, 255, 0.08);
+      border: 1px solid rgba(0, 234, 255, 0.1);
+      color: var(--neon-cyan);
+    }
+
+    .btn-quiz.primary:hover {
+      background: rgba(0, 234, 255, 0.16);
+      transform: translateY(-2px);
+    }
+
+    .btn-quiz.purple {
+      background: rgba(124, 58, 237, 0.08);
+      border: 1px solid rgba(124, 58, 237, 0.1);
+      color: var(--neon-purple);
+    }
+
+    .btn-quiz.purple:hover {
+      background: rgba(124, 58, 237, 0.16);
+      transform: translateY(-2px);
+    }
+
+    .btn-quiz.gold {
+      background: rgba(255, 204, 102, 0.08);
+      border: 1px solid rgba(255, 204, 102, 0.1);
+      color: var(--neon-gold);
+    }
+
+    .btn-quiz.gold:hover {
+      background: rgba(255, 204, 102, 0.16);
+      transform: translateY(-2px);
+    }
+
+    .btn-quiz:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    /* ===== نتیجه ===== */
+    .result-box {
+      text-align: center;
+      padding: 20px 10px;
+    }
+
+    .result-box .result-icon {
+      font-size: 3.5rem;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .result-box .result-score {
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--neon-gold);
+      text-shadow: 0 0 40px rgba(255, 204, 102, 0.1);
+    }
+
+    .result-box .result-detail {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      margin: 8px 0 16px;
+    }
+
+    .result-box .result-stats {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin: 12px 0 20px;
+    }
+
+    .result-box .result-stats .stat {
+      text-align: center;
+      padding: 8px 16px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .result-box .result-stats .stat .number {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--neon-cyan);
+    }
+
+    .result-box .result-stats .stat .label {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      display: block;
+      opacity: 0.6;
+    }
+
+    .result-box .result-rank {
+      padding: 10px 20px;
+      border-radius: 12px;
+      background: rgba(255, 204, 102, 0.06);
+      border: 1px solid rgba(255, 204, 102, 0.08);
+      display: inline-block;
+      margin: 8px 0 16px;
+    }
+
+    .result-box .result-rank .label {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .result-box .result-rank .rank-name {
+      color: var(--neon-gold);
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    /* ============================================
+       ریسپانسیو
+       ============================================ */
+
+    @media (max-width: 768px) {
+      .quiz-container {
+        padding: 14px;
+      }
+
+      .quiz-header h1 {
+        font-size: 1.6rem;
+      }
+
+      .quiz-card {
+        padding: 24px 20px;
+      }
+
+      .quiz-card .question-text {
+        font-size: 1.1rem;
+      }
+
+      .options-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .option-btn {
+        padding: 12px 14px;
+        font-size: 0.85rem;
+      }
+
+      .option-btn .opt-label {
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        font-size: 0.6rem;
+        margin-left: 6px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .quiz-header h1 {
+        font-size: 1.3rem;
+      }
+
+      .quiz-header .subtitle {
+        font-size: 0.8rem;
+      }
+
+      .quiz-card {
+        padding: 18px 14px;
+        border-radius: 14px;
+        min-height: 200px;
+      }
+
+      .quiz-card .question-number {
+        font-size: 0.65rem;
+      }
+
+      .quiz-card .question-text {
+        font-size: 0.95rem;
+        margin-bottom: 16px;
+      }
+
+      .options-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+      }
+
+      .option-btn {
+        padding: 10px 10px;
+        font-size: 0.75rem;
+        border-radius: 10px;
+      }
+
+      .option-btn .opt-label {
+        width: 18px;
+        height: 18px;
+        line-height: 18px;
+        font-size: 0.5rem;
+        margin-left: 4px;
+      }
+
+      .btn-quiz {
+        padding: 10px 20px;
+        font-size: 0.8rem;
+        width: 100%;
+      }
+
+      .quiz-actions {
+        flex-direction: column;
+      }
+
+      .result-box .result-score {
+        font-size: 2.2rem;
+      }
+
+      .result-box .result-stats {
+        gap: 10px;
+      }
+
+      .result-box .result-stats .stat {
+        padding: 6px 12px;
+        flex: 1;
+      }
+
+      .result-box .result-stats .stat .number {
+        font-size: 1rem;
+      }
+
+      .result-box .result-rank {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .options-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 4px;
+      }
+
+      .option-btn {
+        padding: 8px 6px;
+        font-size: 0.65rem;
+        border-radius: 8px;
+      }
+
+      .option-btn .opt-label {
+        width: 14px;
+        height: 14px;
+        line-height: 14px;
+        font-size: 0.4rem;
+        margin-left: 3px;
+      }
+
+      .quiz-card .question-text {
+        font-size: 0.85rem;
+      }
+
+      .btn-quiz {
+        padding: 8px 16px;
+        font-size: 0.7rem;
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="quiz-container">
+
+    <!-- ===== هدر ===== -->
+    <header class="quiz-header">
+      <h1 class="neon-text">🧠 آزمون سریع</h1>
+      <p class="subtitle">
+        مهارت‌های خود را در <span>سه سطح</span> مختلف بسنج
+      </p>
+    </header>
+
+    <!-- ===== کارت آزمون ===== -->
+    <div class="quiz-card glow-card" id="quizCard">
+      <div id="quizContent">
+        <!-- توسط JS پر می‌شود -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ==========================================
+       اسکریپت‌ها
+       ========================================== -->
+  <script>
+    // ============================================
+    // NitroVerse Quick Quiz (Enhanced)
+    // ============================================
+
+    const HISTORY_KEY = 'nv_quiz_history';
+    const RATING_KEY = 'nv_rating';
+    const ACH_KEY = 'nv_achievements';
+
+    // ============================================
+    // توابع کمکی با پشتیبانی از userId
+    // ============================================
+
+    function getUserKey(baseKey) {
+      const userId = localStorage.getItem('nv_user_id') || 'guest';
+      return `${baseKey}_${userId}`;
+    }
+
+    function getUserData(baseKey, defaultValue = null) {
+      try {
+        const key = getUserKey(baseKey);
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : defaultValue;
+      } catch {
+        return defaultValue;
+      }
+    }
+
+    function setUserData(baseKey, data) {
+      try {
+        const key = getUserKey(baseKey);
+        localStorage.setItem(key, JSON.stringify(data));
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
+    function getHistory() {
+      return getUserData(HISTORY_KEY, []);
+    }
+
+    function setHistory(history) {
+      return setUserData(HISTORY_KEY, history);
+    }
+
+    function getRating() {
+      return getUserData(RATING_KEY, 0);
+    }
+
+    function setRating(rating) {
+      return setUserData(RATING_KEY, rating);
+    }
+
+    function getAchievements() {
+      return getUserData(ACH_KEY, {});
+    }
+
+    function setAchievements(ach) {
+      return setUserData(ACH_KEY, ach);
+    }
+
+    function getUsername() {
+      return localStorage.getItem('nv_username') || 'کاربر';
+    }
+
+    // ============================================
+    // سوالات
+    // ============================================
+
+    const QUESTIONS = {
+      easy: [
+        { q: 'عدد ۲ + ۲ چند می‌شود؟', a: ['۲', '۳', '۴', '۵'], c: 2, diff: 'easy' },
+        { q: 'کدام‌یک حیوان است؟', a: ['کتاب', 'درخت', 'سگ', 'صندلی'], c: 2, diff: 'easy' },
+        { q: 'آب در دمای صفر درجه چه می‌شود؟', a: ['جوش می‌آید', 'یخ می‌زند', 'تبخیر می‌شود', 'می‌سوزد'], c: 1, diff: 'easy' },
+        { q: 'پایتخت ایران کدام است؟', a: ['مشهد', 'شیراز', 'تهران', 'قم'], c: 2, diff: 'easy' },
+        { q: 'کدام‌یک میوه است؟', a: ['سیب', 'سنگ', 'خاک', 'چوب'], c: 0, diff: 'easy' },
+        { q: 'چند تا پا داریم؟', a: ['۱', '۲', '۳', '۴'], c: 1, diff: 'easy' },
+        { q: 'آسمان چه رنگی است؟', a: ['سبز', 'آبی', 'قرمز', 'زرد'], c: 1, diff: 'easy' },
+      ],
+      medium: [
+        { q: 'مولکول آب از چه عناصری تشکیل شده؟', a: ['هیدروژن و اکسیژن', 'کربن و اکسیژن', 'نیتروژن و هیدروژن', 'فقط اکسیژن'], c: 0,
+          diff: 'medium' },
+        { q: 'عدد پی تقریباً چند است؟', a: ['۲.۱۴', '۳.۱۴', '۴.۱۳', '۳.۴۱'], c: 1, diff: 'medium' },
+        { q: 'نویسنده شاهنامه کیست؟', a: ['مولوی', 'فردوسی', 'سعدی', 'حافظ'], c: 1, diff: 'medium' },
+        { q: 'مرکز منظومه شمسی چیست؟', a: ['زمین', 'خورشید', 'ماه', 'زهره'], c: 1, diff: 'medium' },
+        { q: 'کدام کشور در آسیا نیست؟', a: ['چین', 'ژاپن', 'مصر', 'هند'], c: 2, diff: 'medium' },
+        { q: 'سریع‌ترین حیوان خشکی چیست؟', a: ['یوزپلنگ', 'شیر', 'پلنگ', 'گرگ'], c: 0, diff: 'medium' },
+        { q: 'کدام گاز بیشترین درصد هوا را تشکیل می‌دهد؟', a: ['اکسیژن', 'نیتروژن', 'دی‌اکسید کربن', 'آرگون'], c: 1,
+        diff: 'medium' },
+      ],
+      hard: [
+        { q: 'اولین زبان برنامه‌نویسی جهان چیست؟', a: ['Python', 'C', 'Fortran', 'Assembly'], c: 2, diff: 'hard' },
+        { q: 'کدام دانشمند نظریه نسبیت را مطرح کرد؟', a: ['نیوتن', 'انیشتین', 'گالیله', 'ماکسول'], c: 1, diff: 'hard' },
+        { q: 'در مدارهای منطقی، دروازه AND چه کاری انجام می‌دهد؟', a: ['OR', 'جمع', 'ضرب منطقی', 'منفی‌سازی'], c: 2,
+        diff: 'hard' },
+        { q: 'کدام‌یک از الگوریتم‌ها برای مرتب‌سازی استفاده می‌شود؟', a: ['Dijkstra', 'Quick Sort', 'DFS', 'AES'], c: 1,
+          diff: 'hard' },
+        { q: 'در هوش مصنوعی، یادگیری نظارت‌شده به چه معناست؟', a: ['یادگیری بدون داده', 'یادگیری با داده‌ی برچسب‌خورده',
+          'یادگیری از خطا', 'هیچ‌کدام'
+        ], c: 1, diff: 'hard' },
+        { q: 'کدام معماری پردازنده در اکثر گوشی‌های هوشمند استفاده می‌شود؟', a: ['x86', 'ARM', 'MIPS', 'RISC-V'], c: 1,
+          diff: 'hard' },
+        { q: 'الگوریتم RSA بر پایه چه مسئله ریاضی است؟', a: ['فاکتورگیری اعداد بزرگ', 'لگاریتم گسسته', 'مسئله کیسه',
+          'بازه هش'
+        ], c: 0, diff: 'hard' },
+      ]
+    };
+
+    // ============================================
+    // وضعیت
+    // ============================================
+
+    let state = {
+      difficulty: localStorage.getItem('nv_diff') || 'easy',
+      questions: [],
+      index: 0,
+      score: 0,
+      correctCount: 0,
+      isAnswered: false,
+      isFinished: false,
+      total: 0,
+    };
+
+    const labels = ['الف', 'ب', 'پ', 'ت', 'ث', 'ج', 'چ', 'ح'];
+
+    // ============================================
+    // DOM
+    // ============================================
+
+    const contentEl = document.getElementById('quizContent');
+
+    // ============================================
+    // توابع اصلی
+    // ============================================
+
+    function shuffle(arr) {
+      return arr.sort(() => Math.random() - 0.5);
+    }
+
+    function startQuiz() {
+      const filtered = QUESTIONS[state.difficulty] || QUESTIONS.easy;
+      state.questions = shuffle([...filtered]);
+      state.index = 0;
+      state.score = 0;
+      state.correctCount = 0;
+      state.isFinished = false;
+      state.total = state.questions.length;
+
+      showQuestion();
+    }
+
+    function showQuestion() {
+      if (state.index >= state.questions.length) {
+        finishQuiz();
+        return;
+      }
+
+      const q = state.questions[state.index];
+      state.isAnswered = false;
+
+      const diffLabels = {
+        easy: 'آسان',
+        medium: 'متوسط',
+        hard: 'سخت'
+      };
+      const diffClasses = {
+        easy: 'easy',
+        medium: 'medium',
+        hard: 'hard'
+      };
+
+      const progress = Math.round(((state.index) / state.total) * 100);
+
+      let optionsHTML = '';
+      q.a.forEach((opt, i) => {
+        const label = labels[i] || '?';
+        optionsHTML += `
+          <button class="option-btn" data-index="${i}" onclick="selectAnswer(${i})">
+            <span class="opt-label">${label}</span>
+            ${opt}
+          </button>
+        `;
+      });
+
+      contentEl.innerHTML = `
+        <div class="question-number">سؤال ${state.index + 1} از ${state.total}</div>
+        <div class="question-text">
+          <span class="diff-tag ${diffClasses[q.diff]}">${diffLabels[q.diff]}</span>
+          ${q.q}
+        </div>
+        <div class="options-grid">
+          ${optionsHTML}
+        </div>
+        <div class="quiz-progress">
+          <div class="bar">
+            <div class="fill" style="width: ${progress}%;"></div>
+          </div>
+          <div class="info">
+            <span>⭐ ${state.score} امتیاز</span>
+            <span>${progress}%</span>
+          </div>
+        </div>
+        <div class="quiz-actions">
+          <button class="btn-quiz primary" id="nextBtn" disabled>سؤال بعدی →</button>
+        </div>
+      `;
+
+      // رویداد دکمه بعدی
+      document.getElementById('nextBtn').addEventListener('click', function() {
+        if (state.isAnswered) {
+          state.index++;
+          showQuestion();
+        }
+      });
+    }
+
+    function selectAnswer(index) {
+      if (state.isAnswered) return;
+      state.isAnswered = true;
+
+      const q = state.questions[state.index];
+      const btns = document.querySelectorAll('.option-btn');
+
+      btns.forEach((btn, i) => {
+        btn.classList.add('disabled');
+        btn.onclick = null;
+        if (i === q.c) btn.classList.add('correct');
+        if (i === index && i !== q.c) btn.classList.add('wrong');
+      });
+
+      if (index === q.c) {
+        state.correctCount++;
+        state.score += 10;
+      }
+
+      // فعال کردن دکمه بعدی
+      document.getElementById('nextBtn').disabled = false;
+
+      // به‌روزرسانی امتیاز در HUD
+      const scoreEl = document.querySelector('.quiz-progress .info span:first-child');
+      if (scoreEl) {
+        scoreEl.textContent = `⭐ ${state.score} امتیاز`;
+      }
+    }
+
+    function finishQuiz() {
+      state.isFinished = true;
+
+      const total = state.total;
+      const correct = state.correctCount;
+      const score = state.score;
+      const accuracy = Math.round((correct / total) * 100);
+
+      // ذخیره نتیجه
+      const history = getHistory();
+      const result = {
+        date: Date.now(),
+        score: score,
+        correct: correct,
+        total: total,
+        accuracy: accuracy,
+        difficulty: state.difficulty,
+        username: getUsername(),
+      };
+      history.push(result);
+      setHistory(history.slice(-100));
+
+      // ===== محاسبه رنک =====
+      const currentRating = getRating();
+      let ratingChange = 0;
+      let newRating = currentRating;
+
+      if (accuracy >= 80) {
+        ratingChange = Math.min(20, Math.round(accuracy / 10));
+      } else if (accuracy >= 50) {
+        ratingChange = Math.round(accuracy / 20);
+      } else {
+        ratingChange = -5;
+      }
+
+      newRating = Math.max(0, currentRating + ratingChange);
+      setRating(newRating);
+
+      // ===== بررسی دستاوردها =====
+      checkAchievements(history);
+
+      // ===== تغییر سختی =====
+      updateDifficulty(accuracy);
+
+      // ===== نمایش نتیجه =====
+      showResult(result, currentRating, newRating, ratingChange);
+    }
+
+    function showResult(result, oldRating, newRating, change) {
+      const rank = getRank(newRating);
+
+      let statsHTML = `
+        <div class="stat">
+          <div class="number">${result.score}</div>
+          <span class="label">⭐ امتیاز</span>
+        </div>
+        <div class="stat">
+          <div class="number">${result.correct}/${result.total}</div>
+          <span class="label">✅ پاسخ درست</span>
+        </div>
+        <div class="stat">
+          <div class="number">${result.accuracy}%</div>
+          <span class="label">🎯 دقت</span>
+        </div>
+      `;
+
+      const rankHTML = `
+        <div class="result-rank">
+          <span class="label">🏅 رنک جدید: </span>
+          <span class="rank-name">${rank}</span>
+          ${change !== 0 ? ` <span style="color: ${change > 0 ? '#22c55e' : '#ef4444'}; font-size:0.85rem;">(${change > 0 ? '+' : ''}${change})</span>` : ''}
+        </div>
+      `;
+
+      contentEl.innerHTML = `
+        <div class="result-box">
+          <span class="result-icon">🎉</span>
+          <div class="result-score">${result.score}</div>
+          <div class="result-detail">امتیاز شما در آزمون ${result.difficulty === 'easy' ? 'آسان' : result.difficulty === 'medium' ? 'متوسط' : 'سخت'}</div>
+          ${rankHTML}
+          <div class="result-stats">
+            ${statsHTML}
+          </div>
+          <div class="quiz-actions">
+            <button class="btn-quiz gold" onclick="location.reload()">🔄 آزمون جدید</button>
+            <button class="btn-quiz purple" onclick="location.href='dashboard.html'">📊 داشبورد</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function getRank(rating) {
+      if (rating >= 4000) return 'Immortal 👑';
+      if (rating >= 3000) return 'Legendary ⭐';
+      if (rating >= 2200) return 'Diamond 💎';
+      if (rating >= 1500) return 'Gold 🥇';
+      if (rating >= 1000) return 'Silver 🥈';
+      if (rating >= 500) return 'Bronze 🥉';
+      return 'Normal 🌱';
+    }
+
+    function updateDifficulty(accuracy) {
+      const difficulties = ['easy', 'medium', 'hard'];
+      let currentIndex = difficulties.indexOf(state.difficulty);
+
+      if (accuracy >= 80 && currentIndex < 2) {
+        currentIndex++;
+      } else if (accuracy < 40 && currentIndex > 0) {
+        currentIndex--;
+      }
+
+      const newDiff = difficulties[currentIndex];
+      state.difficulty = newDiff;
+      localStorage.setItem('nv_diff', newDiff);
+    }
+
+    function checkAchievements(history) {
+      const ach = getAchievements();
+      let changed = false;
+
+      const totalScore = history.reduce((sum, h) => sum + (h.score || 0), 0);
+      const totalCorrect = history.reduce((sum, h) => sum + (h.correct || 0), 0);
+      const totalGames = history.length;
+
+      // اولین بازی
+      if (totalGames >= 1 && !ach.first_play) {
+        ach.first_play = true;
+        changed = true;
+      }
+
+      // ۱۰ پاسخ صحیح
+      if (totalCorrect >= 10 && !ach.ten_correct) {
+        ach.ten_correct = true;
+        changed = true;
+      }
+
+      // ۵۰ امتیاز
+      if (totalScore >= 50 && !ach.fifty_points) {
+        ach.fifty_points = true;
+        changed = true;
+      }
+
+      // ۱۰۰ امتیاز
+      if (totalScore >= 100 && !ach.hundred_points) {
+        ach.hundred_points = true;
+        changed = true;
+      }
+
+      if (changed) {
+        setAchievements(ach);
+        // نمایش پاپ‌آپ دستاورد جدید
+        showAchievementToast();
+      }
+    }
+
+    function showAchievementToast() {
+      const old = document.querySelector('.toast');
+      if (old) old.remove();
+
+      const toast = document.createElement('div');
+      toast.className = 'toast success';
+      toast.textContent = '🎖️ دستاورد جدید! به پروفایل برو و ببین!';
+      toast.style.cssText = `
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 14px 28px;
+        border-radius: 14px;
+        background: rgba(0,0,0,0.92);
+        border: 1px solid #22c55e;
+        color: #22c55e;
+        z-index: 999;
+        font-weight: 700;
+        backdrop-filter: blur(12px);
+        animation: fadeInUp 0.4s ease;
+        max-width: 90%;
+        text-align: center;
+      `;
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = '0.5s ease';
+        setTimeout(() => toast.remove(), 500);
+      }, 3000);
+    }
+
+    // ============================================
+    // اجرا
+    // ============================================
+
+    document.addEventListener('DOMContentLoaded', function() {
+      startQuiz();
+      console.log('🧠 NitroVerse Quick Quiz loaded!');
+    });
+  </script>
+
+</body>
+</html>

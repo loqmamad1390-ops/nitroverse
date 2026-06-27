@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="NitroVerse — پلتفرم آموزشی و رقابتی با هوش مصنوعی برای آینده‌سازان ایران" />
+  <meta name="keywords" content="آموزش, رقابت, هوش مصنوعی, بازی, یادگیری, NitroVerse" />
+  <meta name="author" content="Mohammad Javad" />
+  <meta property="og:title" content="NitroVerse — آینده‌ای برای ذهن‌های برتر" />
+  <meta property="og:description" content="به جهان رقابت، علم و آینده خوش آمدی. یادگیری را با بازی ترکیب کن!" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://nitroverse.ir" />
+  <meta name="theme-color" content="#00eaff" />
+  <title>NitroVerse — آینده‌ای برای ذهن‌های برتر</title>
+  <link rel="icon" href="img/logo.png" />
+  <link rel="stylesheet" href="css/style.css" />
+  
+  <style>
+    /* ============================================
+       صفحه اصلی — استایل‌های اختصاصی
+       ============================================ */
+
+    body {
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(ellipse at center, #050011 0%, #000000 100%);
+      margin: 0;
+      padding: 0;
+    }
+
+    /* ===== پس‌زمینه ذرات ===== */
+    #bg-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ===== محتوای اصلی ===== */
+    .hero {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 20px;
+      max-width: 950px;
+      width: 100%;
+      animation: fadeInUp 1s ease forwards;
+    }
+
+    /* ===== لوگو و تایتل ===== */
+    .hero .logo-wrapper {
+      margin-bottom: 12px;
+    }
+
+    .hero .logo-wrapper .logo-icon {
+      font-size: 4rem;
+      display: block;
+      margin-bottom: 4px;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .hero h1 {
+      font-family: 'Orbitron', 'Vazirmatn', sans-serif;
+      font-size: clamp(2.8rem, 8vw, 5.5rem);
+      font-weight: 900;
+      letter-spacing: 3px;
+      margin: 0;
+      line-height: 1.1;
+    }
+
+    .hero h1 .highlight {
+      color: var(--neon-cyan);
+      text-shadow: 0 0 30px rgba(0, 234, 255, 0.3);
+    }
+
+    .hero .subtitle {
+      font-size: clamp(1rem, 2vw, 1.4rem);
+      color: var(--text-secondary);
+      margin-top: 8px;
+      margin-bottom: 32px;
+      opacity: 0.85;
+      line-height: 1.8;
+    }
+
+    .hero .subtitle span {
+      color: var(--neon-cyan);
+      font-weight: 700;
+    }
+
+    /* ===== دکمه‌ها ===== */
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .hero-buttons .btn {
+      min-width: 160px;
+      padding: 14px 28px;
+      font-size: 1rem;
+      border-radius: 30px;
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 700;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-primary);
+      backdrop-filter: blur(8px);
+    }
+
+    .hero-buttons .btn:hover {
+      transform: translateY(-4px) scale(1.02);
+    }
+
+    .hero-buttons .btn-primary {
+      background: rgba(0, 234, 255, 0.08);
+      border-color: rgba(0, 234, 255, 0.2);
+      color: var(--neon-cyan);
+    }
+
+    .hero-buttons .btn-primary:hover {
+      background: rgba(0, 234, 255, 0.16);
+      box-shadow: 0 0 50px rgba(0, 234, 255, 0.08);
+    }
+
+    .hero-buttons .btn-purple {
+      background: rgba(124, 58, 237, 0.08);
+      border-color: rgba(124, 58, 237, 0.2);
+      color: var(--neon-purple);
+    }
+
+    .hero-buttons .btn-purple:hover {
+      background: rgba(124, 58, 237, 0.16);
+      box-shadow: 0 0 50px rgba(124, 58, 237, 0.08);
+    }
+
+    .hero-buttons .btn-gold {
+      background: rgba(255, 204, 102, 0.08);
+      border-color: rgba(255, 204, 102, 0.2);
+      color: var(--neon-gold);
+    }
+
+    .hero-buttons .btn-gold:hover {
+      background: rgba(255, 204, 102, 0.16);
+      box-shadow: 0 0 50px rgba(255, 204, 102, 0.08);
+    }
+
+    .hero-buttons .btn-ghost {
+      background: rgba(255, 255, 255, 0.03);
+      border-color: rgba(255, 255, 255, 0.06);
+      color: var(--text-secondary);
+    }
+
+    .hero-buttons .btn-ghost:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.12);
+      color: #fff;
+    }
+
+    /* ===== وضعیت لاگین ===== */
+    .hero .user-status {
+      margin-top: 20px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      opacity: 0.6;
+    }
+
+    .hero .user-status a {
+      color: var(--neon-cyan);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .hero .user-status a:hover {
+      text-decoration: underline;
+    }
+
+    /* ===== فوتر ===== */
+    .footer-home {
+      position: absolute;
+      bottom: 20px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.1);
+      font-size: 0.8rem;
+      z-index: 2;
+      letter-spacing: 0.5px;
+    }
+
+    .footer-home .heart {
+      color: #ef4444;
+    }
+
+    .footer-home .version {
+      color: rgba(255, 255, 255, 0.04);
+      font-size: 0.6rem;
+      margin-top: 2px;
+    }
+
+    /* ============================================
+       انیمیشن‌ها
+       ============================================ */
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes float {
+      0%,
+      100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-12px);
+      }
+    }
+
+    /* ============================================
+       ریسپانسیو
+       ============================================ */
+
+    @media (max-width: 768px) {
+      .hero .logo-wrapper .logo-icon {
+        font-size: 3rem;
+      }
+
+      .hero h1 {
+        font-size: clamp(2.2rem, 6vw, 3.5rem);
+      }
+
+      .hero .subtitle {
+        font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+        margin-bottom: 24px;
+      }
+
+      .hero-buttons .btn {
+        min-width: 130px;
+        padding: 12px 20px;
+        font-size: 0.9rem;
+      }
+
+      .footer-home {
+        font-size: 0.7rem;
+        bottom: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero {
+        padding: 12px;
+      }
+
+      .hero .logo-wrapper .logo-icon {
+        font-size: 2.4rem;
+      }
+
+      .hero h1 {
+        font-size: clamp(1.8rem, 5vw, 2.8rem);
+        letter-spacing: 1px;
+      }
+
+      .hero .subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 18px;
+      }
+
+      .hero-buttons {
+        gap: 10px;
+      }
+
+      .hero-buttons .btn {
+        min-width: 100%;
+        padding: 12px 16px;
+        font-size: 0.85rem;
+        justify-content: center;
+      }
+
+      .hero .user-status {
+        font-size: 0.75rem;
+        margin-top: 14px;
+      }
+
+      .footer-home {
+        font-size: 0.6rem;
+        bottom: 8px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .hero h1 {
+        font-size: 1.6rem;
+      }
+
+      .hero .subtitle {
+        font-size: 0.8rem;
+      }
+
+      .hero-buttons .btn {
+        padding: 10px 14px;
+        font-size: 0.8rem;
+        min-width: 100%;
+      }
+    }
+
+    /* ===== حالت تاریک (برای نمایش بهتر) ===== */
+    @media (prefers-color-scheme: light) {
+      body {
+        background: radial-gradient(ellipse at center, #0a0f1f 0%, #000000 100%);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================
+       پس‌زمینه ذرات
+       ========================================== -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- ==========================================
+       محتوای اصلی
+       ========================================== -->
+  <section class="hero">
+
+    <!-- لوگو -->
+    <div class="logo-wrapper">
+      <span class="logo-icon">⚡</span>
+    </div>
+
+    <!-- تایتل -->
+    <h1>
+      <span class="neon-text">Nitro</span>Verse
+    </h1>
+
+    <!-- زیرنویس -->
+    <p class="subtitle">
+      به جهان <span>رقابت</span>، <span>علم</span> و <span>آینده</span> خوش آمدی.
+    </p>
+
+    <!-- دکمه‌ها -->
+    <div class="hero-buttons">
+      <a href="login.html" class="btn btn-primary">
+        🚀 ورود / ثبت‌نام
+      </a>
+      <a href="game.html" class="btn btn-purple">
+        🎮 شروع رقابت
+      </a>
+      <a href="leagues.html" class="btn btn-gold">
+        🏆 لیگ‌ها
+      </a>
+      <a href="about.html" class="btn btn-ghost">
+        🧠 درباره
+      </a>
+    </div>
+
+    <!-- وضعیت کاربر (در صورت لاگین) -->
+    <div class="user-status" id="userStatus">
+      <!-- توسط جاوااسکریپت پر می‌شود -->
+    </div>
+
+  </section>
+
+  <!-- ==========================================
+       فوتر
+       ========================================== -->
+  <div class="footer-home">
+    © ۲۰۲۶ NitroVerse — ساخته‌شده با <span class="heart">❤️</span> در ایران
+    <div class="version">نسخه ۲.۰.۰</div>
+  </div>
+
+  <!-- ==========================================
+       اسکریپت‌ها
+       ========================================== -->
+
+  <!-- ===== پس‌زمینه ===== -->
+  <script>
+    // ============================================
+    // Particle Background (بهینه‌شده)
+    // ============================================
+    (function() {
+      const canvas = document.getElementById('bg-canvas');
+      const ctx = canvas.getContext('2d');
+      let w, h;
+      let particles = [];
+      let animationId = null;
+
+      function resize() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      }
+
+      window.addEventListener('resize', resize);
+      resize();
+
+      class Particle {
+        constructor() {
+          this.reset();
+        }
+
+        reset() {
+          this.x = Math.random() * w;
+          this.y = Math.random() * h;
+          this.size = Math.random() * 2 + 0.5;
+          this.speedY = Math.random() * 0.3 + 0.03;
+          this.alpha = Math.random() * 0.5 + 0.15;
+          this.phase = Math.random() * Math.PI * 2;
+        }
+
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(0, 234, 255, ${this.alpha})`;
+          ctx.fill();
+        }
+
+        update() {
+          this.y += this.speedY;
+          this.phase += 0.01;
+          this.x += Math.sin(this.phase) * 0.1;
+
+          if (this.y > h + 10) {
+            this.reset();
+            this.y = -10;
+          }
+          if (this.x > w + 10) this.x = -10;
+          if (this.x < -10) this.x = w + 10;
+        }
+      }
+
+      // ایجاد ذرات با تعداد مناسب
+      const count = Math.min(180, Math.floor((w * h) / 6000));
+      for (let i = 0; i < count; i++) {
+        particles.push(new Particle());
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, w, h);
+        particles.forEach(p => {
+          p.update();
+          p.draw();
+        });
+        animationId = requestAnimationFrame(animate);
+      }
+
+      animate();
+
+      // توقف انیمیشن در صورت عدم نمایش
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          if (animationId) {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+          }
+        } else {
+          if (!animationId) {
+            animate();
+          }
+        }
+      });
+    })();
+  </script>
+
+  <!-- ===== وضعیت کاربر ===== -->
+  <script>
+    // ============================================
+    // نمایش وضعیت لاگین
+    // ============================================
+    (function() {
+      const statusEl = document.getElementById('userStatus');
+
+      function updateStatus() {
+        const token = localStorage.getItem('nv_token');
+        const username = localStorage.getItem('nv_username') || 'کاربر';
+
+        if (token) {
+          statusEl.innerHTML = `
+            👋 خوش برگشتی، <strong style="color: var(--neon-cyan);">${username}</strong>!
+            <a href="dashboard.html" style="margin-right: 8px;">📊 ورود به داشبورد</a>
+            <span style="opacity: 0.3; margin: 0 6px;">|</span>
+            <a href="#" onclick="logoutFromHome(); return false;" style="color: #ef4444;">🚪 خروج</a>
+          `;
+        } else {
+          statusEl.textContent = '💡 برای دسترسی به همه امکانات، وارد شو!';
+        }
+      }
+
+      // تابع خروج
+      window.logoutFromHome = function() {
+        if (confirm('آیا مطمئنی می‌خوای خارج بشی؟')) {
+          localStorage.removeItem('nv_token');
+          localStorage.removeItem('nv_user');
+          localStorage.removeItem('nv_user_id');
+          localStorage.removeItem('nv_username');
+          updateStatus();
+          // رفرش صفحه برای بروزرسانی
+          location.reload();
+        }
+      };
+
+      updateStatus();
+
+      // بروزرسانی هر بار که صفحه فعال می‌شود
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+          updateStatus();
+        }
+      });
+    })();
+  </script>
+
+  <!-- ===== فایل‌های اصلی ===== -->
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+</html>

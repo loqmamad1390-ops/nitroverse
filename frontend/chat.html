@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="چت نیتروورس — با دوستانت در ارتباط باش" />
+  <title>💬 چت | NitroVerse</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* ===== صفحه چت ===== */
+    .chat-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ===== هدر ===== */
+    .chat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      margin-bottom: 20px;
+    }
+
+    .chat-header h1 {
+      font-size: 1.8rem;
+      font-weight: 900;
+      margin: 0;
+    }
+
+    .chat-header .header-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-primary);
+      font-weight: 700;
+      text-decoration: none;
+      transition: 0.3s;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    .btn-back:hover {
+      background: rgba(255, 255, 255, 0.12);
+      transform: translateY(-2px);
+    }
+
+    /* ===== انتخاب اتاق ===== */
+    .room-selector {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      margin-bottom: 16px;
+      align-items: center;
+    }
+
+    .room-selector .label {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-left: 8px;
+    }
+
+    .room-btn {
+      padding: 6px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: 0.3s;
+      font-family: var(--font-main);
+    }
+
+    .room-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+
+    .room-btn.active {
+      background: rgba(0, 234, 255, 0.15);
+      border-color: var(--neon-cyan);
+      color: var(--neon-cyan);
+      box-shadow: 0 0 20px rgba(0, 234, 255, 0.05);
+    }
+
+    .room-btn.create-btn {
+      background: rgba(124, 58, 237, 0.12);
+      border-color: rgba(124, 58, 237, 0.25);
+      color: var(--neon-purple);
+    }
+
+    .room-btn.create-btn:hover {
+      background: rgba(124, 58, 237, 0.22);
+    }
+
+    /* ===== بدنه چت ===== */
+    .chat-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 400px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      overflow: hidden;
+    }
+
+    /* ===== پیام‌ها ===== */
+    .chat-messages {
+      flex: 1;
+      padding: 20px 20px 12px;
+      overflow-y: auto;
+      max-height: 500px;
+      min-height: 350px;
+      scroll-behavior: smooth;
+    }
+
+    .chat-messages::-webkit-scrollbar {
+      width: 5px;
+    }
+    .chat-messages::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .chat-messages::-webkit-scrollbar-thumb {
+      background: rgba(0, 234, 255, 0.2);
+      border-radius: 10px;
+    }
+
+    .msg {
+      padding: 10px 16px;
+      margin-bottom: 8px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border-right: 3px solid rgba(255, 255, 255, 0.08);
+      animation: fadeInUp 0.3s ease;
+    }
+
+    .msg.own {
+      border-right-color: var(--neon-cyan);
+      background: rgba(0, 234, 255, 0.06);
+    }
+
+    .msg .msg-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .msg .msg-username {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #fff;
+    }
+
+    .msg .msg-username.own {
+      color: var(--neon-cyan);
+    }
+
+    .msg .msg-time {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+    }
+
+    .msg .msg-text {
+      color: var(--text-primary);
+      word-wrap: break-word;
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .msg-empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-secondary);
+    }
+
+    .msg-empty .icon {
+      font-size: 3rem;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .msg-empty p {
+      font-size: 1rem;
+    }
+
+    /* ===== ورودی ===== */
+    .chat-input-area {
+      display: flex;
+      gap: 10px;
+      padding: 14px 20px 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .chat-input-area input {
+      flex: 1;
+      padding: 12px 18px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.04);
+      color: #fff;
+      font-family: var(--font-main);
+      font-size: 0.95rem;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    .chat-input-area input:focus {
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 20px rgba(0, 234, 255, 0.05);
+    }
+
+    .chat-input-area input::placeholder {
+      color: var(--text-secondary);
+    }
+
+    .chat-input-area .send-btn {
+      padding: 12px 24px;
+      border-radius: 14px;
+      border: none;
+      background: rgba(0, 234, 255, 0.15);
+      color: var(--neon-cyan);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: 0.3s;
+      font-family: var(--font-main);
+      white-space: nowrap;
+    }
+
+    .chat-input-area .send-btn:hover {
+      background: rgba(0, 234, 255, 0.25);
+      transform: scale(1.02);
+    }
+
+    .chat-input-area .send-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ===== کاربران آنلاین (سایدبار) ===== */
+    .chat-sidebar {
+      display: none;
+      width: 220px;
+      padding: 16px 18px;
+      background: rgba(255, 255, 255, 0.02);
+      border-right: 1px solid rgba(255, 255, 255, 0.06);
+      flex-shrink: 0;
+    }
+
+    .chat-sidebar .sidebar-title {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      font-weight: 700;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .chat-sidebar .user-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 0;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .chat-sidebar .user-item .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      display: inline-block;
+    }
+
+    .chat-sidebar .user-item .dot.offline {
+      background: #555;
+    }
+
+    /* ===== ریسپانسیو ===== */
+    @media (max-width: 768px) {
+      .chat-container {
+        padding: 12px;
+      }
+
+      .chat-header h1 {
+        font-size: 1.4rem;
+      }
+
+      .chat-header .header-actions .btn-back {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+      }
+
+      .room-selector {
+        padding: 10px 12px;
+        gap: 6px;
+      }
+
+      .room-btn {
+        padding: 5px 12px;
+        font-size: 0.8rem;
+      }
+
+      .chat-messages {
+        padding: 14px 14px 10px;
+        max-height: 350px;
+        min-height: 250px;
+      }
+
+      .msg {
+        padding: 8px 14px;
+      }
+
+      .chat-input-area {
+        padding: 10px 14px 14px;
+        flex-wrap: wrap;
+      }
+
+      .chat-input-area input {
+        padding: 10px 14px;
+        font-size: 0.9rem;
+        min-width: 0;
+      }
+
+      .chat-input-area .send-btn {
+        padding: 10px 18px;
+        font-size: 0.85rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .chat-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+
+      .chat-header .header-actions {
+        justify-content: stretch;
+      }
+
+      .chat-header .header-actions .btn-back {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .room-selector {
+        flex-wrap: wrap;
+        gap: 4px;
+      }
+
+      .room-btn {
+        font-size: 0.75rem;
+        padding: 4px 10px;
+      }
+
+      .chat-messages {
+        max-height: 280px;
+        min-height: 200px;
+      }
+
+      .msg .msg-username {
+        font-size: 0.85rem;
+      }
+    }
+
+    @media (min-width: 992px) {
+      .chat-body {
+        flex-direction: row;
+      }
+      .chat-sidebar {
+        display: block;
+      }
+      .chat-messages {
+        max-height: 550px;
+        min-height: 400px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="chat-container">
+
+    <!-- ===== هدر ===== -->
+    <header class="chat-header">
+      <h1 class="neon-text">💬 چت نیتروورس</h1>
+      <div class="header-actions">
+        <a href="dashboard.html" class="btn-back">📊 بازگشت به داشبورد</a>
+        <button class="btn-back" onclick="location.reload()">🔄 تازه‌سازی</button>
+      </div>
+    </header>
+
+    <!-- ===== انتخاب اتاق ===== -->
+    <div class="room-selector" id="roomSelector">
+      <span class="label">📁 اتاق‌ها:</span>
+      <!-- توسط JS پر می‌شود -->
+    </div>
+
+    <!-- ===== بدنه چت ===== -->
+    <div class="chat-body">
+
+      <!-- ===== سایدبار (دسکتاپ) ===== -->
+      <div class="chat-sidebar">
+        <div class="sidebar-title">👥 کاربران آنلاین</div>
+        <div class="user-item"><span class="dot"></span> شما</div>
+        <div class="user-item"><span class="dot"></span> Mohammad Javad</div>
+        <div class="user-item"><span class="dot"></span> Kosar</div>
+        <div class="user-item"><span class="dot offline"></span> Ali (آفلاین)</div>
+        <div class="user-item"><span class="dot"></span> AI Partner</div>
+        <div style="margin-top: 16px; font-size: 0.75rem; color: var(--text-secondary); opacity: 0.5;">
+          🔒 پیام‌ها رمزنگاری می‌شوند
+        </div>
+      </div>
+
+      <!-- ===== پیام‌ها ===== -->
+      <div style="flex: 1; display: flex; flex-direction: column;">
+        <div class="chat-messages" id="chatContainer">
+          <!-- توسط JS پر می‌شود -->
+        </div>
+
+        <!-- ===== ورودی ===== -->
+        <div class="chat-input-area">
+          <input
+            type="text"
+            id="chatInput"
+            placeholder="پیام خود را بنویسید..."
+            maxlength="500"
+            autocomplete="off"
+          />
+          <button class="send-btn" id="sendBtn">📨 ارسال</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ===== فوتر ===== -->
+    <div style="text-align: center; padding: 16px 0 6px; color: var(--text-secondary); font-size: 0.75rem; opacity: 0.4;">
+      © 2026 NitroVerse | چت امن و خصوصی
+    </div>
+
+  </div>
+
+  <!-- ===== اسکریپت‌ها ===== -->
+  <script src="js/data.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/auth.js"></script>
+
+  <script>
+    // ============================================
+    // مقداردهی اولیه چت
+    // ============================================
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const username = localStorage.getItem('nv_username') || 'کاربر';
+
+      // ===== رندر اتاق‌ها =====
+      if (window.Chat) {
+        // رندر اتاق‌ها
+        Chat.renderRoomSelector('roomSelector');
+
+        // رندر پیام‌ها (اتاق پیش‌فرض)
+        Chat.renderChat('chatContainer');
+
+        // ===== ارسال پیام =====
+        const input = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+
+        function sendMessage() {
+          const text = input.value.trim();
+          if (!text) return;
+
+          const result = Chat.sendMessage(text, username);
+          if (result.success) {
+            input.value = '';
+            Chat.renderChat('chatContainer');
+            // اسکرول به پایین
+            const container = document.getElementById('chatContainer');
+            container.scrollTop = container.scrollHeight;
+          } else {
+            alert(result.message);
+          }
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+
+        input.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+          }
+        });
+
+        // ===== چک کردن پیام‌های جدید (هر ۵ ثانیه) =====
+        setInterval(function() {
+          Chat.renderChat('chatContainer');
+        }, 5000);
+
+        console.log('💬 Chat initialized for:', username);
+      } else {
+        console.error('❌ Chat system not loaded!');
+      }
+    });
+  </script>
+
+</body>
+</html>

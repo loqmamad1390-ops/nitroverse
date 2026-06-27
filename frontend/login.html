@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ورود و ثبت‌نام در نیتروورس — پلتفرم آموزشی و رقابتی با هوش مصنوعی" />
+  <meta name="keywords" content="ورود, ثبت‌نام, نیتروورس, حساب کاربری" />
+  <meta property="og:title" content="🚀 ورود / ثبت‌نام | NitroVerse" />
+  <meta property="og:description" content="به نیتروورس خوش آمدی! وارد شو یا ثبت‌نام کن" />
+  <title>🚀 ورود / ثبت‌نام | NitroVerse</title>
+  <link rel="icon" href="img/logo.png" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    /* ============================================
+       صفحه ورود — استایل‌های اختصاصی
+       ============================================ */
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-main);
+      direction: rtl;
+      background: radial-gradient(ellipse at center, #050011 0%, #000000 100%);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* ===== پس‌زمینه ذرات ===== */
+    #bg-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ===== کانتینر ===== */
+    .login-container {
+      width: 100%;
+      max-width: 1000px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      position: relative;
+      z-index: 2;
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    @media (max-width: 768px) {
+      .login-container {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+    }
+
+    /* ===== کارت‌ها ===== */
+    .card {
+      background: rgba(0, 234, 255, 0.04);
+      border: 1px solid rgba(0, 234, 255, 0.08);
+      border-radius: 20px;
+      padding: 28px 30px;
+      backdrop-filter: blur(12px);
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      border-color: rgba(0, 234, 255, 0.12);
+    }
+
+    /* ===== هدر ===== */
+    .login-header {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .login-header h1 {
+      font-size: 2rem;
+      font-weight: 900;
+    }
+
+    .login-header .sub {
+      color: var(--text-secondary);
+      opacity: 0.8;
+      font-size: 0.95rem;
+      margin-top: 2px;
+    }
+
+    /* ===== تب‌ها ===== */
+    .tabs {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 16px 0 22px;
+    }
+
+    .tab-btn {
+      cursor: pointer;
+      padding: 10px 24px;
+      border-radius: 30px;
+      border: 1px solid rgba(0, 234, 255, 0.1);
+      color: var(--text-secondary);
+      background: transparent;
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+      font-weight: 600;
+      font-family: var(--font-main);
+    }
+
+    .tab-btn.active,
+    .tab-btn:hover {
+      background: rgba(0, 234, 255, 0.08);
+      border-color: rgba(0, 234, 255, 0.15);
+      color: var(--neon-cyan);
+    }
+
+    .tab-btn.active {
+      background: rgba(0, 234, 255, 0.12);
+      box-shadow: 0 0 30px rgba(0, 234, 255, 0.03);
+    }
+
+    /* ===== فرم ===== */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    @media (max-width: 700px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field label {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 600;
+      opacity: 0.8;
+    }
+
+    .field input,
+    .field select {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: #fff;
+      padding: 12px 16px;
+      border-radius: 12px;
+      outline: none;
+      transition: all 0.3s ease;
+      width: 100%;
+      font-size: 0.95rem;
+      font-family: var(--font-main);
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: rgba(0, 234, 255, 0.15);
+      box-shadow: 0 0 30px rgba(0, 234, 255, 0.03);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .field input::placeholder {
+      color: var(--text-secondary);
+      opacity: 0.3;
+    }
+
+    .field select option {
+      background: #0a0f1f;
+      color: #fff;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    .inline {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .inline input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--neon-cyan);
+      cursor: pointer;
+    }
+
+    .inline label {
+      cursor: pointer;
+    }
+
+    .inline a {
+      color: var(--neon-cyan);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .inline a:hover {
+      text-decoration: underline;
+    }
+
+    /* ===== دکمه‌ها ===== */
+    .actions {
+      margin-top: 14px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      cursor: pointer;
+      border-radius: 30px;
+      border: 1px solid rgba(0, 234, 255, 0.1);
+      background: rgba(0, 234, 255, 0.06);
+      color: var(--neon-cyan);
+      padding: 14px 28px;
+      font-size: 1rem;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      font-family: var(--font-main);
+      flex: 1;
+      min-width: 120px;
+      text-align: center;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      background: rgba(0, 234, 255, 0.12);
+      box-shadow: 0 0 40px rgba(0, 234, 255, 0.04);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-primary {
+      background: rgba(124, 58, 237, 0.08);
+      border-color: rgba(124, 58, 237, 0.12);
+      color: var(--neon-purple);
+    }
+
+    .btn-primary:hover {
+      background: rgba(124, 58, 237, 0.16);
+      box-shadow: 0 0 40px rgba(124, 58, 237, 0.04);
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    /* ===== سایدبار ===== */
+    .side {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .side .card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 30px 24px;
+    }
+
+    .side .logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 10px;
+      background: radial-gradient(circle, var(--neon-cyan) 0%, #0077ff 55%, transparent 60%);
+      border-radius: 50%;
+      box-shadow: 0 0 50px rgba(0, 234, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+    }
+
+    .side .brand h2 {
+      font-size: 1.6rem;
+      font-weight: 900;
+      margin: 0;
+    }
+
+    .side .brand p {
+      color: var(--text-secondary);
+      margin-top: 2px;
+      opacity: 0.7;
+    }
+
+    .links {
+      display: grid;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .links a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      color: var(--text-secondary);
+      background: rgba(255, 255, 255, 0.02);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .links a:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      transform: translateX(-4px);
+    }
+
+    /* ===== توست ===== */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 14px 28px;
+      border-radius: 14px;
+      background: rgba(0, 0, 0, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: #fff;
+      z-index: 9999;
+      font-size: 0.95rem;
+      font-weight: 600;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(12px);
+      animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      max-width: 90%;
+      text-align: center;
+    }
+
+    .toast.success {
+      border-color: #22c55e;
+      color: #22c55e;
+    }
+
+    .toast.error {
+      border-color: #ef4444;
+      color: #ef4444;
+    }
+
+    .toast.info {
+      border-color: var(--neon-cyan);
+      color: var(--neon-cyan);
+    }
+
+    @keyframes popIn {
+      0% {
+        transform: translateX(-50%) scale(0.8);
+        opacity: 0;
+      }
+      100% {
+        transform: translateX(-50%) scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* ============================================
+       انیمیشن‌ها
+       ============================================ */
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(25px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ============================================
+       ریسپانسیو
+       ============================================ */
+
+    @media (max-width: 768px) {
+      .card {
+        padding: 20px 18px;
+      }
+
+      .login-header h1 {
+        font-size: 1.6rem;
+      }
+
+      .tab-btn {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+      }
+
+      .field input,
+      .field select {
+        padding: 10px 14px;
+        font-size: 0.85rem;
+      }
+
+      .btn {
+        padding: 12px 20px;
+        font-size: 0.9rem;
+        min-width: 100px;
+      }
+
+      .side .card {
+        padding: 20px 16px;
+      }
+
+      .side .logo {
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+      }
+
+      .side .brand h2 {
+        font-size: 1.3rem;
+      }
+
+      .links a {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 12px;
+      }
+
+      .card {
+        padding: 16px 14px;
+        border-radius: 14px;
+      }
+
+      .login-header h1 {
+        font-size: 1.3rem;
+      }
+
+      .login-header .sub {
+        font-size: 0.8rem;
+      }
+
+      .tabs {
+        gap: 6px;
+        margin: 12px 0 16px;
+      }
+
+      .tab-btn {
+        padding: 6px 14px;
+        font-size: 0.75rem;
+        flex: 1;
+        text-align: center;
+      }
+
+      .field label {
+        font-size: 0.75rem;
+      }
+
+      .field input,
+      .field select {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+        border-radius: 10px;
+      }
+
+      .actions {
+        flex-direction: column;
+      }
+
+      .btn {
+        padding: 10px 16px;
+        font-size: 0.85rem;
+        min-width: 100%;
+      }
+
+      .inline {
+        font-size: 0.8rem;
+      }
+
+      .side .logo {
+        width: 50px;
+        height: 50px;
+        font-size: 1.6rem;
+      }
+
+      .side .brand h2 {
+        font-size: 1.1rem;
+      }
+
+      .side .brand p {
+        font-size: 0.8rem;
+      }
+
+      .links a {
+        padding: 6px 10px;
+        font-size: 0.75rem;
+      }
+
+      .toast {
+        font-size: 0.85rem;
+        padding: 12px 18px;
+        bottom: 16px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .card {
+        padding: 12px 10px;
+      }
+
+      .login-header h1 {
+        font-size: 1.1rem;
+      }
+
+      .tab-btn {
+        font-size: 0.65rem;
+        padding: 4px 10px;
+      }
+
+      .field input,
+      .field select {
+        padding: 6px 10px;
+        font-size: 0.75rem;
+      }
+
+      .btn {
+        padding: 8px 12px;
+        font-size: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================
+       پس‌زمینه ذرات
+       ========================================== -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- ==========================================
+       کانتینر اصلی
+       ========================================== -->
+  <div class="login-container">
+
+    <!-- ===== فرم ===== -->
+    <div class="card">
+
+      <!-- هدر -->
+      <div class="login-header">
+        <h1 class="neon-text">🚀 ورود / ثبت‌نام</h1>
+        <p class="sub">به نیتروورس خوش آمدی</p>
+      </div>
+
+      <!-- تب‌ها -->
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="login">🔑 ورود</button>
+        <button class="tab-btn" data-tab="register">✨ ثبت‌نام</button>
+      </div>
+
+      <!-- ===== فرم ورود ===== -->
+      <form id="loginForm" class="form-grid" autocomplete="off">
+        <div class="field full">
+          <label>📧 ایمیل</label>
+          <input id="login-email" type="email" placeholder="user@example.com" />
+        </div>
+        <div class="field full">
+          <label>🔒 رمز عبور</label>
+          <input type="password" id="login-password" placeholder="••••••••" />
+        </div>
+        <div class="actions full">
+          <button type="submit" class="btn">🚀 ورود</button>
+        </div>
+      </form>
+
+      <!-- ===== فرم ثبت‌نام ===== -->
+      <form id="registerForm" class="form-grid" style="display:none;" autocomplete="off">
+        <div class="field full">
+          <label>👤 نام کامل</label>
+          <input id="reg-fullname" placeholder="نام و نام خانوادگی" />
+        </div>
+        <div class="field">
+          <label>🏷️ نام کاربری</label>
+          <input id="reg-username" placeholder="نام کاربری" />
+        </div>
+        <div class="field">
+          <label>📧 ایمیل</label>
+          <input id="reg-email" type="email" placeholder="you@example.com" />
+        </div>
+        <div class="field">
+          <label>🔒 رمز عبور</label>
+          <input id="reg-password" type="password" placeholder="حداقل ۸ کاراکتر" />
+        </div>
+        <div class="field">
+          <label>🔒 تکرار رمز</label>
+          <input id="reg-password2" type="password" placeholder="تکرار رمز" />
+        </div>
+        <div class="field full">
+          <label>📍 استان</label>
+          <select id="reg-province">
+            <option value="">انتخاب استان</option>
+            <option value="آذربایجان شرقی">آذربایجان شرقی</option>
+            <option value="آذربایجان غربی">آذربایجان غربی</option>
+            <option value="اردبیل">اردبیل</option>
+            <option value="اصفهان">اصفهان</option>
+            <option value="البرز">البرز</option>
+            <option value="ایلام">ایلام</option>
+            <option value="بوشهر">بوشهر</option>
+            <option value="تهران">تهران</option>
+            <option value="چهارمحال و بختیاری">چهارمحال و بختیاری</option>
+            <option value="خراسان جنوبی">خراسان جنوبی</option>
+            <option value="خراسان رضوی">خراسان رضوی</option>
+            <option value="خراسان شمالی">خراسان شمالی</option>
+            <option value="خوزستان">خوزستان</option>
+            <option value="زنجان">زنجان</option>
+            <option value="سمنان">سمنان</option>
+            <option value="سیستان و بلوچستان">سیستان و بلوچستان</option>
+            <option value="فارس">فارس</option>
+            <option value="قزوین">قزوین</option>
+            <option value="قم">قم</option>
+            <option value="کردستان">کردستان</option>
+            <option value="کرمان">کرمان</option>
+            <option value="کرمانشاه">کرمانشاه</option>
+            <option value="کهگیلویه و بویراحمد">کهگیلویه و بویراحمد</option>
+            <option value="گلستان">گلستان</option>
+            <option value="گیلان">گیلان</option>
+            <option value="لرستان">لرستان</option>
+            <option value="مازندران">مازندران</option>
+            <option value="مرکزی">مرکزی</option>
+            <option value="هرمزگان">هرمزگان</option>
+            <option value="همدان">همدان</option>
+            <option value="یزد">یزد</option>
+          </select>
+        </div>
+        <div class="field full">
+          <label>📍 شهر</label>
+          <input id="reg-city" placeholder="شهر" />
+        </div>
+        <div class="inline full">
+          <input type="checkbox" id="reg-agree" />
+          <label for="reg-agree">
+            با <a href="terms.html">قوانین</a> موافقم
+          </label>
+        </div>
+        <div class="actions full">
+          <button type="submit" class="btn btn-primary">✨ ثبت‌نام</button>
+        </div>
+      </form>
+
+    </div>
+
+    <!-- ===== سایدبار ===== -->
+    <div class="side">
+
+      <!-- برند -->
+      <div class="card">
+        <div class="logo">⚡</div>
+        <div class="brand">
+          <h2 class="neon-text">NitroVerse</h2>
+          <p>سفر علمی‌ات را شروع کن</p>
+        </div>
+      </div>
+
+      <!-- لینک‌ها -->
+      <div class="card links">
+        <a href="leagues.html">🏆 لیگ‌های علمی</a>
+        <a href="leaderboard.html">📊 لیدربورد</a>
+        <a href="groups.html">👥 گروه‌ها</a>
+        <a href="shop.html">🛍 فروشگاه</a>
+        <a href="index.html">🏠 صفحه اصلی</a>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ==========================================
+       اسکریپت‌ها
+       ========================================== -->
+
+  <!-- ===== پس‌زمینه ===== -->
+  <script>
+    (function() {
+      const canvas = document.getElementById('bg-canvas');
+      const ctx = canvas.getContext('2d');
+      let w, h;
+      let particles = [];
+      let animationId = null;
+
+      function resize() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      }
+
+      window.addEventListener('resize', resize);
+      resize();
+
+      class Particle {
+        constructor() {
+          this.reset();
+        }
+
+        reset() {
+          this.x = Math.random() * w;
+          this.y = Math.random() * h;
+          this.size = Math.random() * 2 + 0.5;
+          this.speedY = Math.random() * 0.3 + 0.03;
+          this.alpha = Math.random() * 0.4 + 0.1;
+          this.phase = Math.random() * Math.PI * 2;
+        }
+
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(0, 234, 255, ${this.alpha})`;
+          ctx.fill();
+        }
+
+        update() {
+          this.y += this.speedY;
+          this.phase += 0.01;
+          this.x += Math.sin(this.phase) * 0.1;
+
+          if (this.y > h + 10) {
+            this.reset();
+            this.y = -10;
+          }
+          if (this.x > w + 10) this.x = -10;
+          if (this.x < -10) this.x = w + 10;
+        }
+      }
+
+      const count = Math.min(120, Math.floor((w * h) / 7000));
+      for (let i = 0; i < count; i++) {
+        particles.push(new Particle());
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, w, h);
+        particles.forEach(p => {
+          p.update();
+          p.draw();
+        });
+        animationId = requestAnimationFrame(animate);
+      }
+
+      animate();
+
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          if (animationId) {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+          }
+        } else {
+          if (!animationId) {
+            animate();
+          }
+        }
+      });
+    })();
+  </script>
+
+  <!-- ===== منطق فرم ===== -->
+  <script>
+    // ============================================
+    // تنظیمات API
+    // ============================================
+    const API_BASE = "http://localhost:5000";
+
+    // ============================================
+    // توابع API با پشتیبانی از Auth
+    // ============================================
+
+    async function apiRegister(data) {
+      const response = await fetch(`${API_BASE}/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      return response.json();
+    }
+
+    async function apiLogin(data) {
+      const response = await fetch(`${API_BASE}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+        credentials: "include"
+      });
+      const result = await response.json();
+      if (response.ok) {
+        // ذخیره اطلاعات کاربری با پشتیبانی از userId
+        localStorage.setItem("nv_token", result.accessToken);
+        localStorage.setItem("nv_user", JSON.stringify(result.user));
+        localStorage.setItem("nv_user_id", result.user.id || result.user.username || 'user_' + Date.now());
+        localStorage.setItem("nv_username", result.user.username || 'کاربر');
+        localStorage.setItem("nv_user_email", result.user.email || '');
+      }
+      return result;
+    }
+
+    // ============================================
+    // تب‌ها
+    // ============================================
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const tab = btn.dataset.tab;
+        document.getElementById('loginForm').style.display = tab === 'login' ? 'grid' : 'none';
+        document.getElementById('registerForm').style.display = tab === 'register' ? 'grid' : 'none';
+      });
+    });
+
+    // ============================================
+    // Login
+    // ============================================
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      const btn = e.target.querySelector('.btn');
+
+      if (!email || !password) {
+        showToast('❌ همه فیلدها را پر کن', 'error');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = '⏳ در حال ورود...';
+
+      try {
+        const result = await apiLogin({ email, password });
+        if (result.accessToken) {
+          showToast('✅ ورود موفق! خوش برگشتی!', 'success');
+          // بررسی redirect
+          const redirect = localStorage.getItem('nv_redirect_after_login') || 'dashboard.html';
+          localStorage.removeItem('nv_redirect_after_login');
+          setTimeout(() => window.location.href = redirect, 500);
+        } else {
+          showToast('❌ ' + (result.error || 'خطا در ورود'), 'error');
+        }
+      } catch (err) {
+        showToast('❌ خطا در ارتباط با سرور', 'error');
+        console.error(err);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '🚀 ورود';
+      }
+    });
+
+    // ============================================
+    // Register
+    // ============================================
+
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const fullname = document.getElementById('reg-fullname').value.trim();
+      const username = document.getElementById('reg-username').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-password').value;
+      const password2 = document.getElementById('reg-password2').value;
+      const province = document.getElementById('reg-province').value;
+      const city = document.getElementById('reg-city').value.trim();
+      const agree = document.getElementById('reg-agree').checked;
+      const btn = e.target.querySelector('.btn');
+
+      // ===== اعتبارسنجی =====
+      if (!fullname || !username || !email || !password || !province || !city) {
+        showToast('❌ همه فیلدها را پر کن', 'error');
+        return;
+      }
+
+      if (username.length < 3) {
+        showToast('❌ نام کاربری باید حداقل ۳ کاراکتر باشد', 'error');
+        return;
+      }
+
+      if (password.length < 8) {
+        showToast('❌ رمز باید حداقل ۸ کاراکتر باشد', 'error');
+        return;
+      }
+
+      if (password !== password2) {
+        showToast('❌ رمزها یکسان نیستند', 'error');
+        return;
+      }
+
+      if (!agree) {
+        showToast('❌ باید با قوانین موافقت کنی', 'error');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = '⏳ در حال ثبت‌نام...';
+
+      try {
+        const result = await apiRegister({
+          email,
+          username,
+          password,
+          full_name: fullname,
+          province,
+          city
+        });
+
+        if (result.message === 'registered' || result.user) {
+          showToast('✅ ثبت‌نام موفق! حالا وارد می‌شوی...', 'success');
+          // لاگین خودکار
+          const loginResult = await apiLogin({ email, password });
+          if (loginResult.accessToken) {
+            setTimeout(() => window.location.href = 'dashboard.html', 600);
+          } else {
+            // اگر لاگین خودکار نشد، به صفحه ورود برو
+            document.querySelector('.tab-btn[data-tab="login"]').click();
+            document.getElementById('login-email').value = email;
+            showToast('✅ ثبت‌نام موفق! حالا وارد شو', 'success');
+          }
+        } else {
+          showToast('❌ ' + (result.error || 'خطا در ثبت‌نام'), 'error');
+        }
+      } catch (err) {
+        showToast('❌ خطا در ارتباط با سرور', 'error');
+        console.error(err);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '✨ ثبت‌نام';
+      }
+    });
+
+    // ============================================
+    // Toast
+    // ============================================
+
+    function showToast(message, type = "info") {
+      const old = document.querySelector('.toast');
+      if (old) old.remove();
+
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = '0.5s ease';
+        setTimeout(() => toast.remove(), 500);
+      }, 3000);
+    }
+
+    // ============================================
+    // ورود با Enter
+    // ============================================
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const activeTab = document.querySelector('.tab-btn.active');
+        if (activeTab) {
+          const tab = activeTab.dataset.tab;
+          if (tab === 'login') {
+            document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+          } else if (tab === 'register') {
+            document.getElementById('registerForm').dispatchEvent(new Event('submit'));
+          }
+        }
+      }
+    });
+
+    console.log('🚀 NitroVerse Login loaded!');
+  </script>
+
+</body>
+</html>

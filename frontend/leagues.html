@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="لیگ‌های نیتروورس — رقابت در سطوح مختلف علمی و کسب جوایز ویژه" />
+  <meta name="keywords" content="لیگ, خوارزمی, ابن‌سینا, بیرونی, نیتروورس, رقابت, علمی" />
+  <meta property="og:title" content="🏆 لیگ‌ها | NitroVerse" />
+  <meta property="og:description" content="به لیگ‌های علمی نیتروورس بپیوند و در سطوح مختلف رقابت کن" />
+  <title>🏆 لیگ‌های نیتروورس | NitroVerse Leagues</title>
+  <link rel="icon" href="img/logo.png" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    /* ============================================
+       صفحه لیگ‌ها — استایل‌های اختصاصی
+       ============================================ */
+
+    .leagues-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 20px 40px;
+      min-height: 100vh;
+    }
+
+    /* ----- هدر ----- */
+    .leagues-header {
+      text-align: center;
+      padding: 30px 20px 10px;
+      animation: fadeInUp 0.7s ease forwards;
+    }
+
+    .leagues-header h1 {
+      font-size: 2.6rem;
+      font-weight: 900;
+    }
+
+    .leagues-header .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      margin-top: 4px;
+      opacity: 0.8;
+    }
+
+    .leagues-header .subtitle span {
+      color: var(--neon-cyan);
+      font-weight: 700;
+    }
+
+    /* ===== وضعیت لیگ کاربر ===== */
+    .user-league-status {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 16px 24px;
+      border-radius: 16px;
+      background: rgba(0, 234, 255, 0.04);
+      border: 1px solid rgba(0, 234, 255, 0.08);
+      margin-bottom: 28px;
+      animation: fadeInUp 0.7s ease 0.05s forwards;
+      opacity: 0;
+    }
+
+    .user-league-status .status-label {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .user-league-status .league-name {
+      font-size: 1.3rem;
+      font-weight: 900;
+    }
+
+    .user-league-status .league-name .icon {
+      margin-left: 6px;
+    }
+
+    .user-league-status .progress-wrap {
+      flex: 1;
+      min-width: 150px;
+      max-width: 300px;
+    }
+
+    .user-league-status .progress-wrap .bar {
+      height: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .user-league-status .progress-wrap .bar .fill {
+      height: 100%;
+      border-radius: 10px;
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+      transition: width 0.8s ease;
+      width: 0%;
+    }
+
+    .user-league-status .progress-text {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      opacity: 0.7;
+    }
+
+    .user-league-status .next-league {
+      font-size: 0.9rem;
+      color: var(--neon-gold);
+      font-weight: 700;
+    }
+
+    /* ----- لیست لیگ‌ها ----- */
+    .leagues-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-top: 10px;
+      animation: fadeInUp 0.7s ease 0.1s forwards;
+      opacity: 0;
+    }
+
+    .league-card {
+      padding: 28px 24px 24px;
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      cursor: default;
+      border-top: 4px solid var(--neon-cyan);
+    }
+
+    .league-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse at 50% 0%, rgba(0, 234, 255, 0.03), transparent 70%);
+      pointer-events: none;
+    }
+
+    .league-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 0 60px rgba(0, 234, 255, 0.04);
+    }
+
+    .league-card .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .league-card .card-top .level-badge {
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-secondary);
+    }
+
+    .league-card .card-top .level-badge.active {
+      background: rgba(0, 234, 255, 0.12);
+      color: var(--neon-cyan);
+    }
+
+    .league-card .card-top .level-badge.locked {
+      background: rgba(255, 255, 255, 0.03);
+      color: rgba(255, 255, 255, 0.2);
+    }
+
+    .league-card .league-icon {
+      font-size: 2.8rem;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .league-card h2 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin: 0 0 4px;
+    }
+
+    .league-card .league-sub {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      opacity: 0.6;
+      margin-bottom: 10px;
+    }
+
+    .league-card .league-desc {
+      color: var(--text-secondary);
+      line-height: 1.9;
+      font-size: 0.95rem;
+      margin-bottom: 14px;
+      min-height: 50px;
+    }
+
+    .league-card .league-reward {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      border-radius: 12px;
+      background: rgba(255, 204, 102, 0.04);
+      border: 1px solid rgba(255, 204, 102, 0.06);
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .league-card .league-reward .reward-icon {
+      font-size: 1.2rem;
+    }
+
+    .league-card .league-reward .reward-text {
+      font-size: 0.85rem;
+      color: var(--neon-gold);
+      font-weight: 600;
+    }
+
+    .league-card .league-requirements {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      opacity: 0.6;
+      margin-bottom: 14px;
+    }
+
+    .league-card .league-requirements .req-value {
+      color: var(--neon-cyan);
+      font-weight: 700;
+    }
+
+    /* ===== دکمه‌ها ===== */
+    .btn-league {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-family: var(--font-main);
+      width: 100%;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-league.available {
+      background: rgba(0, 234, 255, 0.08);
+      border: 1px solid rgba(0, 234, 255, 0.15);
+      color: var(--neon-cyan);
+    }
+
+    .btn-league.available:hover {
+      background: rgba(0, 234, 255, 0.16);
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px rgba(0, 234, 255, 0.04);
+    }
+
+    .btn-league.active {
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.15);
+      color: #22c55e;
+    }
+
+    .btn-league.locked {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      color: var(--text-secondary);
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .btn-league.locked:hover {
+      transform: none;
+    }
+
+    /* ===== فوتر ===== */
+    .leagues-footer {
+      text-align: center;
+      padding: 25px 20px 10px;
+      color: rgba(255, 255, 255, 0.08);
+      font-size: 0.8rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.03);
+      margin-top: 40px;
+    }
+
+    .leagues-footer .version {
+      color: rgba(255, 255, 255, 0.04);
+      font-size: 0.65rem;
+    }
+
+    /* ============================================
+       انیمیشن‌ها
+       ============================================ */
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(25px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ============================================
+       ریسپانسیو
+       ============================================ */
+
+    @media (max-width: 768px) {
+      .leagues-container {
+        padding: 12px 14px 30px;
+      }
+
+      .leagues-header h1 {
+        font-size: 2rem;
+      }
+
+      .user-league-status {
+        padding: 14px 16px;
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .user-league-status .progress-wrap {
+        max-width: 100%;
+        width: 100%;
+      }
+
+      .leagues-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .league-card {
+        padding: 22px 18px;
+      }
+
+      .league-card .league-icon {
+        font-size: 2.2rem;
+      }
+
+      .league-card h2 {
+        font-size: 1.2rem;
+      }
+
+      .btn-league {
+        padding: 10px 20px;
+        font-size: 0.85rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .leagues-header h1 {
+        font-size: 1.6rem;
+      }
+
+      .leagues-header .subtitle {
+        font-size: 0.85rem;
+      }
+
+      .user-league-status .league-name {
+        font-size: 1.1rem;
+      }
+
+      .user-league-status .status-label {
+        font-size: 0.8rem;
+      }
+
+      .user-league-status .progress-text {
+        font-size: 0.7rem;
+      }
+
+      .league-card {
+        padding: 18px 14px;
+        border-radius: 14px;
+      }
+
+      .league-card .league-icon {
+        font-size: 1.8rem;
+      }
+
+      .league-card h2 {
+        font-size: 1.05rem;
+      }
+
+      .league-card .league-desc {
+        font-size: 0.85rem;
+        min-height: 30px;
+      }
+
+      .league-card .league-reward {
+        padding: 8px 12px;
+      }
+
+      .league-card .league-reward .reward-text {
+        font-size: 0.75rem;
+      }
+
+      .league-card .league-requirements {
+        font-size: 0.7rem;
+      }
+
+      .btn-league {
+        padding: 8px 16px;
+        font-size: 0.8rem;
+      }
+
+      .leagues-footer {
+        font-size: 0.7rem;
+        padding: 16px 10px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .leagues-header h1 {
+        font-size: 1.3rem;
+      }
+
+      .league-card {
+        padding: 14px 12px;
+      }
+
+      .league-card .league-icon {
+        font-size: 1.5rem;
+      }
+
+      .league-card h2 {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="leagues-container">
+
+    <!-- ==========================================
+         هدر
+         ========================================== -->
+    <header class="leagues-header">
+      <h1 class="neon-text">🏆 لیگ‌های دانشمندان ایرانی</h1>
+      <p class="subtitle">
+        در <span>سه سطح</span> مختلف رقابت کن و به <span>قله</span> برس!
+      </p>
+    </header>
+
+    <!-- ==========================================
+         وضعیت لیگ کاربر
+         ========================================== -->
+    <div class="user-league-status" id="userLeagueStatus">
+      <span class="status-label">📍 لیگ فعلی:</span>
+      <span class="league-name" id="currentLeagueName">
+        <span class="icon">⚙️</span> لیگ خوارزمی
+      </span>
+      <div class="progress-wrap">
+        <div class="bar">
+          <div class="fill" id="leagueProgressFill" style="width: 0%;"></div>
+        </div>
+        <div class="progress-text" id="leagueProgressText">۰ / ۵۰۰ امتیاز</div>
+      </div>
+      <span class="next-league" id="nextLeagueInfo">🌟 تا لیگ ابن‌سینا: ۵۰۰ امتیاز</span>
+    </div>
+
+    <!-- ==========================================
+       لیست لیگ‌ها
+       ========================================== -->
+    <div class="leagues-grid" id="leaguesGrid">
+      <!-- توسط JavaScript پر می‌شود -->
+    </div>
+
+    <!-- ==========================================
+       فوتر
+       ========================================== -->
+    <div class="leagues-footer">
+      ⚡ نسخه ۲.۰.۰ | NitroVerse
+      <div class="version">ساخته‌شده با ❤️ در ایران</div>
+    </div>
+
+  </div>
+
+  <!-- ==========================================
+       اسکریپت‌ها
+       ========================================== -->
+  <script>
+    // ============================================
+    // NitroVerse Leagues (Enhanced)
+    // ============================================
+
+    // ============================================
+    // داده‌های لیگ‌ها
+    // ============================================
+
+    const LEAGUES_DATA = [{
+      id: 'kharazmi',
+      name: 'لیگ خوارزمی',
+      nameEn: 'Kharazmi',
+      icon: '⚙️',
+      color: '#00bfff',
+      level: 1,
+      minScore: 0,
+      maxScore: 499,
+      description: 'سطح ۱ – آغاز راه. مخصوص تازه‌واردها.',
+      fullDesc: 'سوالات ساده ولی آموزنده در حوزه علوم پایه، ریاضی و منطق.',
+      reward: '۲۰۰ N-Coins',
+      rewardIcon: '🪙',
+    }, {
+      id: 'avicenna',
+      name: 'لیگ ابن‌سینا',
+      nameEn: 'Avicenna',
+      icon: '🧠',
+      color: '#a94eff',
+      level: 2,
+      minScore: 500,
+      maxScore: 1499,
+      description: 'سطح ۲ – لیگ اندیشه و تحلیل.',
+      fullDesc: 'سوالات علمی، تحلیلی و ترکیبی برای ذهن‌های جستجوگر.',
+      reward: '۵۰۰ N-Coins + مدال نقره',
+      rewardIcon: '🥈',
+    }, {
+      id: 'biruni',
+      name: 'لیگ بیرونی',
+      nameEn: 'Biruni',
+      icon: '🔬',
+      color: '#ffd700',
+      level: 3,
+      minScore: 1500,
+      maxScore: Infinity,
+      description: 'سطح ۳ – لیگ نخبگان.',
+      fullDesc: 'سوالات بسیار دشوار و مفهومی با چالش‌های تکنولوژی و هوش مصنوعی.',
+      reward: '۱۰۰۰ N-Coins + مدال طلایی نیترو',
+      rewardIcon: '🏅',
+    }];
+
+    // ============================================
+    // توابع کمکی
+    // ============================================
+
+    function getUserKey(baseKey) {
+      const userId = localStorage.getItem('nv_user_id') || 'guest';
+      return `${baseKey}_${userId}`;
+    }
+
+    function getUserData(baseKey, defaultValue = null) {
+      try {
+        const key = getUserKey(baseKey);
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : defaultValue;
+      } catch {
+        return defaultValue;
+      }
+    }
+
+    function getHistory() {
+      return getUserData('nv_quiz_history', []);
+    }
+
+    function getTotalScore() {
+      const history = getHistory();
+      return history.reduce((sum, h) => sum + (Number(h.score) || 0), 0);
+    }
+
+    function getLeagueByScore(score) {
+      for (const league of LEAGUES_DATA) {
+        if (score >= league.minScore && score < league.maxScore) {
+          return league;
+        }
+      }
+      return LEAGUES_DATA[LEAGUES_DATA.length - 1];
+    }
+
+    function getNextLeague(score) {
+      for (const league of LEAGUES_DATA) {
+        if (score < league.maxScore) {
+          return league;
+        }
+      }
+      return null;
+    }
+
+    function getLeagueProgress(score) {
+      const current = getLeagueByScore(score);
+      const next = getNextLeague(score);
+
+      if (!next) {
+        return {
+          current: current,
+          next: null,
+          progress: 100,
+          isMax: true,
+          needed: 0,
+          text: '🌟 شما در بالاترین سطح هستید!',
+        };
+      }
+
+      const range = next.maxScore - current.minScore;
+      const achieved = score - current.minScore;
+      const progress = Math.min(100, Math.max(0, (achieved / range) * 100));
+      const needed = next.maxScore - score;
+
+      return {
+        current: current,
+        next: next,
+        progress: Math.round(progress),
+        isMax: false,
+        needed: needed,
+        text: progress >= 80 ? '🔥 نزدیک به صعود هستی!' : '💪 ادامه بده تا به لیگ بعدی برسی!',
+      };
+    }
+
+    // ============================================
+    // رندر
+    // ============================================
+
+    function renderLeagues() {
+      const score = getTotalScore();
+      const currentLeague = getLeagueByScore(score);
+      const progress = getLeagueProgress(score);
+
+      // ===== وضعیت کاربر =====
+      document.getElementById('currentLeagueName').innerHTML = `
+        <span class="icon">${currentLeague.icon}</span> ${currentLeague.name}
+      `;
+
+      document.getElementById('leagueProgressFill').style.width = progress.progress + '%';
+      document.getElementById('leagueProgressText').textContent =
+        progress.isMax ?
+        '🎯 به اوج رسیدی!' :
+        `${score} / ${progress.next.maxScore} امتیاز`;
+
+      document.getElementById('nextLeagueInfo').textContent =
+        progress.isMax ?
+        '👑 شما در بالاترین سطح لیگ هستید!' :
+        `🌟 تا ${progress.next.name}: ${progress.needed} امتیاز دیگر`;
+
+      // ===== لیست لیگ‌ها =====
+      const grid = document.getElementById('leaguesGrid');
+
+      grid.innerHTML = LEAGUES_DATA.map(league => {
+        const isUnlocked = score >= league.minScore;
+        const isActive = currentLeague.id === league.id;
+        const isLocked = !isUnlocked && league.level > 1;
+
+        let btnClass = 'btn-league locked';
+        let btnText = '🔒 قفل است';
+        let btnDisabled = true;
+
+        if (isActive) {
+          btnClass = 'btn-league active';
+          btnText = '✅ لیگ فعلی';
+          btnDisabled = false;
+        } else if (isUnlocked) {
+          btnClass = 'btn-league available';
+          btnText = '🚀 ورود به لیگ';
+          btnDisabled = false;
+        }
+
+        return `
+          <div class="league-card glow-card" style="border-top-color: ${league.color};">
+            <div class="card-top">
+              <span class="league-icon">${league.icon}</span>
+              <span class="level-badge ${isActive ? 'active' : isLocked ? 'locked' : ''}">
+                ${isActive ? '📍 فعلی' : isLocked ? '🔒 قفل' : '✅ باز'}
+              </span>
+            </div>
+            <h2 style="color: ${league.color};">${league.name}</h2>
+            <div class="league-sub">${league.nameEn} • سطح ${league.level}</div>
+            <p class="league-desc">${league.fullDesc}</p>
+
+            <div class="league-reward">
+              <span class="reward-icon">${league.rewardIcon}</span>
+              <span class="reward-text">🎁 پاداش: ${league.reward}</span>
+            </div>
+
+            <div class="league-requirements">
+              نیاز به <span class="req-value">${league.minScore.toLocaleString()}</span> امتیاز
+              ${league.maxScore !== Infinity ? `تا <span class="req-value">${league.maxScore.toLocaleString()}</span>` : 'و بالاتر'}
+            </div>
+
+            <a href="leaderboard.html" class="btn-league ${btnClass}" 
+               onclick="${!btnDisabled ? '' : 'event.preventDefault();'}">
+              ${btnText}
+            </a>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ============================================
+    // اجرا
+    // ============================================
+
+    document.addEventListener('DOMContentLoaded', function() {
+      renderLeagues();
+      console.log('🏆 NitroVerse Leagues loaded!');
+    });
+
+    // بروزرسانی هر بار که صفحه فعال می‌شود
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        renderLeagues();
+      }
+    });
+
+    // بروزرسانی هر ۱۰ ثانیه
+    setInterval(renderLeagues, 10000);
+  </script>
+
+</body>
+</html>

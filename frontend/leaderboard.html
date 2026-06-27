@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="لیدربورد نیتروورس — رتبه‌بندی بهترین کاربران بر اساس امتیاز و عملکرد" />
+  <meta name="keywords" content="لیدربورد, رتبه‌بندی, امتیاز, نیتروورس, کاربران برتر" />
+  <meta property="og:title" content="🏆 لیدربورد | NitroVerse" />
+  <meta property="og:description" content="بهترین کاربران نیتروورس را بشناس و رتبه خود را ببین" />
+  <title>🏆 لیدربورد | NitroVerse</title>
+  <link rel="icon" href="img/logo.png" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    /* ============================================
+       صفحه لیدربورد — استایل‌های اختصاصی
+       ============================================ */
+
+    .lb-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 16px 20px 40px;
+      min-height: 100vh;
+    }
+
+    /* ----- هدر ----- */
+    .lb-header {
+      text-align: center;
+      padding: 25px 20px 6px;
+      animation: fadeInUp 0.7s ease forwards;
+    }
+
+    .lb-header h1 {
+      font-size: 2.4rem;
+      font-weight: 900;
+    }
+
+    .lb-header .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      margin-top: 4px;
+      opacity: 0.8;
+    }
+
+    .lb-header .subtitle span {
+      color: var(--neon-cyan);
+      font-weight: 700;
+    }
+
+    /* ----- فیلترها ----- */
+    .lb-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin: 18px 0 22px;
+      animation: fadeInUp 0.7s ease 0.05s forwards;
+      opacity: 0;
+    }
+
+    .lb-filters select,
+    .lb-filters input {
+      padding: 10px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.04);
+      color: #fff;
+      font-family: var(--font-main);
+      font-size: 0.9rem;
+      outline: none;
+      transition: all 0.3s ease;
+      min-width: 140px;
+    }
+
+    .lb-filters select:focus,
+    .lb-filters input:focus {
+      border-color: rgba(0, 234, 255, 0.15);
+      box-shadow: 0 0 30px rgba(0, 234, 255, 0.03);
+    }
+
+    .lb-filters select option {
+      background: #0a0f1f;
+      color: #fff;
+    }
+
+    .lb-filters select option:hover {
+      background: rgba(0, 234, 255, 0.1);
+    }
+
+    .lb-filters .filter-btn {
+      padding: 10px 24px;
+      border-radius: 12px;
+      border: none;
+      background: rgba(0, 234, 255, 0.08);
+      color: var(--neon-cyan);
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: var(--font-main);
+      font-size: 0.9rem;
+    }
+
+    .lb-filters .filter-btn:hover {
+      background: rgba(0, 234, 255, 0.16);
+      transform: translateY(-2px);
+    }
+
+    .lb-filters .filter-btn.reset {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-secondary);
+    }
+
+    .lb-filters .filter-btn.reset:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* ----- آمار ----- */
+    .lb-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
+      animation: fadeInUp 0.7s ease 0.1s forwards;
+      opacity: 0;
+    }
+
+    .lb-stats .stat {
+      text-align: center;
+      padding: 12px 10px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      transition: 0.3s;
+    }
+
+    .lb-stats .stat:hover {
+      border-color: rgba(0, 234, 255, 0.06);
+    }
+
+    .lb-stats .stat .number {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--neon-cyan);
+    }
+
+    .lb-stats .stat .label {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      display: block;
+      margin-top: 2px;
+      opacity: 0.7;
+    }
+
+    .lb-stats .stat.gold .number {
+      color: var(--neon-gold);
+    }
+
+    .lb-stats .stat.purple .number {
+      color: var(--neon-purple);
+    }
+
+    /* ----- رتبه من ----- */
+    .lb-my-rank {
+      text-align: center;
+      padding: 16px 20px;
+      border-radius: 16px;
+      background: rgba(0, 234, 255, 0.04);
+      border: 1px solid rgba(0, 234, 255, 0.08);
+      margin-bottom: 20px;
+      animation: fadeInUp 0.7s ease 0.12s forwards;
+      opacity: 0;
+      transition: 0.3s;
+    }
+
+    .lb-my-rank:hover {
+      border-color: rgba(0, 234, 255, 0.15);
+    }
+
+    .lb-my-rank .rank-label {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .lb-my-rank .rank-number {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--neon-cyan);
+      margin: 0 4px;
+    }
+
+    .lb-my-rank .rank-score {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--neon-gold);
+    }
+
+    .lb-my-rank .rank-empty {
+      color: var(--text-secondary);
+      opacity: 0.6;
+    }
+
+    .lb-my-rank .medal {
+      font-size: 1.6rem;
+      vertical-align: middle;
+    }
+
+    /* ----- جدول ----- */
+    .lb-table-wrap {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      overflow: hidden;
+      margin-bottom: 24px;
+      animation: fadeInUp 0.7s ease 0.15s forwards;
+      opacity: 0;
+    }
+
+    .lb-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .lb-table th {
+      padding: 14px 16px;
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      opacity: 0.7;
+    }
+
+    .lb-table td {
+      padding: 12px 14px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      font-size: 0.9rem;
+      transition: 0.3s;
+    }
+
+    .lb-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .lb-table tr:hover td {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .lb-table tr.my-row td {
+      background: rgba(0, 234, 255, 0.04);
+    }
+
+    .lb-table .rank-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      font-weight: 900;
+      font-size: 0.8rem;
+      transition: 0.3s;
+    }
+
+    .lb-table .rank-1 {
+      background: rgba(250, 204, 21, 0.15);
+      color: #facc15;
+      border: 2px solid #facc15;
+      box-shadow: 0 0 20px rgba(250, 204, 21, 0.1);
+    }
+
+    .lb-table .rank-2 {
+      background: rgba(161, 161, 170, 0.15);
+      color: #a1a1aa;
+      border: 2px solid #a1a1aa;
+    }
+
+    .lb-table .rank-3 {
+      background: rgba(249, 115, 22, 0.15);
+      color: #f97316;
+      border: 2px solid #f97316;
+    }
+
+    .lb-table .rank-other {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-secondary);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .lb-table .rank-medal {
+      font-size: 1.3rem;
+    }
+
+    .lb-table .username-cell {
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .lb-table .username-cell .me-badge {
+      font-size: 0.55rem;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: var(--neon-cyan);
+      color: #000;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .lb-table .score-cell {
+      font-weight: 700;
+      color: var(--neon-gold);
+      font-size: 1rem;
+    }
+
+    .lb-table .province-cell,
+    .lb-table .city-cell {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+
+    .lb-table .date-cell {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      opacity: 0.4;
+    }
+
+    /* ===== وضعیت خالی ===== */
+    .lb-empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-secondary);
+    }
+
+    .lb-empty .icon {
+      font-size: 3.5rem;
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .lb-empty h3 {
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .lb-empty p {
+      font-size: 0.95rem;
+      opacity: 0.7;
+    }
+
+    /* ===== دکمه‌ها ===== */
+    .lb-actions {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      animation: fadeInUp 0.7s ease 0.2s forwards;
+      opacity: 0;
+    }
+
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: var(--text-primary);
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      cursor: pointer;
+      font-family: var(--font-main);
+    }
+
+    .btn-back:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .btn-back.primary {
+      background: rgba(124, 58, 237, 0.08);
+      border-color: rgba(124, 58, 237, 0.12);
+      color: var(--neon-purple);
+    }
+
+    .btn-back.primary:hover {
+      background: rgba(124, 58, 237, 0.16);
+    }
+
+    .btn-back.neon {
+      background: rgba(0, 234, 255, 0.06);
+      border-color: rgba(0, 234, 255, 0.1);
+      color: var(--neon-cyan);
+    }
+
+    .btn-back.neon:hover {
+      background: rgba(0, 234, 255, 0.12);
+    }
+
+    /* ============================================
+       انیمیشن‌ها
+       ============================================ */
+
+    .lb-table tbody tr {
+      animation: slideIn 0.4s ease forwards;
+      opacity: 0;
+    }
+
+    .lb-table tbody tr:nth-child(1) { animation-delay: 0.04s; }
+    .lb-table tbody tr:nth-child(2) { animation-delay: 0.08s; }
+    .lb-table tbody tr:nth-child(3) { animation-delay: 0.12s; }
+    .lb-table tbody tr:nth-child(4) { animation-delay: 0.16s; }
+    .lb-table tbody tr:nth-child(5) { animation-delay: 0.20s; }
+    .lb-table tbody tr:nth-child(6) { animation-delay: 0.24s; }
+    .lb-table tbody tr:nth-child(7) { animation-delay: 0.28s; }
+    .lb-table tbody tr:nth-child(8) { animation-delay: 0.32s; }
+    .lb-table tbody tr:nth-child(9) { animation-delay: 0.36s; }
+    .lb-table tbody tr:nth-child(10) { animation-delay: 0.40s; }
+    .lb-table tbody tr:nth-child(11) { animation-delay: 0.44s; }
+    .lb-table tbody tr:nth-child(12) { animation-delay: 0.48s; }
+    .lb-table tbody tr:nth-child(13) { animation-delay: 0.52s; }
+    .lb-table tbody tr:nth-child(14) { animation-delay: 0.56s; }
+    .lb-table tbody tr:nth-child(15) { animation-delay: 0.60s; }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* ============================================
+       ریسپانسیو
+       ============================================ */
+
+    @media (max-width: 768px) {
+      .lb-container {
+        padding: 12px 14px 30px;
+      }
+
+      .lb-header h1 {
+        font-size: 1.8rem;
+      }
+
+      .lb-filters {
+        gap: 8px;
+      }
+
+      .lb-filters select,
+      .lb-filters input {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+        min-width: 100px;
+        flex: 1;
+      }
+
+      .lb-filters .filter-btn {
+        padding: 8px 16px;
+        font-size: 0.8rem;
+      }
+
+      .lb-stats {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+
+      .lb-stats .stat .number {
+        font-size: 1.2rem;
+      }
+
+      .lb-stats .stat .label {
+        font-size: 0.65rem;
+      }
+
+      .lb-my-rank .rank-number {
+        font-size: 1.6rem;
+      }
+
+      .lb-table th,
+      .lb-table td {
+        padding: 10px 10px;
+        font-size: 0.8rem;
+      }
+
+      .lb-table .province-cell,
+      .lb-table .city-cell {
+        display: none;
+      }
+
+      .lb-table .date-cell {
+        display: none;
+      }
+
+      .lb-table .rank-badge {
+        width: 28px;
+        height: 28px;
+        font-size: 0.7rem;
+      }
+
+      .btn-back {
+        padding: 10px 20px;
+        font-size: 0.85rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .lb-header h1 {
+        font-size: 1.4rem;
+      }
+
+      .lb-header .subtitle {
+        font-size: 0.85rem;
+      }
+
+      .lb-filters {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .lb-filters select,
+      .lb-filters input {
+        min-width: 100%;
+        width: 100%;
+        padding: 10px 14px;
+      }
+
+      .lb-filters .filter-btn {
+        width: 100%;
+        padding: 10px;
+      }
+
+      .lb-stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .lb-stats .stat {
+        padding: 10px 6px;
+      }
+
+      .lb-stats .stat .number {
+        font-size: 1rem;
+      }
+
+      .lb-stats .stat .label {
+        font-size: 0.6rem;
+      }
+
+      .lb-my-rank {
+        padding: 12px 14px;
+      }
+
+      .lb-my-rank .rank-number {
+        font-size: 1.3rem;
+      }
+
+      .lb-my-rank .rank-score {
+        font-size: 1rem;
+      }
+
+      .lb-table th,
+      .lb-table td {
+        padding: 8px 6px;
+        font-size: 0.7rem;
+      }
+
+      .lb-table .username-cell {
+        font-size: 0.75rem;
+        gap: 4px;
+        flex-wrap: wrap;
+      }
+
+      .lb-table .username-cell .me-badge {
+        font-size: 0.5rem;
+        padding: 1px 6px;
+      }
+
+      .lb-table .score-cell {
+        font-size: 0.85rem;
+      }
+
+      .lb-table .rank-badge {
+        width: 22px;
+        height: 22px;
+        font-size: 0.6rem;
+      }
+
+      .lb-table .rank-medal {
+        font-size: 1rem;
+      }
+
+      .lb-actions {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .lb-actions .btn-back {
+        width: 100%;
+        justify-content: center;
+        padding: 12px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .lb-stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+      }
+
+      .lb-stats .stat .number {
+        font-size: 0.9rem;
+      }
+
+      .lb-table th,
+      .lb-table td {
+        padding: 6px 4px;
+        font-size: 0.6rem;
+      }
+
+      .lb-table .score-cell {
+        font-size: 0.75rem;
+      }
+
+      .lb-table .rank-badge {
+        width: 18px;
+        height: 18px;
+        font-size: 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="lb-container">
+
+    <!-- ==========================================
+         هدر
+         ========================================== -->
+    <header class="lb-header">
+      <h1 class="neon-text">🏆 لیدربورد</h1>
+      <p class="subtitle">
+        رتبه‌بندی بهترین <span>ذهن‌های</span> نیتروورس
+      </p>
+    </header>
+
+    <!-- ==========================================
+         فیلترها
+         ========================================== -->
+    <div class="lb-filters">
+      <select id="filterProvince">
+        <option value="all">🌍 همه استان‌ها</option>
+      </select>
+      <input
+        type="text"
+        id="filterSearch"
+        placeholder="🔍 جستجوی کاربر..."
+        autocomplete="off"
+      />
+      <button class="filter-btn" id="applyFilter">✅ اعمال فیلتر</button>
+      <button class="filter-btn reset" id="resetFilter">↺ بازنشانی</button>
+    </div>
+
+    <!-- ==========================================
+         آمار
+         ========================================== -->
+    <div class="lb-stats" id="statsBar">
+      <div class="stat">
+        <div class="number" id="totalUsers">0</div>
+        <span class="label">👥 کاربران</span>
+      </div>
+      <div class="stat gold">
+        <div class="number" id="topScore">0</div>
+        <span class="label">🏅 بالاترین امتیاز</span>
+      </div>
+      <div class="stat purple">
+        <div class="number" id="avgScore">0</div>
+        <span class="label">📊 میانگین امتیاز</span>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         رتبه من
+         ========================================== -->
+    <div class="lb-my-rank" id="myRank">
+      <span class="rank-label">📍 رتبه شما:</span>
+      <span class="rank-number" id="myRankNumber">—</span>
+      <span class="rank-label">با</span>
+      <span class="rank-score" id="myRankScore">۰</span>
+      <span class="rank-label">امتیاز</span>
+      <span class="medal" id="myRankMedal"></span>
+    </div>
+
+    <!-- ==========================================
+         جدول
+         ========================================== -->
+    <div class="lb-table-wrap">
+      <div id="leaderboard">
+        <!-- توسط JS پر می‌شود -->
+      </div>
+    </div>
+
+    <!-- ==========================================
+         دکمه‌ها
+         ========================================== -->
+    <div class="lb-actions">
+      <a href="dashboard.html" class="btn-back primary">📊 بازگشت به داشبورد</a>
+      <button class="btn-back neon" onclick="location.reload()">🔄 تازه‌سازی</button>
+    </div>
+
+  </div>
+
+  <!-- ==========================================
+       اسکریپت‌ها
+       ========================================== -->
+  <script>
+    // ============================================
+    // NitroVerse Leaderboard (Enhanced)
+    // ============================================
+
+    const PROFILE_KEY = 'nv_profile';
+    const HISTORY_KEY = 'nv_quiz_history';
+    const LEADER_KEY = 'nv_leaderboard';
+
+    // ============================================
+    // توابع کمکی با پشتیبانی از userId
+    // ============================================
+
+    function getUserKey(baseKey) {
+      const userId = localStorage.getItem('nv_user_id') || 'guest';
+      return `${baseKey}_${userId}`;
+    }
+
+    function getUserData(baseKey, defaultValue = null) {
+      try {
+        const key = getUserKey(baseKey);
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : defaultValue;
+      } catch {
+        return defaultValue;
+      }
+    }
+
+    function getProfile() {
+      return getUserData(PROFILE_KEY, {});
+    }
+
+    function getHistory() {
+      return getUserData(HISTORY_KEY, []);
+    }
+
+    function getUsername() {
+      return localStorage.getItem('nv_username') || 'کاربر';
+    }
+
+    function calcUserScore(history) {
+      if (!Array.isArray(history) || history.length === 0) return 0;
+      return history.reduce((sum, h) => sum + (Number(h.score) || 0), 0);
+    }
+
+    function getAllProvinces(users) {
+      const provinces = new Set();
+      users.forEach(u => {
+        if (u.province && u.province !== '-' && u.province !== 'undefined') {
+          provinces.add(u.province);
+        }
+      });
+      return [...provinces].sort();
+    }
+
+    function getMedal(rank) {
+      if (rank === 1) return '🥇';
+      if (rank === 2) return '🥈';
+      if (rank === 3) return '🥉';
+      return '';
+    }
+
+    // ============================================
+    // لیدربورد
+    // ============================================
+
+    function getLeaderboard() {
+      const lb = JSON.parse(localStorage.getItem(LEADER_KEY) || '[]');
+      const profile = getProfile();
+      const history = getHistory();
+      const myScore = calcUserScore(history);
+      const currentUser = getUsername();
+      const currentProvince = profile.province || '-';
+      const currentCity = profile.city || '-';
+
+      const me = {
+        username: currentUser,
+        province: currentProvince,
+        city: currentCity,
+        score: myScore,
+        date: Date.now(),
+      };
+
+      // به‌روزرسانی یا اضافه کردن کاربر فعلی
+      const idx = lb.findIndex(u => u.username === currentUser);
+      if (idx >= 0) {
+        lb[idx] = { ...lb[idx], ...me };
+      } else {
+        lb.push(me);
+      }
+
+      // مرتب‌سازی و ذخیره
+      lb.sort((a, b) => (Number(b.score) || 0) - (Number(a.score) || 0));
+      const top100 = lb.slice(0, 100);
+      localStorage.setItem(LEADER_KEY, JSON.stringify(top100));
+
+      return top100;
+    }
+
+    // ============================================
+    // رندر
+    // ============================================
+
+    function renderLeaderboard(filterProvince = 'all', searchTerm = '') {
+      const lb = getLeaderboard();
+      const boardDiv = document.getElementById('leaderboard');
+      const currentUser = getUsername();
+
+      // فیلتر بر اساس استان
+      let filtered = lb;
+      if (filterProvince !== 'all') {
+        filtered = filtered.filter(u => u.province === filterProvince);
+      }
+
+      // فیلتر بر اساس جستجو
+      if (searchTerm.trim() !== '') {
+        const term = searchTerm.trim().toLowerCase();
+        filtered = filtered.filter(u =>
+          u.username.toLowerCase().includes(term) ||
+          (u.province && u.province.toLowerCase().includes(term)) ||
+          (u.city && u.city.toLowerCase().includes(term))
+        );
+      }
+
+      // ===== آمار =====
+      const totalUsers = filtered.length;
+      const topScore = filtered.length > 0 ? Number(filtered[0].score) || 0 : 0;
+      const avgScore = filtered.length > 0 ?
+        Math.round(filtered.reduce((sum, u) => sum + (Number(u.score) || 0), 0) / filtered.length) :
+        0;
+
+      document.getElementById('totalUsers').textContent = totalUsers;
+      document.getElementById('topScore').textContent = topScore.toLocaleString();
+      document.getElementById('avgScore').textContent = avgScore.toLocaleString();
+
+      // ===== رتبه من =====
+      const myIndex = filtered.findIndex(u => u.username === currentUser);
+
+      if (myIndex >= 0) {
+        const rank = myIndex + 1;
+        document.getElementById('myRankNumber').textContent = '#' + rank;
+        document.getElementById('myRankScore').textContent = Number(filtered[myIndex].score).toLocaleString() || '۰';
+        document.getElementById('myRankMedal').textContent = getMedal(rank);
+      } else {
+        document.getElementById('myRankNumber').textContent = '—';
+        document.getElementById('myRankScore').textContent = '۰';
+        document.getElementById('myRankMedal').textContent = '';
+      }
+
+      // ===== جدول =====
+      if (filtered.length === 0) {
+        boardDiv.innerHTML = `
+          <div class="lb-empty">
+            <span class="icon">📭</span>
+            <h3>هیچ کاربری یافت نشد!</h3>
+            <p>با فیلترهای مختلف امتحان کن یا اولین نفری باش که بازی می‌کند 🚀</p>
+          </div>
+        `;
+        return;
+      }
+
+      let html = `
+        <table class="lb-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>کاربر</th>
+              <th class="province-cell">استان</th>
+              <th class="city-cell">شهر</th>
+              <th>امتیاز</th>
+              <th class="date-cell">آخرین فعالیت</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      filtered.forEach((user, idx) => {
+        const rank = idx + 1;
+        const isMe = user.username === currentUser;
+
+        let rankClass = 'rank-other';
+        let rankDisplay = rank;
+        const medal = getMedal(rank);
+
+        if (rank === 1) rankClass = 'rank-1';
+        else if (rank === 2) rankClass = 'rank-2';
+        else if (rank === 3) rankClass = 'rank-3';
+
+        html += `
+          <tr class="${isMe ? 'my-row' : ''}">
+            <td>
+              <span class="rank-badge ${rankClass}">
+                ${medal || rankDisplay}
+              </span>
+            </td>
+            <td>
+              <div class="username-cell">
+                ${user.username || '-'}
+                ${isMe ? '<span class="me-badge">من</span>' : ''}
+              </div>
+            </td>
+            <td class="province-cell">${user.province || '-'}</td>
+            <td class="city-cell">${user.city || '-'}</td>
+            <td class="score-cell">${Number(user.score).toLocaleString()}</td>
+            <td class="date-cell">
+              ${user.date ? new Date(user.date).toLocaleDateString('fa-IR') : '-'}
+            </td>
+          </tr>
+        `;
+      });
+
+      html += `
+          </tbody>
+        </table>
+      `;
+
+      boardDiv.innerHTML = html;
+    }
+
+    // ============================================
+    // فیلترها
+    // ============================================
+
+    function populateProvinceFilter() {
+      const lb = getLeaderboard();
+      const provinces = getAllProvinces(lb);
+      const select = document.getElementById('filterProvince');
+
+      provinces.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p;
+        opt.textContent = p;
+        select.appendChild(opt);
+      });
+    }
+
+    function applyFilters() {
+      const province = document.getElementById('filterProvince').value;
+      const search = document.getElementById('filterSearch').value;
+      renderLeaderboard(province, search);
+    }
+
+    function resetFilters() {
+      document.getElementById('filterProvince').value = 'all';
+      document.getElementById('filterSearch').value = '';
+      renderLeaderboard('all', '');
+    }
+
+    // ============================================
+    // اجرا
+    // ============================================
+
+    document.addEventListener('DOMContentLoaded', function() {
+      populateProvinceFilter();
+      renderLeaderboard();
+
+      // رویدادها
+      document.getElementById('applyFilter').addEventListener('click', applyFilters);
+      document.getElementById('resetFilter').addEventListener('click', resetFilters);
+
+      // جستجو با Enter
+      document.getElementById('filterSearch').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          applyFilters();
+        }
+      });
+
+      // به‌روزرسانی خودکار هر ۱۵ ثانیه
+      setInterval(() => {
+        const province = document.getElementById('filterProvince').value;
+        const search = document.getElementById('filterSearch').value;
+        renderLeaderboard(province, search);
+      }, 15000);
+    });
+
+    console.log('🏆 NitroVerse Leaderboard loaded!');
+  </script>
+
+</body>
+</html>
