@@ -40,7 +40,8 @@ def create_app():
     # 🚀 سرو کردن فرانت‌اند
     # ============================================
     
-    STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
+    # ✅ مسیر درست: یک سطح بالا میره (backend/static)
+    STATIC_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'static')
     
     @app.route('/')
     def serve_index():
@@ -60,7 +61,7 @@ def create_app():
     def home():
         return {"message": "🔥 NitroVerse backend is running!"}
 
-    # ===== Route تستی برای دیدن فایل‌ها =====
+    # ===== Route تستی =====
     @app.route('/list-static')
     def list_static():
         try:
