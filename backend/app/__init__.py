@@ -1,5 +1,5 @@
 from flask import Flask, send_from_directory
-from .extensions import db, migrate, jwt, bcrypt, cors, limiter, init_cors
+from .extensions import db, migrate, jwt, bcrypt, limiter, init_cors
 from .config import Config
 from .routes.auth import auth_bp
 from .routes.profile import profile_bp
@@ -23,6 +23,7 @@ def create_app():
     bcrypt.init_app(app)
     limiter.init_app(app)
     
+    # ✅ CORS رو فقط با init_cors تنظیم کن
     init_cors(app)
 
     # Register blueprints
@@ -40,28 +41,20 @@ def create_app():
     # 🚀 سرو کردن فرانت‌اند
     # ============================================
     
-    # ✅ مسیر درست: یک سطح بالا میره (backend/static)
     STATIC_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'static')
     
     @app.route('/')
     def serve_index():
-        try:
-            return send_from_directory(STATIC_DIR, 'index.html')
-        except Exception as e:
-            return {"error": str(e), "static_dir": STATIC_DIR}, 404
+        return send_from_directory(STATIC_DIR, 'index.html')
 
     @app.route('/<path:path>')
     def serve_static(path):
-        try:
-            return send_from_directory(STATIC_DIR, path)
-        except Exception as e:
-            return {"error": str(e), "path": path, "static_dir": STATIC_DIR}, 404
+        return send_from_directory(STATIC_DIR, path)
 
     @app.get("/api")
     def home():
         return {"message": "🔥 NitroVerse backend is running!"}
 
-    # ===== Route تستی =====
     @app.route('/list-static')
     def list_static():
         try:

@@ -13,11 +13,14 @@ bcrypt = Bcrypt()
 cors = CORS()
 limiter = Limiter(key_func=get_remote_address, default_limits=["200 per day", "50 per hour"])
 
-# تنظیم CORS به صورت پیش‌فرض
+# ============================================
+# ✅ تنظیم CORS برای Render
+# ============================================
 def init_cors(app):
     CORS(app, 
          resources={r"/*": {"origins": "*"}},
          supports_credentials=True,
          allow_headers=["Content-Type", "Authorization", "X-Requested-With"],
-         expose_headers=["Content-Type", "Authorization"]
+         expose_headers=["Content-Type", "Authorization"],
+         methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"]
     )
