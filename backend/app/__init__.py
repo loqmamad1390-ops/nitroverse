@@ -13,13 +13,10 @@ from .routes.leagues import leagues_bp
 import os
 
 def create_app():
-    # ✅ مسیر frontend رو به‌روز کن
-    frontend_path = os.path.join(os.path.dirname(__file__), 'frontend')
+    # ✅ مسیر frontend رو درست تنظیم کن
+    frontend_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'frontend')
     
-    app = Flask(__name__, 
-                static_folder=frontend_path,
-                static_url_path='')
-    
+    app = Flask(__name__)
     app.config.from_object(Config)
 
     # Initialize extensions
@@ -45,14 +42,11 @@ def create_app():
     # ===== سرو کردن فرانت‌اند =====
     @app.route('/')
     def serve_index():
-        return send_from_directory(app.static_folder, 'index.html')
+        return send_from_directory(frontend_path, 'index.html')
 
     @app.route('/<path:path>')
     def serve_static(path):
-        file_path = os.path.join(app.static_folder, path)
-        if not os.path.exists(file_path):
-            return {"error": "File not found"}, 404
-        return send_from_directory(app.static_folder, path)
+        return send_from_directory(frontend_path, path)
 
     @app.get("/api")
     def home():
