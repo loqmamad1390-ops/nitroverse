@@ -10,6 +10,7 @@ from .routes.rank import rank_bp
 from .routes.achievements import achievement_bp
 from .routes.groups import groups_bp
 from .routes.leagues import leagues_bp
+from .routes.admin import admin_bp  # ✅ اضافه کن
 import os
 
 def create_app():
@@ -36,6 +37,7 @@ def create_app():
     app.register_blueprint(achievement_bp)
     app.register_blueprint(groups_bp)
     app.register_blueprint(leagues_bp)
+    app.register_blueprint(admin_bp)  # ✅ ثبت کن
 
     # ============================================
     # 🚀 سرو کردن فرانت‌اند
