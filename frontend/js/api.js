@@ -1,5 +1,8 @@
 // NitroVerse API Client
-const API_BASE = "http://localhost:5000";
+// ============================================
+// 🔥 برای اجرا روی هاست، API_BASE رو خالی بذار
+// ============================================
+const API_BASE = "";  // ← خالی = همون دامنه (مثلاً https://nitroverse.onrender.com)
 
 class NitroAPI {
     constructor() {

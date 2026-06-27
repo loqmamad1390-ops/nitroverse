@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, send_from_directory
 from .extensions import db, migrate, jwt, bcrypt, cors, limiter, init_cors
 from .config import Config
 from .routes.auth import auth_bp
@@ -10,9 +10,13 @@ from .routes.rank import rank_bp
 from .routes.achievements import achievement_bp
 from .routes.groups import groups_bp
 from .routes.leagues import leagues_bp
+import os
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__, 
+                static_folder='../frontend',  # ← مسیر فرانت‌اند
+                static_url_path='')
+    
     app.config.from_object(Config)
 
     # Initialize extensions
@@ -36,7 +40,28 @@ def create_app():
     app.register_blueprint(groups_bp)
     app.register_blueprint(leagues_bp)
 
-    @app.get("/")
+    # ============================================
+    # 🚀 سرو کردن فرانت‌اند (Frontend)
+    # ============================================
+    
+    @app.route('/')
+    def serve_index():
+        """صفحه اصلی (index.html) رو سرو کن"""
+        return send_from_directory(app.static_folder, 'index.html')
+
+    @app.route('/<path:path>')
+    def serve_static(path):
+        """همه فایل‌های استاتیک (HTML, CSS, JS) رو سرو کن"""
+        # اگه فایل وجود نداشت، خطا نده
+        if not os.path.exists(os.path.join(app.static_folder, path)):
+            return {"error": "File not found"}, 404
+        return send_from_directory(app.static_folder, path)
+
+    # ============================================
+    # 📡 API های بک‌اند
+    # ============================================
+    
+    @app.get("/api")
     def home():
         return {"message": "🔥 NitroVerse backend is running!"}
 
