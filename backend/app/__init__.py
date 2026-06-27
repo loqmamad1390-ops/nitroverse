@@ -13,10 +13,7 @@ from .routes.leagues import leagues_bp
 import os
 
 def create_app():
-    app = Flask(__name__, 
-                static_folder='static',      # ← اسم پوشه
-                static_url_path='/static')   # ← آدرس فایل‌های استاتیک
-
+    app = Flask(__name__)
     app.config.from_object(Config)
 
     # Initialize extensions
@@ -40,28 +37,36 @@ def create_app():
     app.register_blueprint(leagues_bp)
 
     # ============================================
-    # 🚀 سرو کردن فرانت‌اند (با مسیر مستقیم)
+    # 🚀 سرو کردن فرانت‌اند
     # ============================================
+    
+    STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
     
     @app.route('/')
     def serve_index():
-        return send_from_directory('static', 'index.html')
+        try:
+            return send_from_directory(STATIC_DIR, 'index.html')
+        except Exception as e:
+            return {"error": str(e), "static_dir": STATIC_DIR}, 404
 
     @app.route('/<path:path>')
-    def serve_static_files(path):
-        # اگه فایل توی static وجود داشت، برگردون
-        static_file = os.path.join('static', path)
-        if os.path.exists(static_file):
-            return send_from_directory('static', path)
-        
-        # اگه فایل HTML بود، از static برگردون
-        if path.endswith('.html'):
-            return send_from_directory('static', path)
-        
-        return {"error": "File not found"}, 404
+    def serve_static(path):
+        try:
+            return send_from_directory(STATIC_DIR, path)
+        except Exception as e:
+            return {"error": str(e), "path": path, "static_dir": STATIC_DIR}, 404
 
     @app.get("/api")
     def home():
         return {"message": "🔥 NitroVerse backend is running!"}
+
+    # ===== Route تستی برای دیدن فایل‌ها =====
+    @app.route('/list-static')
+    def list_static():
+        try:
+            files = os.listdir(STATIC_DIR)
+            return {"files": files, "static_dir": STATIC_DIR}
+        except Exception as e:
+            return {"error": str(e), "static_dir": STATIC_DIR}
 
     return app
