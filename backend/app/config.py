@@ -1,12 +1,17 @@
 import os
 from datetime import timedelta
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
 
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "dev_secret")
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite:///nitroverse.db")
+    
+    # ✅ مسیر دیتابیس رو به‌روز کن
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", f"sqlite:///{os.path.join(BASE_DIR, 'nitroverse.db')}")
+    
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "dev_jwt_secret")
